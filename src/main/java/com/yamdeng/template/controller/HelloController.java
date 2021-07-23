@@ -1,8 +1,10 @@
 package com.yamdeng.template.controller;
 
+import com.yamdeng.common.data.MemberDao;
 import com.yamdeng.common.service.CountService;
 import com.yamdeng.common.service.ISpringMetaService;
 import com.yamdeng.common.service.LicenseService;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,19 @@ public class HelloController {
     @Autowired
     CountService countService;
 
+    @Autowired
+    MemberDao memberDao;
+
     @ResponseBody
     @GetMapping("/hello")
     public String hello() {
         return "hello23";
+    }
+
+    @ResponseBody
+    @GetMapping("/member")
+    public Map<String, Object> getMember() {
+        return memberDao.selectByEmail("yamdeng2@gmail.com");
     }
 
 }
