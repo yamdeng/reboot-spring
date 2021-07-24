@@ -21,8 +21,15 @@ public class BeanLoadMain {
     private static void manualBeanLoad() {
         AnnotationConfigApplicationContext ctx =
             new AnnotationConfigApplicationContext(BeanConfig1.class);
-        FirstServiceImpl fileServiceImpl = ctx.getBean("firstServiceImpl", FirstServiceImpl.class);
-        System.out.println("list : " + fileServiceImpl.list());
+        FirstServiceImpl fileServiceImpl1 = ctx.getBean("firstServiceImpl", FirstServiceImpl.class);
+        System.out.println("list : " + fileServiceImpl1.list());
+
+        // prototype 빈 확인
+        FirstServiceImpl fileServiceImpl2 = ctx.getBean("firstServiceImpl", FirstServiceImpl.class);
+        FirstVo firstVo1 = ctx.getBean("firstVo", FirstVo.class);
+        FirstVo firstVo2 = ctx.getBean("firstVo", FirstVo.class);
+        System.out.println("fileServiceImpl == fileServiceImpl2 : " + (fileServiceImpl1 == fileServiceImpl2)); // true
+        System.out.println("firstVo1 == firstVo2 : " + (firstVo1 == firstVo2)); // false
     }
 
     private static void autoBeanLoad() {
