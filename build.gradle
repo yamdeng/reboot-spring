@@ -24,3 +24,7 @@ dependencies {
     implementation 'com.google.guava:guava:30.0-jre'
     compileOnly 'org.projectlombok:lombok:1.18.20'
 }
+
+test {
+    useJUnitPlatform()
+}
