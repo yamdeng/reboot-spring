@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>hihi.jsp</title>
+    <title>test.jsp</title>
   </head>
   <body>
-    name : ${name}
-    enabled : ${enabled}
+    test.jsp : ${name}
   </body>
 </html>
