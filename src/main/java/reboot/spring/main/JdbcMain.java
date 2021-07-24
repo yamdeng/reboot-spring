@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import reboot.spring.bean.data.ConnectionCheck;
 import reboot.spring.bean.data.MemberDao;
+import reboot.spring.bean.data.MemberService;
 import reboot.spring.bean.vo.Member;
 import reboot.spring.config.DataConfig;
 
@@ -16,6 +17,7 @@ public class JdbcMain {
     public static void main(String[] args) {
         dataSourceTest();
         crudTest();
+        transactionTest();
     }
 
     private static void dataSourceTest() {
@@ -54,6 +56,17 @@ public class JdbcMain {
         list.forEach(member -> {
             System.out.println("member : " + member);
         });
+
+        ctx.close();
+    }
+
+    private static void transactionTest() {
+        AnnotationConfigApplicationContext ctx =
+            new AnnotationConfigApplicationContext(DataConfig.class);
+
+        MemberService memberService = ctx.getBean("memberService", MemberService.class);
+        Member newMember = new Member("yamdeng12@gmail.com", "1234", "yamdeng11");
+        memberService.multipleInsert(newMember);
 
         ctx.close();
     }

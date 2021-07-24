@@ -6,10 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reboot.spring.bean.data.ConnectionCheck;
 import reboot.spring.bean.data.MemberDao;
+import reboot.spring.bean.data.MemberService;
 
 @Configuration
+@EnableTransactionManagement
 @Import({DataSourceConfig.class})
 public class DataConfig {
 
@@ -35,6 +40,23 @@ public class DataConfig {
             jdbcTemplate = new JdbcTemplate(dataSource);
         }
         return new MemberDao(jdbcTemplate, dbmsName);
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        DataSourceTransactionManager tm = new DataSourceTransactionManager();
+        String dbmsName = "mysql";
+        if(dbmsName.equals("h2")) {
+            tm.setDataSource(dataSourceToH2);
+        } else {
+            tm.setDataSource(dataSource);
+        }
+        return tm;
+    }
+
+    @Bean
+    public MemberService memberService() {
+        return new MemberService();
     }
 
 }
