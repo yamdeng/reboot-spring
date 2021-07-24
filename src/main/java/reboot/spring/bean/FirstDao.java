@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import reboot.spring.bean.vo.FirstVo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FirstDao {
 
     private List<FirstVo> voList = new ArrayList<>();
@@ -41,6 +44,7 @@ public class FirstDao {
     }
 
     public List<FirstVo> list() {
+        log.info("================== list ================");
         return voList;
     }
 

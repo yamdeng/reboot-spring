@@ -2,7 +2,6 @@ package reboot.spring.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import reboot.spring.bean.FirstDao;
-import reboot.spring.bean.FirstRepository;
 import reboot.spring.bean.IFirstRepository;
 import reboot.spring.bean.IFirstService;
 import reboot.spring.bean.aop.ExceptionBean;
@@ -12,8 +11,8 @@ import reboot.spring.config.AopConfigClass;
 public class AopMain {
 
     public static void main(String[] args) {
-//        timecheckAop();
-//        exceptionCheckAop();
+        timecheckAop();
+        exceptionCheckAop();
         proxyTargetClass();
     }
 
