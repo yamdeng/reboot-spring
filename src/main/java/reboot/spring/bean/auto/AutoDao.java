@@ -9,6 +9,10 @@ public class AutoDao {
     @Autowired
     private AutoBean autoBean;
 
+    public AutoDao() {
+        System.out.println("AutoDao 생성자");
+    }
+
     public String getBeanName() {
         return autoBean.getBeanName();
     }

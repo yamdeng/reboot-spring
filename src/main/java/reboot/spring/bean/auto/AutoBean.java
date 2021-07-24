@@ -9,4 +9,8 @@ public class AutoBean {
 
     private String beanName = "autoBean";
 
+    public AutoBean() {
+        System.out.println("AutoBean 생성자2");
+    }
+
 }
