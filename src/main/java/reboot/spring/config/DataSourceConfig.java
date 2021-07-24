@@ -22,6 +22,7 @@ public class DataSourceConfig {
     public javax.sql.DataSource dataSourceToH2() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUsername("sa");
 //        dataSource.setUrl("jdbc:h2:mem:testdb");
         dataSource.setUrl("jdbc:h2:file:C:\\h2data\\testdb2");
         return dataSource;
