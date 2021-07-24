@@ -20,8 +20,8 @@
     <init-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>
-        reboot.spring.config.web.WebConfig
-        reboot.spring.config.web.WebConfiguration
+        reboot.spring.config.WebConfig
+        reboot.spring.config.WebConfiguration
       </param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>

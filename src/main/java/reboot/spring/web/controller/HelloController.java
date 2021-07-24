@@ -1,14 +1,22 @@
-package reboot.spring.config.web.controller;
+package reboot.spring.web.controller;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import reboot.spring.bean.vo.Member;
+import reboot.spring.web.validator.MemberValidator;
 
+@Slf4j
 @RestController
 public class HelloController {
 
@@ -40,6 +48,19 @@ public class HelloController {
         resultMap.put("buttonOk", buttonOk);
         resultMap.put("buttonCancel", buttonCancel);
         return resultMap;
+    }
+
+    @PostMapping("/member")
+    @ResponseBody
+    public String member(@RequestBody Member member, Errors errors) {
+        new MemberValidator().validate(member, errors);
+        if (errors.hasErrors()) {
+            errors.getAllErrors().forEach(errorInfo -> {
+                log.info("errorInfo.toString() : " + errorInfo.toString());
+            });
+            return "fail";
+        }
+        return "success";
     }
 
 }
