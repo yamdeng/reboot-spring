@@ -3,6 +3,7 @@ package reboot.spring.web.controller;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -53,6 +54,19 @@ public class HelloController {
     @PostMapping("/member")
     @ResponseBody
     public String member(@RequestBody Member member, Errors errors) {
+        new MemberValidator().validate(member, errors);
+        if (errors.hasErrors()) {
+            errors.getAllErrors().forEach(errorInfo -> {
+                log.info("errorInfo.toString() : " + errorInfo.toString());
+            });
+            return "fail";
+        }
+        return "success";
+    }
+
+    @PostMapping("/member2")
+    @ResponseBody
+    public String member2(@Valid @RequestBody Member member, Errors errors) {
         new MemberValidator().validate(member, errors);
         if (errors.hasErrors()) {
             errors.getAllErrors().forEach(errorInfo -> {
