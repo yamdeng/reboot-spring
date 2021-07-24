@@ -66,4 +66,12 @@ public class FirstDao {
         }
     }
 
+    public void initManual() {
+        System.out.println("FirstDao initManual");
+    }
+
+    public void destroyManual() {
+        System.out.println("FirstDao destroyManual");
+    }
+
 }

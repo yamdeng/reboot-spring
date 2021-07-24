@@ -30,6 +30,7 @@ public class BeanLoadMain {
         FirstVo firstVo2 = ctx.getBean("firstVo", FirstVo.class);
         System.out.println("fileServiceImpl == fileServiceImpl2 : " + (fileServiceImpl1 == fileServiceImpl2)); // true
         System.out.println("firstVo1 == firstVo2 : " + (firstVo1 == firstVo2)); // false
+        ctx.close();
     }
 
     private static void autoBeanLoad() {
@@ -42,6 +43,7 @@ public class BeanLoadMain {
         IFirstService firstService = ctx.getBean("firstService", IFirstService.class);
         List<FirstVo> list2 = firstService.list();
         System.out.println("list1 == list2 : " + (list1 == list2)); // true
+        ctx.close();
     }
 
     private static void importUseBeanLoad() {
@@ -49,6 +51,7 @@ public class BeanLoadMain {
             new AnnotationConfigApplicationContext(ParentBeanConfig.class);
         FirstServiceImpl fileServiceImpl = ctx.getBean("firstServiceImpl", FirstServiceImpl.class);
         System.out.println("list : " + fileServiceImpl.list());
+        ctx.close();
     }
 
 }

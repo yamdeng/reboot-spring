@@ -12,7 +12,7 @@ import reboot.spring.bean.IFirstService;
 @Configuration
 public class BeanConfig2 {
 
-    @Bean
+    @Bean(initMethod = "initManual", destroyMethod = "destroyManual")
     public FirstDao firstDao() {
         return new FirstDao();
     }

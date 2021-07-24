@@ -19,18 +19,17 @@ public class ComponentScanMain {
             new AnnotationConfigApplicationContext(ComponentScanConfig.class);
         AutoService autoService = ctx.getBean(AutoService.class);
         String beanName = autoService.getBeanName();
-        System.out.println("beanName : " + beanName);
+        System.out.println("loadBeanByComponentScan beanName : " + beanName);
         ctx.close();
     }
 
     private static void checkLoadBeanList() {
         AnnotationConfigApplicationContext ctx =
             new AnnotationConfigApplicationContext(ComponentScanConfig.class);
-        AutoBean autoBean = ctx.getBean("autoBean", AutoBean.class);
         Iterator<String> beanNameIterator = ctx.getBeanFactory().getBeanNamesIterator();
         while(beanNameIterator.hasNext()) {
             String beanName = beanNameIterator.next();
-            System.out.println("beanName : " + beanName);
+            System.out.println("checkLoadBeanList beanName : " + beanName);
         }
 
         // 수동으로 빈 등록하기
@@ -38,7 +37,7 @@ public class ComponentScanMain {
         beanNameIterator = ctx.getBeanFactory().getBeanNamesIterator();
         while(beanNameIterator.hasNext()) {
             String beanName = beanNameIterator.next();
-            System.out.println("after beanName : " + beanName);
+            System.out.println("after checkLoadBeanList beanName : " + beanName);
         }
         ctx.close();
     }

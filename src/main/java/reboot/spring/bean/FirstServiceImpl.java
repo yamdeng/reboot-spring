@@ -3,11 +3,13 @@ package reboot.spring.bean;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import reboot.spring.bean.vo.FirstVo;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class FirstServiceImpl {
+public class FirstServiceImpl implements InitializingBean, DisposableBean {
 
     private FirstDao firstDao;
 
@@ -35,4 +37,13 @@ public class FirstServiceImpl {
         firstDao.delete(loginId);
     }
 
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("FirstServiceImpl destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("FirstServiceImpl create");
+    }
 }
