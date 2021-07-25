@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -87,6 +84,15 @@ public class HelloController {
                 log.info("errorInfo.toString() : " + errorInfo.toString());
             });
             return "fail";
+        }
+        return "success";
+    }
+
+    @GetMapping("/exception")
+    @ResponseBody
+    public String exception() {
+        if (true) {
+            throw new RuntimeException("manual exception!");
         }
         return "success";
     }
