@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reboot.spring.bean.vo.Member;
+import reboot.spring.bean.vo.Member2;
 import reboot.spring.web.validator.MemberValidator;
 
 @Slf4j
@@ -66,8 +67,7 @@ public class HelloController {
 
     @PostMapping("/member2")
     @ResponseBody
-    public String member2(@Valid @RequestBody Member member, Errors errors) {
-        new MemberValidator().validate(member, errors);
+    public String member2(@Valid @RequestBody Member2 member2, Errors errors) {
         if (errors.hasErrors()) {
             errors.getAllErrors().forEach(errorInfo -> {
                 log.info("errorInfo.toString() : " + errorInfo.toString());
