@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,5 +78,23 @@ public class HelloController {
         }
         return "success";
     }
+
+    @PostMapping("/member3")
+    @ResponseBody
+    public String member3(@RequestBody @Valid Member member, Errors errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().forEach(errorInfo -> {
+                log.info("errorInfo.toString() : " + errorInfo.toString());
+            });
+            return "fail";
+        }
+        return "success";
+    }
+
+//    @InitBinder
+//    protected void initBinder(WebDataBinder binder) {
+//        binder.addValidators(new MemberValidator());
+//    }
+
 
 }
