@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,33 @@ public class HelloController {
 //    protected void initBinder(WebDataBinder binder) {
 //        binder.addValidators(new MemberValidator());
 //    }
+
+    @Value("${spring.test}")
+    private String test;
+
+    @Value("${spring.welcome}")
+    private String welcome;
+
+    @Value("${datasource.url}")
+    private String dbUrl;
+
+    @Value("${datasource.name}")
+    private String dbName;
+
+    @Value("${datasource.password}")
+    private String dbPassword;
+
+    @GetMapping("/properties")
+    @ResponseBody
+    public Map<String, String> properties() {
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("test", test);
+        resultMap.put("welcome", welcome);
+        resultMap.put("dbUrl", dbUrl);
+        resultMap.put("dbName", dbName);
+        resultMap.put("dbPassword", dbPassword);
+        return resultMap;
+    }
 
     @GetMapping("/hello")
     @ResponseBody
