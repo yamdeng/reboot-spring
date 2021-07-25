@@ -15,6 +15,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -26,6 +29,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import reboot.spring.web.GlobalInterceptor;
 
 @Slf4j
@@ -38,6 +44,12 @@ public class WebConfig implements WebMvcConfigurer {
 //        return new MemberValidator();
 //    }
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -46,6 +58,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.jsp("/WEB-INF/view/", ".jsp");
+        registry.viewResolver(thymeleafViewResolver());
     }
 
     @Override
@@ -84,6 +97,36 @@ public class WebConfig implements WebMvcConfigurer {
             .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(localTimeFormatString)))
             .build();
         converters.add(0, new MappingJackson2HttpMessageConverter(objectMapper));
+    }
+
+    // thymeleaf 적용
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setPrefix("classpath:templates/");
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setSuffix(".html");
+        templateResolver.setCacheable(false);
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.setEnableSpringELCompiler(true);
+        templateEngine.setTemplateEngineMessageSource(messageSource);
+        return templateEngine;
+    }
+
+    @Bean
+    public ThymeleafViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setContentType("text/html");
+        resolver.setCharacterEncoding("utf-8");
+        resolver.setTemplateEngine(templateEngine());
+        resolver.setOrder(0);
+        return resolver;
     }
 
 }
