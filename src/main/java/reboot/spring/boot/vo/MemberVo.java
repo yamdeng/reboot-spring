@@ -9,6 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MemberVo {
 
+    private Long id;
     private String name;
     private String loginId;
     private String email;
