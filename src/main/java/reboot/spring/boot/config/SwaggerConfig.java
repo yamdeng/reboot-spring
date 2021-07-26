@@ -20,7 +20,7 @@ public class SwaggerConfig {
             .apiInfo(apiInfo())
             .select()
             .apis(RequestHandlerSelectors.basePackage("reboot.spring.boot.controller"))
-            .paths(PathSelectors.any())
+            .paths(PathSelectors.ant("/api/**"))
             .build();
     }
 
