@@ -13,9 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/assets/**")
             .addResourceLocations("classpath:/assets/", "/assets/");
 
-        // /js/jquery.js, /css/bootstrap.css
+        // /js/jquery.js, /css/bootstrap.css : /** 속성을 오버라이드 하므로 유의
         registry.addResourceHandler("/**")
-            .addResourceLocations("classpath:/assets/", "/assets/");
+            .addResourceLocations("classpath:/assets/", "/assets/", "classpath:/public/", "classpath:/static/");
     }
 
 }
