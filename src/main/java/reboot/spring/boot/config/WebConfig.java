@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import reboot.spring.boot.interceptor.ApiLogInterceptor;
 import reboot.spring.boot.interceptor.ViewLogInterceptor;
@@ -40,4 +41,15 @@ public class WebConfig implements WebMvcConfigurer {
         return new ViewLogInterceptor();
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // templates/index.html
+        registry.addViewController("/view").setViewName("index.html");
+
+        // /view/th/model
+        registry.addViewController("/detail").setViewName("forward:/view/th/model");
+
+        // public.html
+        registry.addRedirectViewController("/", "/public.html");
+    }
 }
