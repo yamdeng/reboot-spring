@@ -2,10 +2,21 @@ package reboot.spring;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import reboot.spring.config.FirstSpringConfig;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reboot.spring.config.FirstSpringConfig;
+import reboot.spring.config.FirstSpringConfig.FirstBean;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {FirstSpringConfig.class})
 public class SpringFirstTest {
+
+    @Autowired
+    public FirstBean firstBean;
 
     @Test
     public void firstTest() {
@@ -22,6 +33,11 @@ public class SpringFirstTest {
         System.out.println("isBeanSame : " + isBeanSame);
         ctx.close();
         assertEquals(true, isBeanSame);
+    }
+
+    @Test
+    public void firstBeanTest() {
+        assertEquals("yamdeng", firstBean.getName());
     }
 
 }
