@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
@@ -29,6 +30,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+	implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.0.Final'
+	implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+	implementation 'mysql:mysql-connector-java:8.0.25'
+	implementation group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '10.0.8'
 }
 
 test {
