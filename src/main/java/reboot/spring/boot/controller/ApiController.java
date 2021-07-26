@@ -17,7 +17,7 @@ public class ApiController {
         for (int index=0; index<10; index++) {
             MemberVo memberVo = new MemberVo();
             memberVo.setEmail("yamdeng" + (index+1) + "@gmail.com");
-            memberVo.setName("안용성");
+            memberVo.setName("안용성23");
             memberVo.setLoginId("yamdeng" + (index+1));
             list.add(memberVo);
         }
