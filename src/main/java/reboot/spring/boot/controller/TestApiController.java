@@ -19,7 +19,7 @@ import reboot.spring.boot.vo.MemberVo;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class TestApiController {
 
     private List<MemberVo> list = new ArrayList<>();
 
@@ -35,20 +35,20 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/members")
+    @GetMapping("/tests")
     public List<MemberVo> members() {
         log.info("members size : " + list.size());
         return list;
     }
 
-    @GetMapping("/members/{id}")
+    @GetMapping("/tests/{id}")
     public MemberVo getDetail(@PathVariable Long id) {
         Optional<MemberVo> optionalMemberVo = list.stream()
             .filter(memberVo -> memberVo.getId().equals(id)).findAny();
         return optionalMemberVo.get();
     }
 
-    @PostMapping("/members")
+    @PostMapping("/tests")
     public ResponseEntity<?> createMember(@RequestBody MemberVo memberVo) {
         MemberVo lastMemberVo = list.get(list.size() - 1);
         Long newId = lastMemberVo.getId() + 1;
@@ -59,7 +59,7 @@ public class ApiController {
             HttpStatus.OK);
     }
 
-    @PutMapping("/members/{id}")
+    @PutMapping("/tests/{id}")
     public MemberVo updateMember(@PathVariable Long id, @RequestBody MemberVo updateMemberVo) {
         Optional<MemberVo> optionalMemberVo = list.stream()
             .filter(memberVo -> memberVo.getId().equals(id)).findAny();
@@ -70,7 +70,7 @@ public class ApiController {
         return originalMemberVo;
     }
 
-    @DeleteMapping("/members/{id}")
+    @DeleteMapping("/tests/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id) {
         boolean removed = list.removeIf(memberVo -> memberVo.getId().equals(id));
         return new ResponseEntity<>(

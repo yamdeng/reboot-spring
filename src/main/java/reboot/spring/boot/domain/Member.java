@@ -6,10 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @Entity
 public class Member {
 
@@ -21,6 +19,11 @@ public class Member {
     private Integer age;
     private LocalDate create_date;
     private LocalDate update_date;
+
+    public Member() {
+        this.create_date = LocalDate.now();
+        this.update_date = LocalDate.now();
+    }
 
     public Member(String name, String email, Integer age) {
         this.name = name;
