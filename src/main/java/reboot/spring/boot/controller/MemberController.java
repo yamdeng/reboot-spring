@@ -2,6 +2,8 @@ package reboot.spring.boot.controller;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reboot.spring.boot.domain.Member;
+import reboot.spring.boot.mapper.MemberMapper;
 import reboot.spring.boot.service.MemberService;
 
+@RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
 public class MemberController {
+
+    private final MemberMapper memberMapper;
+
+    private final SqlSession sqlSession;
 
     @Autowired
     private MemberService memberService;
@@ -52,6 +60,11 @@ public class MemberController {
     @GetMapping("/testQueryDsl")
     public List<Member> testQueryDsl() {
         return memberService.testQueryDsl();
+    }
+
+    @GetMapping("/testMapper")
+    public Member testMapper() {
+        return memberMapper.findByEmail("yamdeng@gmail.com");
     }
 
 }

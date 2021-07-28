@@ -11,6 +11,7 @@ ext {
 	querydslVersion="4.3.1"
 }
 
+
 group = 'reboot.spring'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -21,6 +22,7 @@ configurations {
 	}
 }
 
+// query dsl 설정 start
 def querydslSrcDir = "src/main/generated"
 
 querydsl {
@@ -40,7 +42,7 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-
+// query dsl 설정 end
 
 repositories {
 	mavenCentral()
@@ -65,6 +67,7 @@ dependencies {
 	implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
 	implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
 	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
+	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.0'
 }
 
 test {
