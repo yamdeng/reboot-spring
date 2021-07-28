@@ -35,6 +35,7 @@ dependencies {
 	implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 	implementation 'mysql:mysql-connector-java:8.0.25'
 	implementation group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '10.0.8'
+	implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
 }
 
 test {
