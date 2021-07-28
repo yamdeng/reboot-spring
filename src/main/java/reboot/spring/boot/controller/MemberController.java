@@ -49,4 +49,9 @@ public class MemberController {
         return id;
     }
 
+    @GetMapping("/testQueryDsl")
+    public List<Member> testQueryDsl() {
+        return memberService.testQueryDsl();
+    }
+
 }
