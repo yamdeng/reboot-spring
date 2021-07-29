@@ -5,6 +5,7 @@ plugins {
 	id 'java'
 	id 'war'
 	id 'eclipse'
+	id 'idea'
 }
 
 ext {
