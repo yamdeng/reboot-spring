@@ -17,14 +17,22 @@ group = 'reboot.spring'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+// query dsl 설정 start
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
 
-// query dsl 설정 start
 def querydslSrcDir = "src/main/generated"
+
+idea{
+	module{
+		sourceDirs +=file('generated/')
+		generatedSourceDirs += file('generated/')
+	}
+}
 
 querydsl {
 	library = "com.querydsl:querydsl-apt"
