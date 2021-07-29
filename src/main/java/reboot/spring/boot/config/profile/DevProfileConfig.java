@@ -10,7 +10,7 @@ import reboot.spring.boot.platform.license.LicenseCheckByDev;
 @Configuration
 public class DevProfileConfig{
 
-    @Bean
+    @Bean(initMethod = "init", destroyMethod = "destroy")
     public LicenseCheck licenseCheck() {
         return new LicenseCheckByDev();
     }

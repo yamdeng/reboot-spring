@@ -10,7 +10,7 @@ import reboot.spring.boot.platform.license.LicenseCheckByReal;
 @Configuration
 public class RealProfileConfig {
 
-    @Bean
+    @Bean(initMethod = "init", destroyMethod = "destroy")
     public LicenseCheck licenseCheck() {
         return new LicenseCheckByReal();
     }
