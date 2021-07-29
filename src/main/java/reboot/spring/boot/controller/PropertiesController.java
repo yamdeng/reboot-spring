@@ -1,10 +1,12 @@
 package reboot.spring.boot.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,9 @@ public class PropertiesController {
     @Autowired
     private CustomProperties customProperties;
 
+    @Autowired
+    private Environment environment;
+
     @GetMapping("/yamdeng")
     public YamdengProperties yamdengProperties() {
         return yamdengProperties;
@@ -42,6 +47,9 @@ public class PropertiesController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("datasourceUrl", datasourceUrl);
         resultMap.put("customProp1", customProp1);
+        String[] profiles = environment.getActiveProfiles();
+        String profileNames = Arrays.toString(profiles);
+        resultMap.put("current profiles", profileNames);
         return resultMap;
     }
 
