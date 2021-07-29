@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import reboot.spring.boot.util.HttpClientUtil;
 
-@SpringBootTest
 @TestPropertySource("classpath:/test.properties")
+@SpringBootTest(classes = BootApplication.class,
+	webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class BootApplicationTests {
 
 	@Autowired

@@ -9,12 +9,6 @@ import org.springframework.context.annotation.Configuration;
 //@Configuration
 public class DataSourceConfig {
 
-//    spring.datasource.url=jdbc:h2:file:C:/h2data/groupware2
-//    spring.jpa.hibernate.ddl-auto=update
-//    spring.datasource.driver-class-name=org.h2.Driver
-//    spring.datasource.username=sa
-//    spring.datasource.password=
-
     @Value("${spring.datasource.url}")
     private String url;
 
