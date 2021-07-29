@@ -42,8 +42,6 @@ public class ControllerWithDBTest {
     @Test
     public void membersApiTest() throws Exception {
 
-//        this.mockMvc.perform(get("/api/test/members")) .andExpect(jsonPath("$[0].username").value("Kyeongho Yoo")) .andExpect(jsonPath("$[1].username").value("Minho Yoo"));
-
         mockMvc.perform(get("/api/members"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0]").exists())

@@ -16,7 +16,8 @@ public class MemberRepositoryTest {
 
     @Test
     public void createMember() {
-        Member member = new Member("yamdeng", "yamdeng@gmail.com", 37);
+//        Member member = new Member("yamdeng", "yamdeng@gmail.com", 37);
+        Member member =  Member.builder().name("yamdeng").email("yamdeng@gmail.com").age(37).build();
         Member savedMember = memberRepository.save(member);
         Optional<Member> searchMemberOptional= memberRepository.findById(savedMember.getId());
         if(searchMemberOptional.isPresent()) {
