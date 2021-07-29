@@ -10,7 +10,7 @@ import reboot.spring.boot.properties.YamdengProperties;
 
 @Configuration
 @EnableConfigurationProperties({YamdengProperties.class})
-@PropertySource(value={"classpath:custom.properties"})
+@PropertySource(value={"classpath:custom.properties", "classpath:platform.properties"})
 public class PropertiesConfig {
 
     @ConfigurationProperties(prefix = "custom")
