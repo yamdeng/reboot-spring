@@ -1,14 +1,16 @@
 package reboot.spring.boot.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reboot.spring.boot.domain.Member;
 import reboot.spring.boot.domain.QMember;
 import reboot.spring.boot.repository.MemberRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,7 +43,8 @@ public class MemberService {
         List <Member> list = query
             .select(qMember)
             .from(qMember).fetch();
-        return list;
+        List<Member> resultList = list.stream().limit(2).collect(Collectors.toList());
+        return resultList;
     }
 
 }

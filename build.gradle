@@ -25,12 +25,12 @@ configurations {
 	}
 }
 
-def querydslSrcDir = "src/main/generated"
+def querydslSrcDir = "$projectDir/build/generated/querydsl"
 
 idea{
 	module{
-		sourceDirs +=file('generated/')
-		generatedSourceDirs += file('generated/')
+		sourceDirs +=file(querydslSrcDir)
+		generatedSourceDirs += file(querydslSrcDir)
 	}
 }
 
