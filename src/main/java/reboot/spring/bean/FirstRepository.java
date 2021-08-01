@@ -1,8 +1,9 @@
 package reboot.spring.bean;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import reboot.spring.bean.vo.FirstVo;
+
+import java.util.List;
 
 public class FirstRepository implements IFirstRepository {
 

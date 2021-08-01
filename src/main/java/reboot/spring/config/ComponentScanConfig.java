@@ -8,6 +8,9 @@ import reboot.spring.bean.auto.NotScan;
 
 @Configuration
 @ComponentScan(value = "reboot.spring.bean.auto",
-    excludeFilters = {@Filter(type = FilterType.ANNOTATION, classes = NotScan.class)})
+        excludeFilters = {
+                @Filter(type = FilterType.ANNOTATION, classes = NotScan.class),
+                @Filter(type = FilterType.ASPECTJ, pattern = "reboot.spring.bean.auto.exclude.*")}
+)
 public class ComponentScanConfig {
 }

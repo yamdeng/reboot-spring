@@ -1,9 +1,10 @@
 package reboot.spring.bean.auto;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @Component
 @Data
@@ -12,17 +13,17 @@ public class AutoBean {
     private String beanName = "autoBean";
 
     public AutoBean() {
-        System.out.println("AutoBean 생성자2");
+        System.out.println("AutoBean 생성자");
     }
 
     @PostConstruct
     public void init() {
-        System.out.println("FirstBean init call");
+        System.out.println("AutoBean init call");
     }
 
     @PreDestroy
     public void destroy() {
-        System.out.println("FirstBean destroy call");
+        System.out.println("AutoBean destroy call");
     }
 
 }
