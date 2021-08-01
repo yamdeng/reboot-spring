@@ -43,7 +43,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
-        <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+        <webhookUri>https://hooks.slack.com/services/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</webhookUri>
         <username>${HOSTNAME}</username>
         <colorCoding>true</colorCoding>
     </appender>
