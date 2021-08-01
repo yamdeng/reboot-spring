@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import reboot.spring.bean.vo.Member;
 
-@Transactional("transactionManager")
-public class MemberService {
+@Transactional("transactionManagerMysql")
+public class MemberMysqlService {
 
     @Autowired
-    private MemberDao memberDao;
+    private MemberDaoMySql memberDaoMySql;
 
     public void multipleInsert(Member member) {
-        memberDao.insert(member);
-        memberDao.insert(member);
+        memberDaoMySql.insert(member);
+        memberDaoMySql.insert(member);
     }
 
 }

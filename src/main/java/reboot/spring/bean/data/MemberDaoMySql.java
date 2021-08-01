@@ -13,13 +13,13 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-public class MemberDao {
+public class MemberDaoMySql {
 
     private String dbmsName;
 
     private JdbcTemplate jdbcTemplate;
 
-    public MemberDao(JdbcTemplate jdbcTemplate, String dbmsName) {
+    public MemberDaoMySql(JdbcTemplate jdbcTemplate, String dbmsName) {
         this.jdbcTemplate = jdbcTemplate;
         this.dbmsName = dbmsName;
     }
