@@ -1,15 +1,15 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.3'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-	id 'java'
-	id 'war'
-	id 'eclipse'
-	id 'idea'
+    id 'org.springframework.boot' version '2.5.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'java'
+    id 'war'
+    id 'eclipse'
+    id 'idea'
 }
 
 ext {
-	querydslVersion="4.3.1"
+    querydslVersion = "4.3.1"
 }
 
 
@@ -20,66 +20,67 @@ sourceCompatibility = '11'
 // query dsl 설정 start
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 def querydslSrcDir = "$projectDir/build/generated/querydsl"
 
-idea{
-	module{
-		sourceDirs +=file(querydslSrcDir)
-		generatedSourceDirs += file(querydslSrcDir)
-	}
+idea {
+    module {
+        sourceDirs += file(querydslSrcDir)
+        generatedSourceDirs += file(querydslSrcDir)
+    }
 }
 
 querydsl {
-	library = "com.querydsl:querydsl-apt"
-	jpa = true
-	querydslSourcesDir = querydslSrcDir
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
 }
 
 sourceSets {
-	main.java.srcDirs = ['src/main/java', querydslSrcDir]
+    main.java.srcDirs = ['src/main/java', querydslSrcDir]
 }
 
 configurations {
-	querydsl.extendsFrom compileClasspath
+    querydsl.extendsFrom compileClasspath
 }
 
 compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
+    options.annotationProcessorPath = configurations.querydsl
 }
 // query dsl 설정 end
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-	implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.0.Final'
-	implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
-	implementation 'mysql:mysql-connector-java:8.0.25'
-	implementation group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '10.0.8'
-	implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
-	implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
-	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
-	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.0'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.0.Final'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation 'mysql:mysql-connector-java:8.0.25'
+    implementation group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '10.0.8'
+    implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
+    annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
+    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.0'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation group: 'com.github.maricn', name: 'logback-slack-appender', version: '1.4.0'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
