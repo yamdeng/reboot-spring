@@ -1,13 +1,13 @@
 package reboot.spring.config;
 
+import com.atomikos.icatch.jta.UserTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
 import reboot.spring.bean.data.*;
 
 import javax.sql.DataSource;
@@ -22,9 +22,6 @@ public class DataConfig {
 
     @Autowired
     private DataSource dataSourceToH2;
-
-    @Autowired
-    private DataSource dataSourceToMysql;
 
     @Bean
     public ConnectionCheck connectionCheck() {
@@ -51,25 +48,6 @@ public class DataConfig {
         return new MemberDaoMySql(jdbcTemplate, dbmsName);
     }
 
-    @Bean("transactionManager")
-    public PlatformTransactionManager transactionManager() {
-        DataSourceTransactionManager tm = new DataSourceTransactionManager();
-        String dbmsName = "h2";
-        if (dbmsName.equals("h2")) {
-            tm.setDataSource(dataSourceToH2);
-        } else {
-            tm.setDataSource(dataSource);
-        }
-        return tm;
-    }
-
-    @Bean("transactionManagerMysql")
-    public PlatformTransactionManager transactionManagerMysql() {
-        DataSourceTransactionManager tm = new DataSourceTransactionManager();
-        tm.setDataSource(dataSource);
-        return tm;
-    }
-
     @Bean
     public MemberService memberService() {
         return new MemberService();
@@ -78,6 +56,27 @@ public class DataConfig {
     @Bean
     public MemberMysqlService memberMysqlService() {
         return new MemberMysqlService();
+    }
+
+    @Bean
+    public MemberGlobalService memberGlobalService() {
+        return new MemberGlobalService();
+    }
+
+    @Bean(initMethod = "init", destroyMethod = "close")
+    public UserTransactionManager userTransactionManager() throws Exception {
+        UserTransactionManager userTransactionManager = new UserTransactionManager();
+        userTransactionManager.setTransactionTimeout(300);
+        userTransactionManager.setForceShutdown(true);
+        return userTransactionManager;
+    }
+
+    @Bean
+    public JtaTransactionManager transactionManager() throws Exception {
+        JtaTransactionManager jtaTransactionManager = new JtaTransactionManager();
+        jtaTransactionManager.setTransactionManager(userTransactionManager());
+        jtaTransactionManager.setUserTransaction(userTransactionManager());
+        return jtaTransactionManager;
     }
 
 }

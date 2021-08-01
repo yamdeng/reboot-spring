@@ -1,18 +1,29 @@
 package reboot.spring.bean.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import reboot.spring.bean.vo.Member;
 
-@Transactional("transactionManager")
+import javax.transaction.Transactional;
+import java.util.List;
+
+//@Transactional("transactionManager")
+@Transactional
 public class MemberService {
 
     @Autowired
     private MemberDao memberDao;
 
+    public void insert(Member member) {
+        memberDao.insert(member);
+    }
+
     public void multipleInsert(Member member) {
         memberDao.insert(member);
         memberDao.insert(member);
+    }
+
+    public List<Member> selectAll() {
+        return memberDao.selectAll();
     }
 
 }

@@ -1,9 +1,10 @@
 package reboot.spring.bean.data;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConnectionCheck {
 
@@ -12,9 +13,6 @@ public class ConnectionCheck {
 
     @Autowired
     private DataSource dataSourceToH2;
-
-    @Autowired
-    private DataSource dataSourceToMysql;
 
     public void connection() {
         Connection conn = null;
@@ -45,21 +43,5 @@ public class ConnectionCheck {
                 }
         }
     }
-
-    public void connectionMysql() {
-        Connection conn = null;
-        try {
-            conn = dataSourceToMysql.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (conn != null)
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                }
-        }
-    }
-
 
 }
