@@ -1,16 +1,68 @@
 <configuration>
 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-  <logger name="org.springframework.jdbc" level="DEBUG"/>
-  <logger name="org.springframework.web.servlet" level="DEBUG" />
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_PATH:-/logs/app}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_PATH:-/logs/app}/bak/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-  <root level="info">
-    <appender-ref ref="STDOUT"/>
-  </root>
+    <appender name="ROLLING_FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_PATH:-/logs/app}/app-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_PATH:-/logs/app}/bak/app.%d{yyyy-MM-dd}-error.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+        <username>yamdeng</username>
+        <colorCoding>true</colorCoding>
+    </appender>
+
+    <logger name="org.springframework.jdbc" level="DEBUG"/>
+    <logger name="org.springframework.web.servlet" level="DEBUG"/>
+
+    <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SLACK"/>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <root level="ALL">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SLACK"/>
+        <appender-ref ref="ROLLING_FILE"/>
+        <appender-ref ref="ROLLING_FILE_ERROR"/>
+    </root>
 
 </configuration>
