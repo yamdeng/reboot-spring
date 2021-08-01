@@ -12,13 +12,13 @@ public class AopMain {
 
     public static void main(String[] args) {
         timecheckAop();
-        exceptionCheckAop();
-        proxyTargetClass();
+//        exceptionCheckAop();
+//        proxyTargetClass();
     }
 
     private static void timecheckAop() {
         AnnotationConfigApplicationContext ctx =
-            new AnnotationConfigApplicationContext(AopConfig.class);
+                new AnnotationConfigApplicationContext(AopConfig.class);
         IFirstRepository firstRepository = ctx.getBean(IFirstRepository.class);
         IFirstService firstService = ctx.getBean(IFirstService.class);
         firstService.list();
@@ -28,7 +28,7 @@ public class AopMain {
 
     private static void exceptionCheckAop() {
         AnnotationConfigApplicationContext ctx =
-            new AnnotationConfigApplicationContext(AopConfig.class);
+                new AnnotationConfigApplicationContext(AopConfig.class);
         ExceptionBean exceptionBean = ctx.getBean(ExceptionBean.class);
         try {
             exceptionBean.handleAopExampleException(true);
@@ -40,13 +40,13 @@ public class AopMain {
 
     private static void proxyTargetClass() {
         AnnotationConfigApplicationContext ctx =
-            new AnnotationConfigApplicationContext(AopConfig.class);
+                new AnnotationConfigApplicationContext(AopConfig.class);
         FirstDao firstDao1 = ctx.getBean("firstDao", FirstDao.class);
         firstDao1.list();
         System.out.println("firstDao1 class : " + firstDao1.getClass());
 
         AnnotationConfigApplicationContext proxyTargetClassCtx =
-            new AnnotationConfigApplicationContext(AopConfigClass.class);
+                new AnnotationConfigApplicationContext(AopConfigClass.class);
 
         FirstDao firstDao2 = ctx.getBean("firstDao", FirstDao.class);
         firstDao2.list();

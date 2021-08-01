@@ -1,11 +1,9 @@
 package reboot.spring.bean.aop;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
@@ -15,7 +13,8 @@ public class TimeCheckAspect {
     private void timecheckTarget() {
     }
 
-    @Around("timecheckTarget()")
+    //    @Around("timecheckTarget()")
+    @Around("reboot.spring.bean.aop.CommonPointcut.rootPointcut()")
     public Object checkTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.nanoTime();
         try {
