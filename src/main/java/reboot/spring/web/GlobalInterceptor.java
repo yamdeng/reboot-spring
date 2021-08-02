@@ -2,6 +2,8 @@ package reboot.spring.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +15,20 @@ public class GlobalInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
         log.info("GlobalInterceptor preHandle : " + handler.toString());
-        return true;
+        HttpSession session = request.getSession(false);
+        String requestUri = request.getRequestURI();
+        if(requestUri.contains("loginInfo")) {
+            if(session != null) {
+                Object authInfo = session.getAttribute("loginInfo");
+                if (authInfo != null) {
+                    return true;
+                }
+            }
+            response.sendRedirect(request.getContextPath() + "/auth/loginFail");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
