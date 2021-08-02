@@ -1,19 +1,14 @@
 package reboot.spring.web.controller;
 
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import jdk.jshell.spi.ExecutionControl.RunException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import reboot.spring.bean.vo.Member;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -37,15 +32,15 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model,
-        @RequestParam(value = "name", required = false) String name) {
+                        @RequestParam(value = "name", required = false) String name) {
         model.addAttribute("name", name);
         return "index";
     }
 
     @GetMapping("/hihi")
     public String hihi(Model model,
-        @RequestParam(value = "name", required = false) String name,
-        @RequestParam(value = "enabled", defaultValue = "false") Boolean enabled) {
+                       @RequestParam(value = "name", required = false) String name,
+                       @RequestParam(value = "enabled", defaultValue = "false") Boolean enabled) {
         model.addAttribute("name", name);
         model.addAttribute("enabled", enabled);
         return "hihi";
@@ -71,7 +66,7 @@ public class IndexController {
 
     @GetMapping("/client")
     public String clientError() {
-        if(true) {
+        if (true) {
             throw new IndexException("client error");
         }
         return "form";
@@ -79,7 +74,7 @@ public class IndexController {
 
     @GetMapping("/server")
     public String serverError() {
-        if(true) {
+        if (true) {
             throw new IndexException2("server error");
         }
         return "form";
@@ -87,7 +82,7 @@ public class IndexController {
 
     @GetMapping("/checked")
     public String checkedError() throws Exception {
-        if(true) {
+        if (true) {
             throw new Exception("checked exception error");
         }
         return "form";
@@ -95,24 +90,39 @@ public class IndexController {
 
     @GetMapping("/runtime")
     public String runtimeError() {
-        if(true) {
+        if (true) {
             throw new RuntimeException("runtime exception error");
         }
         return "form";
     }
 
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IndexException.class)
     public String handleClientException(HttpServletRequest request, IndexException ex) {
         log.info("handleClientException : " + ex.getMessage());
         return "error/error-client";
     }
 
-    @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IndexException2.class)
     public String handleServerException(HttpServletRequest request, IndexException2 ex) {
         log.info("handleServerException : " + ex.getMessage());
         return "error/error-server";
+    }
+
+    @GetMapping("/index2")
+    public String index2() {
+        return "redirect:index";
+    }
+
+    @GetMapping("/index3")
+    public String index3() {
+        return "forward:hihi";
+    }
+
+    @GetMapping("/index4")
+    public String index4() {
+        return "forward:view/detail";
     }
 
 }
