@@ -2,6 +2,7 @@ package com.yamdeng.template.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -14,6 +15,9 @@ import java.util.Arrays;
 @Configuration
 public class CommonConfig {
 
+    @Value("${app.logo}")
+    String appLogo;
+
     @Autowired
     private Environment environment;
 
@@ -23,6 +27,7 @@ public class CommonConfig {
     @PostConstruct
     public void init() {
         String[] profiles = environment.getActiveProfiles();
+        log.info("app logo : " + appLogo);
         log.info("active profiles : " + Arrays.toString(profiles));
         String[] beanNames = applicationContext.getBeanDefinitionNames();
         log.info("========== beanName display start ==========");

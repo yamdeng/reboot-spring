@@ -2,6 +2,7 @@ package com.yamdeng.template.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +18,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/common")
 public class CommonController {
 
+    @Value("${app.logo}")
+    String appLogo;
+
     @Autowired
     private ApplicationContext applicationContext;
 
     @Autowired
     private Environment environment;
 
+    @GetMapping("/appInfo")
+    public Map<String, Object> appInfo() {
+        Map<String, Object> appInfoMap = new HashMap<>();
+        appInfoMap.put("logo", appLogo);
+        return appInfoMap;
+    }
+
     @GetMapping("/beanNames")
     public List<String> beanNames() {
-        log.warn("testaaa");
         List<String> beanNameList = Arrays.stream(applicationContext.getBeanDefinitionNames()).collect(Collectors.toList());
         return beanNameList;
     }
