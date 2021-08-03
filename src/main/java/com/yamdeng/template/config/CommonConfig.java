@@ -1,0 +1,40 @@
+package com.yamdeng.template.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Arrays;
+
+@Slf4j
+@Configuration
+public class CommonConfig {
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @PostConstruct
+    public void init() {
+        String[] profiles = environment.getActiveProfiles();
+        log.info("active profiles : " + Arrays.toString(profiles));
+        String[] beanNames = applicationContext.getBeanDefinitionNames();
+        log.info("========== beanName display start ==========");
+        for(int index=0; index<beanNames.length; index++) {
+            log.info((index+1) + "." + beanNames[index]);
+        }
+        log.info("========== beanName display end ==========");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        log.info("application close");
+    }
+
+}
