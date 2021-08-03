@@ -1,9 +1,12 @@
 <configuration>
 
-    <springProperty name="slackUrl" source="app.log.slack.webhook-url"/>
-    <springProperty name="slackEnabled" source="app.log.slack.enabled"/>
     <springProperty name="logPath" source="app.log.path"/>
     <springProperty name="logPattern" source="app.log.pattern"/>
+    <springProperty name="slackUrl" source="app.log.slack.webhook-url"/>
+    <springProperty name="slackEnabled" source="app.log.slack.enabled"/>
+    <springProperty name="restEnabled" source="app.log.rest.enabled"/>
+    <springProperty name="restHostName" source="app.log.rest.host"/>
+    <springProperty name="restRequestParamName" source="app.log.rest.request-param-name"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -60,6 +63,25 @@
         </filter>
     </appender>
 
+    <!-- 커스텀 appender-->
+    <appender name="REST_LOG" class="com.yamdeng.template.common.RestLogAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${logPattern}</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <hostName>${restHostName}</hostName>
+        <requestParamName>${restRequestParamName}</requestParamName>
+    </appender>
+
+    <appender name="ASYNC_REST" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="REST_LOG"/>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
     <logger name="org.springframework.jdbc" level="DEBUG"/>
     <logger name="org.springframework.web.servlet" level="DEBUG"/>
 
@@ -69,7 +91,12 @@
         <appender-ref ref="ROLLING_FILE_ERROR"/>
         <if condition='property("slackEnabled").equals("true")'>
             <then>
-                <appender-ref ref="ASYNC_SLACK"/>
+                <appender-ref ref="SLACK"/>
+            </then>
+        </if>
+        <if condition='property("restEnabled").equals("true")'>
+            <then>
+                <appender-ref ref="ASYNC_REST"/>
             </then>
         </if>
     </root>
