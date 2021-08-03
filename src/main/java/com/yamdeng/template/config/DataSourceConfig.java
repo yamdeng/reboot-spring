@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +33,10 @@ public class DataSourceConfig {
         return new HikariDataSource(hikariConfig);
     }
 
+    @ConditionalOnProperty(
+        value="app.datasource.use-multiple", 
+        havingValue = "true",
+        matchIfMissing = false)
     @Bean("subDataSource")
     public DataSource subDataSource() {
         final HikariConfig hikariConfig = new HikariConfig();
