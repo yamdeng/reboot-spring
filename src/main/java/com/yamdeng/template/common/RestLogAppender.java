@@ -3,6 +3,8 @@ package com.yamdeng.template.common;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
+import lombok.extern.slf4j.Slf4j;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -12,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+@Slf4j
 public class RestLogAppender extends AppenderBase<ILoggingEvent> {
 
     Layout<ILoggingEvent> layout;
@@ -80,7 +83,7 @@ public class RestLogAppender extends AppenderBase<ILoggingEvent> {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
+            log.info(response.toString());
         } catch(Exception e) {
             e.printStackTrace();
         }finally {

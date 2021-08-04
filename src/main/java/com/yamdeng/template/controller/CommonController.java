@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.yamdeng.template.properties.BasicDataSourceProperties;
+import com.yamdeng.template.properties.SubDataSourceProperties;
+
 @Slf4j
 @RestController
 @RequestMapping("/common")
@@ -27,10 +30,18 @@ public class CommonController {
     @Autowired
     private Environment environment;
 
+    @Autowired(required = false)
+    private BasicDataSourceProperties basicDataSourceProperties;
+
+    @Autowired(required = false)
+    private SubDataSourceProperties subDataSourceProperties;
+
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
         Map<String, Object> appInfoMap = new HashMap<>();
         appInfoMap.put("logo", appLogo);
+        appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
+        appInfoMap.put("subDataSourceProperties", subDataSourceProperties.toString());
         return appInfoMap;
     }
 
@@ -50,6 +61,11 @@ public class CommonController {
     @PostMapping("/saveLog")
     public String saveLog(@RequestBody Map<String, String> logMap) {
         log.info("saveLog : " + logMap.get("message"));
+        return "success";
+    }
+
+    @GetMapping("/health")
+    public String health() {
         return "success";
     }
 
