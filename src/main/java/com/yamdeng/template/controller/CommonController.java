@@ -1,20 +1,28 @@
 package com.yamdeng.template.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.yamdeng.template.properties.BasicDataSourceProperties;
 import com.yamdeng.template.properties.SecondDataSourceProperties;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -28,7 +36,7 @@ public class CommonController {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private Environment environment;
+    private ConfigurableEnvironment environment;
 
     @Autowired(required = false)
     private BasicDataSourceProperties basicDataSourceProperties;
@@ -42,6 +50,16 @@ public class CommonController {
         appInfoMap.put("logo", appLogo);
         appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
         appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
+        TreeMap<String, String> appPropertyMap = new TreeMap<>();
+        MutablePropertySources mutablePropertySources = environment.getPropertySources();
+        mutablePropertySources.stream()
+            .filter(ps -> ps instanceof EnumerablePropertySource)
+            .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
+            .flatMap(Arrays::stream)
+            .forEach(propertyName -> {
+                appPropertyMap.put(propertyName, environment.getProperty(propertyName));
+            });
+        appInfoMap.put("appProperties", appPropertyMap);
         return appInfoMap;
     }
 
