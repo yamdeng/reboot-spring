@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.yamdeng.template.properties.BasicDataSourceProperties;
-import com.yamdeng.template.properties.SubDataSourceProperties;
+import com.yamdeng.template.properties.SecondDataSourceProperties;
 
 @Slf4j
 @RestController
@@ -34,14 +34,14 @@ public class CommonController {
     private BasicDataSourceProperties basicDataSourceProperties;
 
     @Autowired(required = false)
-    private SubDataSourceProperties subDataSourceProperties;
+    private SecondDataSourceProperties secondDataSourceProperties;
 
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
         Map<String, Object> appInfoMap = new HashMap<>();
         appInfoMap.put("logo", appLogo);
         appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
-        appInfoMap.put("subDataSourceProperties", subDataSourceProperties.toString());
+        appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
         return appInfoMap;
     }
 

@@ -1,10 +1,16 @@
 package com.yamdeng.template.common;
 
+import java.sql.Connection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +23,41 @@ public class ApplicationStarDataBaseRunner implements CommandLineRunner {
     @Value("${app.logo}")
     private String appLogo;
 
+    @Value("${app.data.run-ddl-script}")
+    private Boolean isRunSqlScript;
+
+    @Value("${app.datasource.use-multiple}")
+    private Boolean isUseMultipleDataSource;
+
     @Autowired
-    private Environment environment;
+    private JdbcTemplate jdbcTemplate;
+
+    @Qualifier("secondJdbcTemplate")
+    @Autowired(required = false)
+    private JdbcTemplate secondJdbcTemplate;
 
     public void run(String... args) {
     	log.info("========== database init start ==========");
-
+        log.info("isRunSqlScript : " + isRunSqlScript);
+        if(isRunSqlScript) {
+            initScript();
+        }
         log.info("========== database init end ==========");
     }
 
+    private void initScript() {
+        try {
+            Connection connection = jdbcTemplate.getDataSource().getConnection();
+            ScriptUtils.executeSqlScript(connection, new ClassPathResource("sql/ddl.sql"));
+            ScriptUtils.executeSqlScript(connection, new ClassPathResource("sql/init.sql"));
+            if(isUseMultipleDataSource && secondJdbcTemplate != null) {
+                Connection secondConnection = secondJdbcTemplate.getDataSource().getConnection();
+                ScriptUtils.executeSqlScript(secondConnection, new ClassPathResource("sql/ddl.sql"));
+                ScriptUtils.executeSqlScript(secondConnection, new ClassPathResource("sql/init.sql"));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
     
 }

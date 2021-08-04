@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @ConfigurationProperties(prefix = "app.datasource")
-public class SubDataSourceProperties {
+public class SecondDataSourceProperties {
 
     private String url;
     private String driverClassName;

@@ -3,7 +3,7 @@ package com.yamdeng.template.config;
 import javax.sql.DataSource;
 
 import com.yamdeng.template.properties.BasicDataSourceProperties;
-import com.yamdeng.template.properties.SubDataSourceProperties;
+import com.yamdeng.template.properties.SecondDataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -19,7 +19,7 @@ public class DataSourceConfig {
     private BasicDataSourceProperties basicDataSourceProperties;
 
     @Autowired(required = false)
-    private SubDataSourceProperties subDataSourceProperties;
+    private SecondDataSourceProperties secondDataSourceProperties;
 
     @Bean("dataSource")
     public DataSource dataSource() {
@@ -37,13 +37,13 @@ public class DataSourceConfig {
         value="app.datasource.use-multiple", 
         havingValue = "true",
         matchIfMissing = false)
-    @Bean("subDataSource")
-    public DataSource subDataSource() {
+    @Bean("secondDataSource")
+    public DataSource secondDataSource() {
         final HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(subDataSourceProperties.getUrl());
-        hikariConfig.setUsername(subDataSourceProperties.getUsername());
-        hikariConfig.setPassword(subDataSourceProperties.getPassword());
-        hikariConfig.setDriverClassName(subDataSourceProperties.getDriverClassName());
+        hikariConfig.setJdbcUrl(secondDataSourceProperties.getUrl());
+        hikariConfig.setUsername(secondDataSourceProperties.getUsername());
+        hikariConfig.setPassword(secondDataSourceProperties.getPassword());
+        hikariConfig.setDriverClassName(secondDataSourceProperties.getDriverClassName());
         hikariConfig.setPoolName("subAppPool");
         hikariConfig.setLeakDetectionThreshold(100);
         return new HikariDataSource(hikariConfig);
