@@ -2,7 +2,7 @@ package com.yamdeng.template.controller;
 
 import java.util.List;
 
-import com.yamdeng.template.dto.request.MemberDto;
+import com.yamdeng.template.dto.MemberDto;
 import com.yamdeng.template.service.MemberService;
 import com.yamdeng.template.util.TypeConvertUtil;
 
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+// @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
 public class MemberController {

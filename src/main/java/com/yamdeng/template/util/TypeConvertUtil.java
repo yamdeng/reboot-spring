@@ -9,12 +9,12 @@ public class TypeConvertUtil {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static <T, R> R convertType(T target, Class<R> type) {
-        return modelMapper.map(target, type);
+    public static <T, R extends Object> R convertType(T source, Class<R> type) {
+        return modelMapper.map(source, type);
     }
 
-    public static <E, R> List<R> convertListToDto(List<E> targetList, Class<R> dtoType) {
-        List<R> resultList = targetList.stream()
+    public static <E, R> List<R> convertListToDto(List<E> sourceList, Class<R> dtoType) {
+        List<R> resultList = sourceList.stream()
                 .map(entity -> modelMapper.map(entity, dtoType))
                 .collect(Collectors.toList());
         return resultList;

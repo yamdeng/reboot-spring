@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.yamdeng.template.common.RestServiceInterface;
 import com.yamdeng.template.data.repository.MemberRepository;
 import com.yamdeng.template.domain.Member;
-import com.yamdeng.template.dto.request.MemberDto;
+import com.yamdeng.template.dto.MemberDto;
 import com.yamdeng.template.util.TypeConvertUtil;
 
 import org.springframework.beans.BeanUtils;
@@ -17,17 +18,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberService {
+public class MemberService implements RestServiceInterface<Member, MemberDto> {
     
     private final MemberRepository memberRepository;
 
     // create
+    @Override
     public Member create(MemberDto memberDto) {
         Member newMember = TypeConvertUtil.convertType(memberDto, Member.class);
         return memberRepository.save(newMember);
     }
 
     // update
+    @Override
     public Member update(Long id, MemberDto memberDto) {
         Member member = memberRepository.findById(id).get();
         BeanUtils.copyProperties(memberDto, member);
@@ -35,20 +38,22 @@ public class MemberService {
     }
 
     // delete
+    @Override
     public Long delete(Long id) {
         memberRepository.deleteById(id);
         return id;
     }
 
     // all list
+    @Override
     public List<Member> list() {
         return memberRepository.findAll();
     }
 
     // detail
+    @Override
     public Member getDetail(Long id) {
         return memberRepository.findById(id).get();
     }
-
 
 }
