@@ -7,12 +7,15 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.yamdeng.template.common.LogMode;
 import com.yamdeng.template.properties.BasicDataSourceProperties;
 import com.yamdeng.template.properties.SecondDataSourceProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
@@ -31,6 +34,8 @@ public class CommonController {
 
     @Value("${app.logo}")
     String appLogo;
+    @Value("${app.log.mode}")
+    private LogMode logMode;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -44,10 +49,14 @@ public class CommonController {
     @Autowired(required = false)
     private SecondDataSourceProperties secondDataSourceProperties;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
         Map<String, Object> appInfoMap = new HashMap<>();
         appInfoMap.put("logo", appLogo);
+        appInfoMap.put("logoMode", logMode);
         appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
         appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
         TreeMap<String, String> appPropertyMap = new TreeMap<>();
@@ -85,6 +94,15 @@ public class CommonController {
     @GetMapping("/health")
     public String health() {
         return "success";
+    }
+
+    @GetMapping("/messages")
+    public Map<String, String> messages() {
+        log.info("messageSource : " + messageSource);
+        Map<String, String> messageMap = new HashMap<>();
+        messageMap.put("server.welcome", messageSource.getMessage("server.welcome", null, null));
+        messageMap.put("client.welcome", messageSource.getMessage("client.welcome", null, null));
+        return messageMap;
     }
 
 }

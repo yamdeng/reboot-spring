@@ -31,9 +31,11 @@ public class CommonConfig {
         log.info("active profiles : " + Arrays.toString(profiles));
         String[] beanNames = applicationContext.getBeanDefinitionNames();
         log.info("========== beanName display start ==========");
+        Arrays.sort(beanNames);
         for(int index=0; index<beanNames.length; index++) {
-            log.info((index+1) + "." + beanNames[index]);
+            log.info(beanNames[index]);
         }
+        log.info("@@@@@@@@@@ beanName totacl count : " + beanNames.length + "@@@@@@@@@@");
         log.info("========== beanName display end ==========");
     }
 

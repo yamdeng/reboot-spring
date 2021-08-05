@@ -85,12 +85,10 @@ public class ExecuteService {
         RestServiceInterface<Object, Object> restServiceInterface = 
                 applicationContext.getBean(serviceName, RestServiceInterface.class);
         Object requestDto = TypeConvertUtil.convertType(body, dtoClass);
-        log.info("validator : " + validator);
         validator.validate(requestDto, errors);
         if(errors.hasErrors()) {
-            log.info("hasError");
             List<ObjectError> errorObjects = errors.getAllErrors();
-            log.info("errorObjects : " + errorObjects);
+            log.error("errorObjects : " + errorObjects);
             throw new ReqeustParameterException(errorObjects);
         }
         return restServiceInterface.create(requestDto);
@@ -103,6 +101,12 @@ public class ExecuteService {
         RestServiceInterface<Object, Object> restServiceInterface = 
                 applicationContext.getBean(serviceName, RestServiceInterface.class);
         Object requestDto = TypeConvertUtil.convertType(body, dtoClass);
+        validator.validate(requestDto, errors);
+        if(errors.hasErrors()) {
+            List<ObjectError> errorObjects = errors.getAllErrors();
+            log.error("errorObjects : " + errorObjects);
+            throw new ReqeustParameterException(errorObjects);
+        }
         return restServiceInterface.update(id, requestDto);
     }
 
