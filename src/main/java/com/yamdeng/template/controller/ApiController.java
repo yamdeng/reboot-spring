@@ -6,6 +6,7 @@ import java.util.Map;
 import com.yamdeng.template.common.ExecuteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,13 +34,13 @@ public class ApiController {
     }
 
     @PostMapping("/{entityNames}")
-    public Object create(@PathVariable String entityNames, @RequestBody Map<String, Object> bodyMap) {
-        return executeService.create(entityNames, bodyMap);
+    public Object create(@PathVariable String entityNames, @RequestBody Map<String, Object> bodyMap, Errors errors) {
+        return executeService.create(entityNames, bodyMap, errors);
     }
 
     @PutMapping("/{entityNames}/{id}")
-    public Object update(@PathVariable String entityNames, @PathVariable Long id, @RequestBody Map<String, Object> bodyMap) {
-        return executeService.update(entityNames, id, bodyMap);
+    public Object update(@PathVariable String entityNames, @PathVariable Long id, @RequestBody Map<String, Object> bodyMap, Errors errors) {
+        return executeService.update(entityNames, id, bodyMap, errors);
     }
 
     @DeleteMapping("/{entityNames}/{id}")

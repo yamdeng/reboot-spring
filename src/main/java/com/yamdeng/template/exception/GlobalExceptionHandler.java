@@ -22,4 +22,12 @@ public class GlobalExceptionHandler {
         return new ExceptionDto(ex.getMessage(), ex.toString());
     }
 
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    @ExceptionHandler(ReqeustParameterException.class)
+    public ExceptionDto handleClientBadParameterException(HttpServletRequest request, ReqeustParameterException ex) {
+        log.error("handleClientBadParameterException : " + ex);
+        return new ExceptionDto(ex.getMessage(), ex.toString(), ex.getErrorObjects());
+    }
+
 }
