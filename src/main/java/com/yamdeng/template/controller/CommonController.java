@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.yamdeng.template.common.DBMessageSource;
 import com.yamdeng.template.common.LogMode;
 import com.yamdeng.template.common.MessageSourceService;
 import com.yamdeng.template.properties.BasicDataSourceProperties;
@@ -36,6 +37,8 @@ public class CommonController {
     String appLogo;
     @Value("${app.log.mode}")
     private LogMode logMode;
+    @Value("${app.messagesource.use-db}")
+    private Boolean useDbMessageSource;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -108,6 +111,15 @@ public class CommonController {
         messageMap.put("server.welcome", messageSourceService.getMessage("server.welcome"));
         messageMap.put("client.welcome", messageSourceService.getMessage("client.welcome"));
         return messageMap;
+    }
+
+    @GetMapping("/refreshDBMessageSource")
+    public String refreshDBMessageSource() {
+        if(useDbMessageSource) {
+            DBMessageSource dbMessageSource = (DBMessageSource) messageSource;
+            dbMessageSource.refreshMessage();
+        }
+        return "success";
     }
 
 }

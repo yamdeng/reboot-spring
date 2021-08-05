@@ -1,22 +1,106 @@
 package com.yamdeng.template.common;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.AbstractMessageSource;
-
+import java.sql.ResultSet;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+
+import com.yamdeng.template.dto.MessageDto;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.AbstractMessageSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.util.StringUtils;
 
 public class DBMessageSource extends AbstractMessageSource {
 
-    // @Autowired
-    // private IMessageService messageService;
+    @Value("${app.messagesource.locale-kinds}")
+    private String localeKinds;
+    String[] locales = null;
+
+    private LocalDateTime messageMapLastModified;
+
+    private Map<String, List<MessageDto>> messageMap = new HashMap<String, List<MessageDto>>();
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    
+    @PostConstruct
+    private void init() {
+        locales = StringUtils.split(localeKinds, ",");
+    }
 
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
         String lang = locale.getLanguage();
-        // String message = messageService.getMessage(code, lang);
-        String message = "";
+        String message = getMessageToMessageMap(code, lang);
+        // String message = getMessageToDB(code, lang);
         return createMessageFormat(message, locale);
     }
 
+    private List<MessageDto> getListByLang(String lang) {
+        List<MessageDto> results = jdbcTemplate.query("select * from APP_MESSAGE where LANG = ?",
+            (ResultSet rs, int rowNum) -> {
+                MessageDto member = new MessageDto(
+                        rs.getString("CODE"),
+                        rs.getString("LANG"),
+                        rs.getString("MESSAGE"));
+                return member;
+            }, lang);
+        return results;
+    }
+
+    @Scheduled(fixedRateString ="${app.messagesource.refresh-ms}", initialDelayString = "${app.messagesource.refresh-ms}")
+    public void refreshMessage() {
+        Map<String, List<MessageDto>> newMessageMap = new HashMap<String, List<MessageDto>>();
+        for(String lang : locales) {
+            List<MessageDto> list = getListByLang(lang);
+            newMessageMap.put(lang, list);
+        }
+        synchronized (this.messageMap) {
+            this.messageMap.clear();
+            this.messageMap = newMessageMap;
+            this.messageMapLastModified = LocalDateTime.now();
+        }
+    }
+
+    private String getMessageToMessageMap(String code, String lang) {
+        String message = "";
+        List<MessageDto> list = messageMap.get(lang);
+        Optional<MessageDto> optionalDto =  list.stream().filter(messageDto -> {
+            return messageDto.getCode().equals(code);
+        }).findAny();
+        if(optionalDto.isPresent()) {
+            message = optionalDto.get().getMessage();
+        }
+        return message;
+    }
+
+    // public String getMessageToDB(String code, String lang) {
+    //     MessageDto member = jdbcTemplate.queryForObject(
+    //             "select * from APP_MESSAGE where CODE = ? AND LANG = ?",
+    //             new RowMapper<MessageDto>() {
+    //                 @Override
+    //                 public MessageDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+    //                     MessageDto member = new MessageDto(
+    //                             rs.getString("CODE"),
+    //                             rs.getString("LANG"),
+    //                             rs.getString("MESSAGE"));
+    //                     return member;
+    //                 }
+    //             }, code, lang);
+    //     return member.getMessage();
+    // }
+
+    public LocalDateTime getMessageMapLastModified() {
+        return messageMapLastModified;
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,12 +22,12 @@ public class ApplicationStarDataBaseRunner implements CommandLineRunner {
 
     @Value("${app.logo}")
     private String appLogo;
-
     @Value("${app.data.run-ddl-script}")
     private Boolean isRunSqlScript;
-
     @Value("${app.datasource.use-multiple}")
     private Boolean isUseMultipleDataSource;
+    @Value("${app.messagesource.use-db}")
+    private Boolean useDbMessageSource;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -35,11 +36,18 @@ public class ApplicationStarDataBaseRunner implements CommandLineRunner {
     @Autowired(required = false)
     private JdbcTemplate secondJdbcTemplate;
 
+    @Autowired
+    private MessageSource messageSource;
+
     public void run(String... args) {
     	log.info("========== database init start ==========");
         log.info("isRunSqlScript : " + isRunSqlScript);
         if(isRunSqlScript) {
             initScript();
+        }
+        if(useDbMessageSource) {
+            DBMessageSource dbMessageSource = (DBMessageSource) messageSource;
+            dbMessageSource.refreshMessage();
         }
         log.info("========== database init end ==========");
     }
