@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.yamdeng.template.common.RestServiceInterface;
+import com.yamdeng.template.common.RestCommonService;
 import com.yamdeng.template.data.repository.MemberRepository;
 import com.yamdeng.template.domain.Member;
 import com.yamdeng.template.dto.MemberDto;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberService implements RestServiceInterface<Member, MemberDto> {
+public class MemberService implements RestCommonService<Member, MemberDto> {
     
     private final MemberRepository memberRepository;
 

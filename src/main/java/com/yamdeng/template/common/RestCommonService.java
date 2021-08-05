@@ -2,7 +2,7 @@ package com.yamdeng.template.common;
 
 import java.util.List;
 
-public interface RestServiceInterface<E, T> {
+public interface RestCommonService<E, T> {
 
     E create(T dto);
 

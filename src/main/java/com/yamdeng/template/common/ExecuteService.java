@@ -67,14 +67,14 @@ public class ExecuteService {
     public List<?> list(String entityNames) {
         CommonRestInfo commonRestInfo = restCommonInfoMap.get(entityNames);
         String serviceName = commonRestInfo.getServiceName();
-        RestServiceInterface<?, ?> restServiceInterface = applicationContext.getBean(serviceName, RestServiceInterface.class);
+        RestCommonService<?, ?> restServiceInterface = applicationContext.getBean(serviceName, RestCommonService.class);
         return restServiceInterface.list();
     }
 
     public Object getDetail(String entityNames, Long id) {
         CommonRestInfo commonRestInfo = restCommonInfoMap.get(entityNames);
         String serviceName = commonRestInfo.getServiceName();
-        RestServiceInterface<?, ?> restServiceInterface = applicationContext.getBean(serviceName, RestServiceInterface.class);
+        RestCommonService<?, ?> restServiceInterface = applicationContext.getBean(serviceName, RestCommonService.class);
         return restServiceInterface.getDetail(id);
     }
 
@@ -82,8 +82,8 @@ public class ExecuteService {
         CommonRestInfo commonRestInfo = restCommonInfoMap.get(entityNames);
         String serviceName = commonRestInfo.getServiceName();
         Class<?> dtoClass = commonRestInfo.getDtoClass();
-        RestServiceInterface<Object, Object> restServiceInterface = 
-                applicationContext.getBean(serviceName, RestServiceInterface.class);
+        RestCommonService<Object, Object> restServiceInterface = 
+                applicationContext.getBean(serviceName, RestCommonService.class);
         Object requestDto = TypeConvertUtil.convertType(body, dtoClass);
         validator.validate(requestDto, errors);
         if(errors.hasErrors()) {
@@ -98,8 +98,8 @@ public class ExecuteService {
         CommonRestInfo commonRestInfo = restCommonInfoMap.get(entityNames);
         String serviceName = commonRestInfo.getServiceName();
         Class<?> dtoClass = commonRestInfo.getDtoClass();
-        RestServiceInterface<Object, Object> restServiceInterface = 
-                applicationContext.getBean(serviceName, RestServiceInterface.class);
+        RestCommonService<Object, Object> restServiceInterface = 
+                applicationContext.getBean(serviceName, RestCommonService.class);
         Object requestDto = TypeConvertUtil.convertType(body, dtoClass);
         validator.validate(requestDto, errors);
         if(errors.hasErrors()) {
@@ -113,8 +113,8 @@ public class ExecuteService {
     public Long delete(String entityNames, Long id) {
         CommonRestInfo commonRestInfo = restCommonInfoMap.get(entityNames);
         String serviceName = commonRestInfo.getServiceName();
-        RestServiceInterface<Object, Object> restServiceInterface = 
-                applicationContext.getBean(serviceName, RestServiceInterface.class);
+        RestCommonService<Object, Object> restServiceInterface = 
+                applicationContext.getBean(serviceName, RestCommonService.class);
         return restServiceInterface.delete(id);
     }
     

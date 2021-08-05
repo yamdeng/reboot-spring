@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.yamdeng.template.common.LogMode;
+import com.yamdeng.template.common.MessageSourceService;
 import com.yamdeng.template.properties.BasicDataSourceProperties;
 import com.yamdeng.template.properties.SecondDataSourceProperties;
 
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
@@ -51,6 +51,9 @@ public class CommonController {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private MessageSourceService messageSourceService;
 
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
@@ -100,8 +103,10 @@ public class CommonController {
     public Map<String, String> messages() {
         log.info("messageSource : " + messageSource);
         Map<String, String> messageMap = new HashMap<>();
-        messageMap.put("server.welcome", messageSource.getMessage("server.welcome", null, null));
-        messageMap.put("client.welcome", messageSource.getMessage("client.welcome", null, null));
+        // messageMap.put("server.welcome", messageSource.getMessage("server.welcome", null, null));
+        // messageMap.put("client.welcome", messageSource.getMessage("client.welcome", null, null));
+        messageMap.put("server.welcome", messageSourceService.getMessage("server.welcome"));
+        messageMap.put("client.welcome", messageSourceService.getMessage("client.welcome"));
         return messageMap;
     }
 
