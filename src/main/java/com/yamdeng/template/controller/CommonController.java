@@ -52,11 +52,11 @@ public class CommonController {
     @Autowired(required = false)
     private SecondDataSourceProperties secondDataSourceProperties;
 
-    @Autowired
-    private MessageSource messageSource;
+    @Autowired(required = false)
+    private MessageSourceService messageSourceService;
 
     @Autowired
-    private MessageSourceService messageSourceService;
+    private MessageSource messageSource;
 
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
