@@ -39,6 +39,8 @@ public class CommonController {
     private LogMode logMode;
     @Value("${app.messagesource.use-db}")
     private Boolean useDbMessageSource;
+    @Value("${app.java.version}")
+    String javaVersion;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -61,10 +63,6 @@ public class CommonController {
     @GetMapping("/appInfo")
     public Map<String, Object> appInfo() {
         Map<String, Object> appInfoMap = new HashMap<>();
-        appInfoMap.put("logo", appLogo);
-        appInfoMap.put("logoMode", logMode);
-        appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
-        appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
         TreeMap<String, String> appPropertyMap = new TreeMap<>();
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         mutablePropertySources.stream()
@@ -74,6 +72,11 @@ public class CommonController {
             .forEach(propertyName -> {
                 appPropertyMap.put(propertyName, environment.getProperty(propertyName));
             });
+        appInfoMap.put("javaVersion", javaVersion);
+        appInfoMap.put("logo", appLogo);
+        appInfoMap.put("logoMode", logMode);
+        appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
+        appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
         appInfoMap.put("appProperties", appPropertyMap);
         return appInfoMap;
     }
