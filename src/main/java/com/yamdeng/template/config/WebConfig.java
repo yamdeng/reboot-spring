@@ -7,6 +7,7 @@ import com.yamdeng.template.exception.ApplicationException;
 import com.yamdeng.template.web.ApiLogInterceptor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +15,13 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +45,8 @@ public class WebConfig implements WebMvcConfigurer {
     private String resourceLocations;
     @Value("${app.messagesource.default-locale}")
     private String defaultLocale;
+    @Value("${app.locale.cookie-name}")
+    private String localeCookieName;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -61,6 +67,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(apiLogInterceptor())
             .addPathPatterns("/api/**");
+        registry.addInterceptor(localeChangeInterceptor());
     }
 
     @Override
@@ -116,6 +123,29 @@ public class WebConfig implements WebMvcConfigurer {
             // Throwables.throwIfUnchecked(e);
         }
         return messageSourceService;
+    }
+
+    @Value("${app.locale.change-parameter:lang}")
+    private String localeChangeParameter;
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName(localeChangeParameter);
+        return interceptor;
+    }
+
+    @ConditionalOnProperty(
+        value="app.locale.use-cookie", 
+        havingValue = "true",
+        matchIfMissing = false)
+    @Bean
+    public LocaleResolver localeResolver(){
+        CookieLocaleResolver resolver = new CookieLocaleResolver();
+        resolver.setDefaultLocale(StringUtils.parseLocaleString(defaultLocale));
+        resolver.setCookieName(localeCookieName);
+        resolver.setCookieMaxAge(4800);
+        return resolver;
     }
     
 }

@@ -114,6 +114,8 @@ public class CommonController {
         messageMap.put("server.welcome", messageSourceService.getMessage("server.welcome"));
         messageMap.put("client.welcome", messageSourceService.getMessage("client.welcome"));
         messageMap.put("not_key_check", messageSourceService.getMessage("not_key_check"));
+        messageMap.put("javax.validation.constraints.NotEmpty.message", messageSourceService.getMessage("javax.validation.constraints.NotEmpty.message"));
+        messageMap.put("validation.NotEmpty", messageSourceService.getMessage("validation.NotEmpty"));
         return messageMap;
     }
 
