@@ -42,20 +42,21 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.view.template-type}")
     private ViewTemplateType viewTemplateType;
     @Value("${app.view.resource-locations}")
-    private String resourceLocations;
+    private String[] resourceLocations;
     @Value("${app.messagesource.default-locale}")
     private String defaultLocale;
     @Value("${app.locale.cookie-name}")
     private String localeCookieName;
+    @Value("${spring.messages.basename}")
+    private String[] messageBasenames;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // registry.addResourceHandler("/assets/**")
         //     .addResourceLocations("classpath:/assets/", "/assets/");
-        String[] resourceLocationsArray = StringUtils.split(resourceLocations, ",");
-        if(resourceLocationsArray != null && resourceLocationsArray.length > 0) {
-            for(int arrIndex=0; arrIndex<resourceLocationsArray.length; arrIndex++) {
-                String resourceLocation = resourceLocationsArray[arrIndex];
+        if(resourceLocations != null && resourceLocations.length > 0) {
+            for(int arrIndex=0; arrIndex<resourceLocations.length; arrIndex++) {
+                String resourceLocation = resourceLocations[arrIndex];
                 registry
                         .addResourceHandler(resourceLocation + "/**")
                         .addResourceLocations(resourceLocation + "/", "classpath:" + resourceLocation + "/");
@@ -94,7 +95,7 @@ public class WebConfig implements WebMvcConfigurer {
             messageSource.setDefaultEncoding("UTF-8");
             // spring 기본 properties 설정을 적용할 경우
             // messageSource.setBasename("messages");
-            messageSource.setBasenames("message.server", "message.client", "message.validation");
+            messageSource.setBasenames(messageBasenames);
             messageSource.setUseCodeAsDefaultMessage(true);
             messageSource.setDefaultLocale(StringUtils.parseLocale(defaultLocale));
             messageSource.setCacheMillis(messageSourceRefreshMs);

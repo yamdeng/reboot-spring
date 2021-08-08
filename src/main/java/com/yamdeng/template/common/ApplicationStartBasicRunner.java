@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Validator;
+import org.springframework.web.servlet.LocaleResolver;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,11 +31,15 @@ public class ApplicationStartBasicRunner implements CommandLineRunner {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private LocaleResolver localeResolver;
+
     public void run(String... args) {
     	log.info("application started [" + appLogo + "] :" + Arrays.toString(args));
         log.info("validator :" + validator);
         log.info("conversionService :" + conversionService.hashCode());
         log.info("messageSource :" + messageSource);
+        log.info("localeResolver :" + localeResolver);
     }
 
     
