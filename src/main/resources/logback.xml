@@ -1,5 +1,7 @@
 <configuration>
 
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
     <springProperty name="logPath" source="app.log.path"/>
     <springProperty name="logPattern" source="app.log.pattern"/>
     <springProperty name="slackUrl" source="app.log.slack.webhook-url"/>
@@ -7,6 +9,12 @@
     <springProperty name="restEnabled" source="app.log.rest.enabled"/>
     <springProperty name="restHostName" source="app.log.rest.host"/>
     <springProperty name="restRequestParamName" source="app.log.rest.request-param-name"/>
+
+    <!-- profile 단위 설정 : application-{profile}.properties 파일에 정의된 것이 우선시 됨-->
+    <springProfile name="local | development">
+        <logger name="org.springframework.jdbc" level="DEBUG"/>
+        <logger name="org.springframework.web.servlet" level="DEBUG"/>
+    </springProfile>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
