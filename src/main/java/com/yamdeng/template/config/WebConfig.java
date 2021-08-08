@@ -7,25 +7,22 @@ import com.yamdeng.template.exception.ApplicationException;
 import com.yamdeng.template.web.ApiLogInterceptor;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// @Configuration
-// @EnableWebMvc
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${app.messagesource.service}")
@@ -40,35 +37,30 @@ public class WebConfig implements WebMvcConfigurer {
     private String jspPrefix;
     @Value("${app.view.template-type}")
     private ViewTemplateType viewTemplateType;
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
-        return (factory) -> factory.setRegisterDefaultServlet(true);
-    }
+    @Value("${app.view.resource-locations}")
+    private String resourceLocations;
+    @Value("${app.messagesource.default-locale}")
+    private String defaultLocale;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // registry.addResourceHandler("/assets/**")
         //     .addResourceLocations("classpath:/assets/", "/assets/");
+        String[] resourceLocationsArray = StringUtils.split(resourceLocations, ",");
+        if(resourceLocationsArray != null && resourceLocationsArray.length > 0) {
+            for(int arrIndex=0; arrIndex<resourceLocationsArray.length; arrIndex++) {
+                String resourceLocation = resourceLocationsArray[arrIndex];
+                registry
+                        .addResourceHandler(resourceLocation + "/**")
+                        .addResourceLocations(resourceLocation + "/", "classpath:" + resourceLocation + "/");
+            }
+        }
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(apiLogInterceptor())
             .addPathPatterns("/api/**");
-    }
-
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver vr = new InternalResourceViewResolver();
-        vr.setPrefix("/WEB-INF/view/");
-        vr.setSuffix(".jsp");
-        return vr;
     }
 
     @Override
@@ -92,12 +84,22 @@ public class WebConfig implements WebMvcConfigurer {
             return dbMessageSource;
         } else {
             ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-            messageSource.setBasenames("message.server", "message.client");
             messageSource.setDefaultEncoding("UTF-8");
+            // spring 기본 properties 설정을 적용할 경우
+            // messageSource.setBasename("messages");
+            messageSource.setBasenames("message.server", "message.client", "message.validation");
             messageSource.setUseCodeAsDefaultMessage(true);
+            messageSource.setDefaultLocale(StringUtils.parseLocale(defaultLocale));
             messageSource.setCacheMillis(messageSourceRefreshMs);
             return messageSource;
         }
+    }
+
+    @Override
+    public Validator getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
     }
 
     @Bean
@@ -110,7 +112,8 @@ public class WebConfig implements WebMvcConfigurer {
         } catch (Exception e) {
             log.error("messageSourceService Init Error", e);
             throw new ApplicationException(e);
-             // Throwables.throwIfUnchecked(e);
+            // 정적 유틸 클래스로 예외 던지기
+            // Throwables.throwIfUnchecked(e);
         }
         return messageSourceService;
     }

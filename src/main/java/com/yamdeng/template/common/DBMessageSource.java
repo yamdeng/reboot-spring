@@ -1,6 +1,7 @@
 package com.yamdeng.template.common;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +27,9 @@ public class DBMessageSource extends AbstractMessageSource {
     @Value("${app.messagesource.locale-kinds}")
     private String localeKinds;
     String[] locales = null;
+
+    @Value("${app.messagesource.default-locale}")
+    private String defaultLocale;
 
     private LocalDateTime messageMapLastModified;
 
@@ -40,7 +45,7 @@ public class DBMessageSource extends AbstractMessageSource {
 
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
-        String lang = locale.getLanguage();
+        String lang = getLangToDefaultLocale(locale.getLanguage());
         String message = getMessageToMessageMap(code, lang);
         // String message = getMessageToDB(code, lang);
         return createMessageFormat(message, locale);
@@ -72,33 +77,45 @@ public class DBMessageSource extends AbstractMessageSource {
         }
     }
 
+    private String getLangToDefaultLocale(String lang) {
+        if(localeKinds.contains(lang)) {
+            return lang;
+        } else {
+            return defaultLocale;
+        } 
+    }
+
     private String getMessageToMessageMap(String code, String lang) {
-        String message = "";
         List<MessageDto> list = messageMap.get(lang);
         Optional<MessageDto> optionalDto =  list.stream().filter(messageDto -> {
             return messageDto.getCode().equals(code);
         }).findAny();
         if(optionalDto.isPresent()) {
-            message = optionalDto.get().getMessage();
+            return optionalDto.get().getMessage();
+        } else {
+            return code;
         }
-        return message;
     }
 
-    // public String getMessageToDB(String code, String lang) {
-    //     MessageDto member = jdbcTemplate.queryForObject(
-    //             "select * from APP_MESSAGE where CODE = ? AND LANG = ?",
-    //             new RowMapper<MessageDto>() {
-    //                 @Override
-    //                 public MessageDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-    //                     MessageDto member = new MessageDto(
-    //                             rs.getString("CODE"),
-    //                             rs.getString("LANG"),
-    //                             rs.getString("MESSAGE"));
-    //                     return member;
-    //                 }
-    //             }, code, lang);
-    //     return member.getMessage();
-    // }
+    public String getMessageToDB(String code, String lang) {
+        MessageDto member = jdbcTemplate.queryForObject(
+                "select * from APP_MESSAGE where CODE = ? AND LANG = ?",
+                new RowMapper<MessageDto>() {
+                    @Override
+                    public MessageDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        MessageDto member = new MessageDto(
+                                rs.getString("CODE"),
+                                rs.getString("LANG"),
+                                rs.getString("MESSAGE"));
+                        return member;
+                    }
+                }, code, lang);
+        if(member != null) {
+            return member.getMessage();
+        } else {
+            return code;
+        }
+    }
 
     public LocalDateTime getMessageMapLastModified() {
         return messageMapLastModified;

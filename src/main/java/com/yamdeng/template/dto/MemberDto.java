@@ -19,7 +19,7 @@ public class MemberDto {
     private String name;
 
     @Email
-    @NotEmpty
+    @NotEmpty(message="{validation.NotEmpty}")
     private String email;
 
     @NotNull

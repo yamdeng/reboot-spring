@@ -113,6 +113,7 @@ public class CommonController {
         // messageMap.put("client.welcome", messageSource.getMessage("client.welcome", null, null));
         messageMap.put("server.welcome", messageSourceService.getMessage("server.welcome"));
         messageMap.put("client.welcome", messageSourceService.getMessage("client.welcome"));
+        messageMap.put("not_key_check", messageSourceService.getMessage("not_key_check"));
         return messageMap;
     }
 
