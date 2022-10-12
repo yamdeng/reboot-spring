@@ -72,12 +72,12 @@ public class CommonController {
             .forEach(propertyName -> {
                 appPropertyMap.put(propertyName, environment.getProperty(propertyName));
             });
-        appInfoMap.put("javaVersion", javaVersion);
-        appInfoMap.put("logo", appLogo);
-        appInfoMap.put("logoMode", logMode);
-        appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
-        appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
-        appInfoMap.put("appProperties", appPropertyMap);
+//        appInfoMap.put("javaVersion", javaVersion);
+//        appInfoMap.put("logo", appLogo);
+//        appInfoMap.put("logoMode", logMode);
+//        appInfoMap.put("basicDataSourceProperties", basicDataSourceProperties.toString());
+//        appInfoMap.put("secondDataSourceProperties", secondDataSourceProperties.toString());
+//        appInfoMap.put("appProperties", appPropertyMap);
         return appInfoMap;
     }
 

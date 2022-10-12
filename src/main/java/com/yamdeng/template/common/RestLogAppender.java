@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -67,7 +68,8 @@ public class RestLogAppender extends AppenderBase<ILoggingEvent> {
             http.setRequestMethod("POST");
             http.setRequestProperty("content-type", "application/json");
             http.setRequestProperty("Accept", "application/json");
-            Map<String, String> logMap = Map.of(requestParamName, logMessage);
+            Map<String, String> logMap = new HashMap<>();
+            logMap.put(requestParamName, logMessage);
             OutputStream os = http.getOutputStream();
             ObjectMapper mapper = new ObjectMapper();
             String jsonParameterString = mapper.writeValueAsString(logMap);
