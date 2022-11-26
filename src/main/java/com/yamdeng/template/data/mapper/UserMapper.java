@@ -8,6 +8,6 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    List<UserVO> test() throws Exception;
+    List<UserVO> test();
 
 }
