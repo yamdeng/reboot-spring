@@ -1,4 +1,4 @@
-package com.yamdeng.template.data.mapper;
+package com.yamdeng.template.data.dao;
 
 import com.yamdeng.template.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface UserMapper {
+public interface UserDao {
 
     List<UserVO> test();
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.CommuteDao">
+	
+	<select id="test" resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT *
+		FROM OFFICE_COMMUTE_DAY
+	</select>
+
+	<select id="selectByBaseDateStr"
+			parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT *
+		FROM OFFICE_COMMUTE_DAY
+		WHERE base_date_str = #{baseDateStr}
+	</select>
+
+</mapper>
