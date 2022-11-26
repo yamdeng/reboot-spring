@@ -42,3 +42,5 @@ build
 ### querydsl ###
 
 src/main/generated
+
+.DS_Store
