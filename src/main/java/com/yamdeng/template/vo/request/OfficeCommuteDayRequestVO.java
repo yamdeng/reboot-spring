@@ -1,5 +1,6 @@
 package com.yamdeng.template.vo.request;
 
+import com.yamdeng.template.vo.common.BaseCommonVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,9 +28,5 @@ public class OfficeCommuteDayRequestVO {
     private String modYn; /* 수정여부 */
     private String tardyYn; /* 지각여부 */
     private Double workedTimeValue; /* 근무시간 */
-    private LocalDateTime regDate; /* 등록일 */
-    private LocalDateTime modDate; /* 수정일 */
-    private String regUserId; /* 등록자ID */
-    private String modUserId; /* 수정자ID */
 
 }

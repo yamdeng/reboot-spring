@@ -34,7 +34,17 @@ class CommuteDaoTest {
 						.baseDateStr("20221126")
 						.build();
 		List<OfficeCommuteDayVO> list = commuteDao.selectByBaseDateStr(vo);
-		log.info("list : {}", list);
+		log.info("selectByBaseDateStr list : {}", list);
+	}
+
+	@Test
+	void selectByBaseDateStrMergeUser() {
+		OfficeCommuteDayRequestVO vo =
+				OfficeCommuteDayRequestVO.builder()
+						.baseDateStr("20221126")
+						.build();
+		List<OfficeCommuteDayVO> list = commuteDao.selectByBaseDateStrMergeUser(vo);
+		log.info("selectByBaseDateStrMergeUser list : {}", list);
 	}
 
 }

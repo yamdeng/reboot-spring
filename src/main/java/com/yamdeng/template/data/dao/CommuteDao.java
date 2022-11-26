@@ -13,4 +13,6 @@ public interface CommuteDao {
 
     List<OfficeCommuteDayVO> selectByBaseDateStr(OfficeCommuteDayRequestVO vo);
 
+    List<OfficeCommuteDayVO> selectByBaseDateStrMergeUser(OfficeCommuteDayRequestVO vo);
+
 }
