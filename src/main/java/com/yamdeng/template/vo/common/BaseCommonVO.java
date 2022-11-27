@@ -16,6 +16,7 @@ public class BaseCommonVO {
     private String deptName; /* 부서명 */
     private String rankTitle; /* 직급명 */
     private String dutyTitle; /* 직책명 */
+    private String positionTitle; /* 직위명 */
     private LocalDateTime regDate; /* 등록일 */
     private LocalDateTime modDate; /* 수정일 */
     private String regUserId; /* 등록자ID */

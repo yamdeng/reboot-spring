@@ -39,20 +39,9 @@
 		,a.mod_date AS mod_date /* 수정일 */
 		,a.reg_user_id AS reg_user_id /* 등록자ID */
 		,a.mod_user_id AS mod_user_id /* 수정자ID */
-		,u.user_name as user_name
-		,u.dept_key as dept_key
-		,d.dept_name as dept_name
-		,r.rank_title as rank_title
-		,du.duty_title as duty_title
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
 		FROM OFFICE_COMMUTE_DAY a
-		left outer join TO0_USER_MAIN u
-		on u.user_key = a.user_id
-		left outer join TO0_DEPT_MAST d
-		on u.dept_key = d.dept_key
-		left outer join TO0_RANK_MAIN r
-		on u.rank_key = r.rank_key
-		left outer join TO0_DUTY_MAIN du
-		on u.duty_key = du.duty_key
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE A.BASE_DATE_STR = #{baseDateStr}
 	</select>
 

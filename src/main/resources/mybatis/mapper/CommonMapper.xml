@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.CommonDao">
+
+	<sql id="user_common_join_table">
+		left outer join TO0_USER_MAIN u
+			on u.user_key = a.user_id
+		left outer join TO0_DEPT_MAST d
+			on u.dept_key = d.dept_key
+		left outer join TO0_RANK_MAIN r
+			on u.rank_key = r.rank_key
+		left outer join TO0_DUTY_MAIN du
+			on u.duty_key = du.duty_key
+		left outer join TO0_POSITION_MAIN po
+			on u.position_key = po.position_key
+	</sql>
+
+	<sql id="user_common_select">
+		,u.user_name as user_name
+		,u.dept_key as dept_key
+		,d.dept_name as dept_name
+		,r.rank_title as rank_title
+		,du.duty_title as duty_title
+		,po.position_title as position_title
+	</sql>
+
+</mapper>
