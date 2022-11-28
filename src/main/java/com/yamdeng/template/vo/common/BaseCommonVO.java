@@ -3,12 +3,13 @@ package com.yamdeng.template.vo.common;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class BaseCommonVO {
 
     private String userName; /* 사용자이름 */
@@ -21,5 +22,6 @@ public class BaseCommonVO {
     private LocalDateTime modDate; /* 수정일 */
     private String regUserId; /* 등록자ID */
     private String modUserId; /* 수정자ID */
+    private String loginUserId; /* 로그인ID */
 
 }

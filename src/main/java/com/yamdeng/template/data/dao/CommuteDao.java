@@ -4,17 +4,14 @@ import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
-
 @Mapper
 public interface CommuteDao {
 
-    List<OfficeCommuteDayVO> test();
+    // 출퇴근 상세 조회 : 사용자ID 기준
+    OfficeCommuteDayVO selectCommuteInfoByUserId(OfficeCommuteDayRequestVO vo);
 
-    List<OfficeCommuteDayVO> selectByBaseDateStr(OfficeCommuteDayRequestVO vo);
+    int startWork(OfficeCommuteDayRequestVO vo);
 
-    List<OfficeCommuteDayVO> selectByBaseDateStrMergeUser(OfficeCommuteDayRequestVO vo);
-
-    //
+    int outWork(OfficeCommuteDayRequestVO vo);
 
 }

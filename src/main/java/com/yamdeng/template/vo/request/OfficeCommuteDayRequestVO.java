@@ -1,16 +1,14 @@
 package com.yamdeng.template.vo.request;
 
 import com.yamdeng.template.vo.common.BaseCommonVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@Builder
-public class OfficeCommuteDayRequestVO {
+@SuperBuilder
+public class OfficeCommuteDayRequestVO extends BaseCommonVO {
 
     private String baseDateStr; /* 근태기준일 */
     private String userId; /* 직원ID */
@@ -28,5 +26,6 @@ public class OfficeCommuteDayRequestVO {
     private String modYn; /* 수정여부 */
     private String tardyYn; /* 지각여부 */
     private Double workedTimeValue; /* 근무시간 */
+    private String inWorkYn; /* 업무중(Y), 재택중(N) */
 
 }

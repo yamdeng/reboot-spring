@@ -1,7 +1,6 @@
 package com.yamdeng.template.vo.db;
 
 import com.yamdeng.template.vo.common.BaseCommonVO;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
