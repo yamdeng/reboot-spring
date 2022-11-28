@@ -7,7 +7,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 public class OfficeCommuteDayVO extends BaseCommonVO {
 
     private String baseDateStr; /* 근태기준일 */
