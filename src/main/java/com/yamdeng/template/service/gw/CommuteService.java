@@ -32,6 +32,24 @@ public class CommuteService {
         String clientIp = req.getHeader("X-FORWARDED-FOR");
         if (clientIp == null)
             clientIp = req.getRemoteAddr();
+//        String clientIp = request.getHeader("X-Forwarded-For");
+//        if (StringUtils.isEmpty(clientIp)|| "unknown".equalsIgnoreCase(clientIp)) {
+//            //Proxy 서버인 경우
+//            clientIp = request.getHeader("Proxy-Client-IP");
+//        }
+//        if (StringUtils.isEmpty(clientIp) || "unknown".equalsIgnoreCase(clientIp)) {
+//            //Weblogic 서버인 경우
+//            clientIp = request.getHeader("WL-Proxy-Client-IP");
+//        }
+//        if (StringUtils.isEmpty(clientIp) || "unknown".equalsIgnoreCase(clientIp)) {
+//            clientIp = request.getHeader("HTTP_CLIENT_IP");
+//        }
+//        if (StringUtils.isEmpty(clientIp) || "unknown".equalsIgnoreCase(clientIp)) {
+//            clientIp = request.getHeader("HTTP_X_FORWARDED_FOR");
+//        }
+//        if (StringUtils.isEmpty(clientIp) || "unknown".equalsIgnoreCase(clientIp)) {
+//            clientIp = request.getRemoteAddr();
+//        }
         requestVO.setStartWorkIp(clientIp);
         // TODO : 상태, 결과 처리
         String inWorkYn = requestVO.getInWorkYn();
