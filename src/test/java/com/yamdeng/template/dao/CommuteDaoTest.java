@@ -66,7 +66,7 @@ class CommuteDaoTest {
 		long minutes = startWorkDate.until( now, ChronoUnit.MINUTES );
 		double minuteValue = (double)minutes / (double)60;
 		double workedTimeValue = Math.ceil(minuteValue * 10) / 10.0;
-		log.info("result : {}", workedTimeValue);
+		log.info("workedTimeValue : {}", workedTimeValue);
 		log.info("outWork minutes : {}", minutes);
 		vo.setWorkedTimeValue(workedTimeValue);
 		int result = commuteDao.outWork(vo);

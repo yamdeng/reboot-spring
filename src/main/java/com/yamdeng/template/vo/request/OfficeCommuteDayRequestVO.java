@@ -2,12 +2,14 @@ package com.yamdeng.template.vo.request;
 
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 public class OfficeCommuteDayRequestVO extends BaseCommonVO {
 
     private String baseDateStr; /* 근태기준일 */
