@@ -22,6 +22,11 @@ public class OfficeCommuteDayVO extends BaseCommonVO {
     private String workStatusCode; /* 근무상태 */
     private String workResultCode; /* 근무결과 */
     private String vacationKindCode; /* 휴가종류 */
+
+    private String workStatusCodeName; /* 근무상태코드명 */
+    private String workResultCodeName; /* 근무결과코드명 */
+    private String vacationKindCodeName; /* 휴가종류코드명 */
+
     private String etcDescription; /* 기타설명 */
     private String modYn; /* 수정여부 */
     private String tardyYn; /* 지각여부 */

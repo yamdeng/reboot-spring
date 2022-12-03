@@ -16,6 +16,9 @@
 		,a.work_status_code AS work_status_code /* 근무상태 */
 		,a.work_result_code AS work_result_code /* 근무결과 */
 		,a.vacation_kind_code AS vacation_kind_code /* 휴가종류 */
+		,fn_get_code_label('WORK_STATUS', a.work_status_code) AS work_status_code_name /* 근무상태코드명 */
+		,fn_get_code_label('WORK_RESULT', a.work_result_code) AS work_result_code_name /* 근무결과코드명 */
+		,fn_get_code_label('VACATION_KIND', a.vacation_kind_code) AS vacation_kind_code_name /* 휴가종류코드명 */
 		,a.etc_description AS etc_description /* 기타설명 */
 		,a.mod_yn AS mod_yn /* 수정여부 */
 		,a.tardy_yn AS tardy_yn /* 지각여부 */
