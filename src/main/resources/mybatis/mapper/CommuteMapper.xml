@@ -78,7 +78,7 @@
 	</select>
 
 	<!-- 춭/퇴근 대상 직원 목록 -->
-	<select id="selectCommuteAllUserList"
+	<select id="selectCommuteTargetUserList"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
 		SELECT
@@ -95,5 +95,123 @@
 			on u.position_key = po.position_key
 		WHERE r.rank_title not in('대표이사', '실장')
 	</select>
+
+	<insert id="insertCommute" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		INSERT INTO office_commute_day (
+			base_date_str
+			,user_id
+		<if test='startWorkDate != null and !startWorkDate.equals("")'>
+			,start_work_date
+		</if>
+		<if test='outWorkDate != null and !outWorkDate.equals("")'>
+			,out_work_date
+		</if>
+		<if test='finalStartWorkDate != null and !finalStartWorkDate.equals("")'>
+			,final_start_work_date
+		</if>
+		<if test='finalOutWorkDate != null and !finalOutWorkDate.equals("")'>
+			,final_out_work_date
+		</if>
+		<if test='startWorkIp != null and !startWorkIp.equals("")'>
+			,start_work_ip
+		</if>
+		<if test='outWorkIp != null and !outWorkIp.equals("")'>
+			,out_work_ip
+		</if>
+		<if test='outsideWorkYn != null and !outsideWorkYn.equals("")'>
+			,outside_work_yn
+		</if>
+		<if test='workStatusCode != null and !workStatusCode.equals("")'>
+			,work_status_code
+		</if>
+		<if test='workResultCode != null and !workResultCode.equals("")'>
+			,work_result_code
+		</if>
+		<if test='vacationKindCode != null and !vacationKindCode.equals("")'>
+			,vacation_kind_code
+		</if>
+		<if test='etcDescription != null and !etcDescription.equals("")'>
+			,etc_description
+		</if>
+		<if test='modYn != null and !modYn.equals("")'>
+			,mod_yn
+		</if>
+		<if test='tardyYn != null and !tardyYn.equals("")'>
+			,tardy_yn
+		</if>
+		<if test='workedTimeValue != null and !workedTimeValue.equals("")'>
+			,worked_time_value
+		</if>
+		<if test='regDate != null and !regDate.equals("")'>
+			,reg_date
+		</if>
+		<if test='modDate != null and !modDate.equals("")'>
+			,mod_date
+		</if>
+		<if test='regUserId != null and !regUserId.equals("")'>
+			,reg_user_id
+		</if>
+		<if test='modUserId != null and !modUserId.equals("")'>
+			,mod_user_id
+		</if>)
+		VALUES (
+		#{baseDateStr}
+		,#{userId}
+		<if test='startWorkDate != null and !startWorkDate.equals("")'>
+			,#{startWorkDate}
+		</if>
+		<if test='outWorkDate != null and !outWorkDate.equals("")'>
+			,#{outWorkDate}
+		</if>
+		<if test='finalStartWorkDate != null and !finalStartWorkDate.equals("")'>
+			,#{finalStartWorkDate}
+		</if>
+		<if test='finalOutWorkDate != null and !finalOutWorkDate.equals("")'>
+			,#{finalOutWorkDate}
+		</if>
+		<if test='startWorkIp != null and !startWorkIp.equals("")'>
+			,#{startWorkIp}
+		</if>
+		<if test='outWorkIp != null and !outWorkIp.equals("")'>
+			,#{outWorkIp}
+		</if>
+		<if test='outsideWorkYn != null and !outsideWorkYn.equals("")'>
+			,#{outsideWorkYn}
+		</if>
+		<if test='workStatusCode != null and !workStatusCode.equals("")'>
+			,#{workStatusCode}
+		</if>
+		<if test='workResultCode != null and !workResultCode.equals("")'>
+			,#{workResultCode}
+		</if>
+		<if test='vacationKindCode != null and !vacationKindCode.equals("")'>
+			,#{vacationKindCode}
+		</if>
+		<if test='etcDescription != null and !etcDescription.equals("")'>
+			,#{etcDescription}
+		</if>
+		<if test='modYn != null and !modYn.equals("")'>
+			,#{modYn}
+		</if>
+		<if test='tardyYn != null and !tardyYn.equals("")'>
+			,#{tardyYn}
+		</if>
+		<if test='workedTimeValue != null and !workedTimeValue.equals("")'>
+			,#{workedTimeValue}
+		</if>
+		<if test='regDate != null and !regDate.equals("")'>
+			,#{regDate}
+		</if>
+		<if test='modDate != null and !modDate.equals("")'>
+			,#{modDate}
+		</if>
+		<if test='regUserId != null and !regUserId.equals("")'>
+			,#{regUserId}
+		</if>
+		<if test='modUserId != null and !modUserId.equals("")'>
+			,#{modUserId}
+		</if>
+		)
+	</insert>
 
 </mapper>

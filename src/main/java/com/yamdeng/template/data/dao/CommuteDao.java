@@ -22,6 +22,8 @@ public interface CommuteDao {
     List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayVO vo);
 
     // 출/퇴근 대상 직원 전체 목록
-    List<BaseCommonVO> selectCommuteAllUserList();
+    List<BaseCommonVO> selectCommuteTargetUserList();
+
+    int insertCommute(OfficeCommuteDayVO vo);
 
 }

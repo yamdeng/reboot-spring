@@ -23,13 +23,11 @@ public class ScheduleConfigService {
 
         /*
 
-            1.직원 전체 조회 : 특정 직급 제외 : 대표이사, 실장
-             -selectCommuteTargetUserList
-             -user_key만 존재하면됨
+            1.출/퇴근 대상이되는 사용자 목록을 전체 가져온다
+            2.기준날짜는 오늘이됨
+            3.일단 insert 하는데 아래와 같이 근무상태와 근무결과를 휴가가 존재하는지 체크해서 반영함
 
-            2.base_date_str 기준으로 기본 vo 셋팅
-             -오늘날짜의 휴가 정보 조회 ===> 휴가 구분 코드별로 셋팅
-             -휴가/휴직에 따른 근무상태, 근태결과 셋팅
+
 
          */
         log.info("createDayCommuteInfo");

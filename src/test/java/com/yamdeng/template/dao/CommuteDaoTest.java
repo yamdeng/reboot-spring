@@ -3,6 +3,7 @@ package com.yamdeng.template.dao;
 import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
+import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -89,12 +90,26 @@ class CommuteDaoTest {
 		log.info("selectCommuteListByDeptKey result : {}", result);
 	}
 
-//	// 출/퇴근 대상 직원 전체 목록
-//	@Test
-//	void selectCommuteAllUserList() {
-//		List<BaseCommonVO> result = commuteDao.selectCommuteAllUserList();
-//		log.info("selectCommuteAllUserList result : {}", result);
-//	}
+	// 출/퇴근 대상 직원 전체 목록
+	@Test
+	void selectCommuteTargetUserList() {
+		List<BaseCommonVO> result = commuteDao.selectCommuteTargetUserList();
+		log.info("selectCommuteTargetUserList result : {}", result);
+	}
 
+	@Test
+	void insertCommute() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("sb")
+						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
+						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
+						.vacationKindCode(Constant.CODE_VACATION_KIND_VACATION_AFTERNOON)
+						.workedTimeValue(0.0)
+						.build();
+		int result = commuteDao.insertCommute(vo);
+		log.info("insertCommute result : {}", result);
+	}
 
 }
