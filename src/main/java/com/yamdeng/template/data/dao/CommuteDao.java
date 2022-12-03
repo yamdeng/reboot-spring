@@ -19,6 +19,9 @@ public interface CommuteDao {
     // 퇴근
     int outWork(OfficeCommuteDayRequestVO vo);
 
+    // 출퇴근 목록 조회 : 부서키 기준
+    List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayRequestVO vo);
+
     // 출/퇴근 대상 직원 전체 목록
     List<BaseCommonVO> selectCommuteAllUserList();
 

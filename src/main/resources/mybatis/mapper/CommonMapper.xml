@@ -35,4 +35,13 @@
 		,po.position_title as position_title /* 직위명 */
 	</sql>
 
+	<sql id="common_page_bottom">
+		<if test="limit != null">
+			limit #{limit}
+		</if>
+		<if test="offset != null">
+			offset #{offset}
+		</if>
+	</sql>
+
 </mapper>

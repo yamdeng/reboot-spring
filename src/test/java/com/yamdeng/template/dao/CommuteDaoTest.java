@@ -1,6 +1,7 @@
 package com.yamdeng.template.dao;
 
 import com.yamdeng.template.BootStandardApplication;
+import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
@@ -26,12 +27,12 @@ class CommuteDaoTest {
 	void selectCommuteInfoByUserId() {
 		OfficeCommuteDayRequestVO vo =
 				OfficeCommuteDayRequestVO.builder()
-						.baseDateStr("20221126")
+						.baseDateStr("20221203")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
 						.build();
 		OfficeCommuteDayVO result = commuteDao.selectCommuteInfoByUserId(vo);
-		log.info("selectCommuteInfo result : {}", result);
+		log.info("selectCommuteInfoByUserId result : {}", result);
 	}
 
 	// 출근
@@ -39,12 +40,12 @@ class CommuteDaoTest {
 	void startWork() {
 		OfficeCommuteDayRequestVO vo =
 				OfficeCommuteDayRequestVO.builder()
-						.baseDateStr("20221126")
+						.baseDateStr("20221203")
 						.startWorkIp("172.0.0.1")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
-						.workStatusCode("ING")
-						.workResultCode("SUCCESS_NORMAL")
+						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
+						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
 						.build();
 		int result = commuteDao.startWork(vo);
 		log.info("startWork result : {}", result);
@@ -55,12 +56,12 @@ class CommuteDaoTest {
 	void outWork() {
 		OfficeCommuteDayRequestVO vo =
 				OfficeCommuteDayRequestVO.builder()
-						.baseDateStr("20221126")
+						.baseDateStr("20221203")
 						.outWorkIp("172.0.0.1")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
-						.workStatusCode("END")
-						.workResultCode("SUCCESS_NORMAL")
+						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
+						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
 						.build();
 		OfficeCommuteDayVO detailInfo = commuteDao.selectCommuteInfoByUserId(vo);
 		LocalDateTime startWorkDate = detailInfo.getStartWorkDate();
@@ -75,12 +76,27 @@ class CommuteDaoTest {
 		log.info("outWork result : {}", result);
 	}
 
-	// 출/퇴근 대상 직원 전체 목록
+	// 출퇴근 목록 조회 : 부서키 기준
 	@Test
-	void selectCommuteAllUserList() {
-		List<BaseCommonVO> result = commuteDao.selectCommuteAllUserList();
-		log.info("selectCommuteAllUserList result : {}", result);
+	void selectCommuteListByDeptKey() {
+		OfficeCommuteDayRequestVO vo =
+				OfficeCommuteDayRequestVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.loginUserId("yamdeng")
+						.deptKey("dept1")
+						.limit(10)
+						.build();
+		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteListByDeptKey(vo);
+		log.info("selectCommuteListByDeptKey result : {}", result);
 	}
+
+//	// 출/퇴근 대상 직원 전체 목록
+//	@Test
+//	void selectCommuteAllUserList() {
+//		List<BaseCommonVO> result = commuteDao.selectCommuteAllUserList();
+//		log.info("selectCommuteAllUserList result : {}", result);
+//	}
 
 
 }

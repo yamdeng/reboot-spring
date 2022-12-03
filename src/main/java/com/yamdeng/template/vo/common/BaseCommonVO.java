@@ -1,6 +1,5 @@
 package com.yamdeng.template.vo.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -27,5 +26,7 @@ public class BaseCommonVO {
     private String regUserId; /* 등록자ID */
     private String modUserId; /* 수정자ID */
     private String loginUserId; /* 로그인ID */
+    private Integer limit; /* 페이징 시작 */
+    private Integer offset; /* 페이징 종료 */
 
 }
