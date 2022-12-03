@@ -2,6 +2,7 @@ package com.yamdeng.template.dao;
 
 import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.data.dao.CommuteDao;
+import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @SpringBootTest(classes = BootStandardApplication.class)
 @Slf4j
@@ -71,6 +73,13 @@ class CommuteDaoTest {
 		vo.setWorkedTimeValue(workedTimeValue);
 		int result = commuteDao.outWork(vo);
 		log.info("outWork result : {}", result);
+	}
+
+	// 출/퇴근 대상 직원 전체 목록
+	@Test
+	void selectCommuteAllUserList() {
+		List<BaseCommonVO> result = commuteDao.selectCommuteAllUserList();
+		log.info("selectCommuteAllUserList result : {}", result);
 	}
 
 

@@ -62,4 +62,23 @@
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
 
+	<!-- 춭/퇴근 대상 직원 목록 -->
+	<select id="selectCommuteAllUserList"
+			parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO"
+			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
+		SELECT
+			u.user_id as user_id
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+		FROM TO0_USER_MAIN u
+			left outer join TO0_DEPT_MAST d
+			on u.dept_key = d.dept_key
+			left outer join TO0_RANK_MAIN r
+			on u.rank_key = r.rank_key
+			left outer join TO0_DUTY_MAIN du
+			on u.duty_key = du.duty_key
+			left outer join TO0_POSITION_MAIN po
+			on u.position_key = po.position_key
+		WHERE r.rank_title not in('대표이사', '실장')
+	</select>
+
 </mapper>
