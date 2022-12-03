@@ -9,19 +9,6 @@
 		,a.mod_user_id AS mod_user_id /* 수정자ID */
 	</sql>
 
-	<sql id="user_common_join_table">
-		left outer join TO0_USER_MAIN u
-			on u.user_key = a.user_id
-		left outer join TO0_DEPT_MAST d
-			on u.dept_key = d.dept_key
-		left outer join TO0_RANK_MAIN r
-			on u.rank_key = r.rank_key
-		left outer join TO0_DUTY_MAIN du
-			on u.duty_key = du.duty_key
-		left outer join TO0_POSITION_MAIN po
-			on u.position_key = po.position_key
-	</sql>
-
 	<sql id="user_common_select">
 		,u.user_key as user_key /* 사용자키 */
 		,u.user_name as user_name /* 사용자명 */
@@ -33,6 +20,19 @@
 		,r.rank_title as rank_title /* 직급명 */
 		,du.duty_title as duty_title /* 직책명 */
 		,po.position_title as position_title /* 직위명 */
+	</sql>
+
+	<sql id="user_common_join_table">
+		left outer join TO0_USER_MAIN u
+			on u.user_key = a.user_id
+		left outer join TO0_DEPT_MAST d
+			on u.dept_key = d.dept_key
+		left outer join TO0_RANK_MAIN r
+			on u.rank_key = r.rank_key
+		left outer join TO0_DUTY_MAIN du
+			on u.duty_key = du.duty_key
+		left outer join TO0_POSITION_MAIN po
+			on u.position_key = po.position_key
 	</sql>
 
 	<sql id="common_page_bottom">

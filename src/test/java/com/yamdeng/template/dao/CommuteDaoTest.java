@@ -3,9 +3,7 @@ package com.yamdeng.template.dao;
 import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
-import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
-import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,8 @@ class CommuteDaoTest {
 	// 출퇴근 상세 조회 : 사용자ID 기준
 	@Test
 	void selectCommuteInfoByUserId() {
-		OfficeCommuteDayRequestVO vo =
-				OfficeCommuteDayRequestVO.builder()
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
@@ -38,8 +36,8 @@ class CommuteDaoTest {
 	// 출근
 	@Test
 	void startWork() {
-		OfficeCommuteDayRequestVO vo =
-				OfficeCommuteDayRequestVO.builder()
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
 						.startWorkIp("172.0.0.1")
 						.userId("yamdeng")
@@ -54,8 +52,8 @@ class CommuteDaoTest {
 	// 퇴근
 	@Test
 	void outWork() {
-		OfficeCommuteDayRequestVO vo =
-				OfficeCommuteDayRequestVO.builder()
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
 						.outWorkIp("172.0.0.1")
 						.userId("yamdeng")
@@ -79,8 +77,8 @@ class CommuteDaoTest {
 	// 출퇴근 목록 조회 : 부서키 기준
 	@Test
 	void selectCommuteListByDeptKey() {
-		OfficeCommuteDayRequestVO vo =
-				OfficeCommuteDayRequestVO.builder()
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")

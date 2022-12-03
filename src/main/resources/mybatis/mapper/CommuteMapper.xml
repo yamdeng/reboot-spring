@@ -29,7 +29,7 @@
 
 	<!-- 출퇴근 상세 조회 : 사용자ID 기준 -->
 	<select id="selectCommuteInfoByUserId"
-			parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		SELECT
 		<include refid="commute_select"/>
@@ -39,7 +39,7 @@
 	</select>
 
 	<!-- 출근 -->
-	<update id="startWork" parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO">
+	<update id="startWork" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
 			start_work_date = NOW()
@@ -52,7 +52,7 @@
 	</update>
 
 	<!-- 퇴근 -->
-	<update id="outWork" parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO">
+	<update id="outWork" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
 			out_work_date = NOW()
@@ -67,7 +67,7 @@
 
 	<!-- 출퇴근 목록 조회 : 부서키 기준 -->
 	<select id="selectCommuteListByDeptKey"
-			parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		SELECT
 		<include refid="commute_select"/>
@@ -79,7 +79,7 @@
 
 	<!-- 춭/퇴근 대상 직원 목록 -->
 	<select id="selectCommuteAllUserList"
-			parameterType="com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
 		SELECT
 			u.user_id as user_id

@@ -2,7 +2,6 @@ package com.yamdeng.template.data.dao;
 
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
-import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,16 +10,16 @@ import java.util.List;
 public interface CommuteDao {
 
     // 출퇴근 상세 조회 : 사용자ID 기준
-    OfficeCommuteDayVO selectCommuteInfoByUserId(OfficeCommuteDayRequestVO vo);
+    OfficeCommuteDayVO selectCommuteInfoByUserId(OfficeCommuteDayVO vo);
 
     // 출근
-    int startWork(OfficeCommuteDayRequestVO vo);
+    int startWork(OfficeCommuteDayVO vo);
 
     // 퇴근
-    int outWork(OfficeCommuteDayRequestVO vo);
+    int outWork(OfficeCommuteDayVO vo);
 
     // 출퇴근 목록 조회 : 부서키 기준
-    List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayRequestVO vo);
+    List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayVO vo);
 
     // 출/퇴근 대상 직원 전체 목록
     List<BaseCommonVO> selectCommuteAllUserList();

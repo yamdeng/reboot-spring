@@ -4,7 +4,6 @@ import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.exception.ApplicationException;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
-import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,12 +44,12 @@ public class CommuteService {
         return clientIp;
     }
 
-    public OfficeCommuteDayVO detail(OfficeCommuteDayRequestVO requestVO) {
+    public OfficeCommuteDayVO detail(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
         return commuteDao.selectCommuteInfoByUserId(requestVO);
     }
 
-    public OfficeCommuteDayVO startWork(OfficeCommuteDayRequestVO requestVO) {
+    public OfficeCommuteDayVO startWork(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
         OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfoByUserId(requestVO);
         if(beforeCommuteDayVo == null) {
@@ -73,7 +72,7 @@ public class CommuteService {
         }
     }
 
-    public OfficeCommuteDayVO outWork(OfficeCommuteDayRequestVO requestVO) {
+    public OfficeCommuteDayVO outWork(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
         OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfoByUserId(requestVO);
         if(beforeCommuteDayVo == null) {
@@ -97,7 +96,7 @@ public class CommuteService {
         }
     }
 
-    public List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayRequestVO requestVO) {
+    public List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayVO requestVO) {
         return commuteDao.selectCommuteListByDeptKey(requestVO);
     }
 

@@ -2,7 +2,6 @@ package com.yamdeng.template.controller.gw;
 
 import com.yamdeng.template.service.gw.CommuteService;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
-import com.yamdeng.template.vo.request.OfficeCommuteDayRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,25 +16,25 @@ public class CommuteApiController {
 
     @GetMapping
     @ResponseBody
-    public List<OfficeCommuteDayVO> list(OfficeCommuteDayRequestVO requestVO) {
+    public List<OfficeCommuteDayVO> list(OfficeCommuteDayVO vo) {
         return null;
     }
     @GetMapping("/detail")
     @ResponseBody
-    public OfficeCommuteDayVO detail(OfficeCommuteDayRequestVO requestVO) {
-        return commuteService.detail(requestVO);
+    public OfficeCommuteDayVO detail(OfficeCommuteDayVO vo) {
+        return commuteService.detail(vo);
     }
 
     @PutMapping("/start-work")
     @ResponseBody
-    public OfficeCommuteDayVO startWork(@RequestBody OfficeCommuteDayRequestVO requestVO) {
-        return commuteService.startWork(requestVO);
+    public OfficeCommuteDayVO startWork(@RequestBody OfficeCommuteDayVO vo) {
+        return commuteService.startWork(vo);
     }
 
     @PutMapping("/out-work")
     @ResponseBody
-    public OfficeCommuteDayVO endWork(@RequestBody OfficeCommuteDayRequestVO requestVO) {
-        return commuteService.outWork(requestVO);
+    public OfficeCommuteDayVO endWork(@RequestBody OfficeCommuteDayVO vo) {
+        return commuteService.outWork(vo);
     }
 
 }
