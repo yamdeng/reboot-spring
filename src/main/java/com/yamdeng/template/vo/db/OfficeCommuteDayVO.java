@@ -2,7 +2,6 @@ package com.yamdeng.template.vo.db;
 
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
