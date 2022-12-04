@@ -34,6 +34,9 @@
 		WHERE  base_date_str = #{baseDateStr}
 			AND user_id = #{userId}
 			AND alarm_kind_code = #{alarmKindCode}
+			<if test='targetId != null and !targetId.equals("")'>
+				AND target_id = #{targetId}
+			</if>
 	</select>
 
 	<insert id="insertPushAlarm" parameterType="com.yamdeng.template.vo.db.OfficePushAlarmVO">

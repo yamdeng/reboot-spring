@@ -27,7 +27,7 @@ public class ScheduleConfigService {
         log.info("createDayCommute 종료 : {}", baseDateStr);
     }
 
-    // 일일출퇴근(개인) 지각 알림 : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(공휴일 제외)
+    // 일일출퇴근(개인) 출퇴근 액션 가이드 알림 : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(공휴일 제외)
     @Scheduled(cron = "0 0/10 7-17 * * *")
     public void alarmCommuteDayByPrivate () {
         log.info("alarmCommuteDayByPrivate 시작");
@@ -35,27 +35,20 @@ public class ScheduleConfigService {
         log.info("alarmCommuteDayByPrivate 종료");
     }
 
+    // 일일출퇴근(팀장) 팀원 지각 알림(지각도 같이 처리됨) : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(공휴일 제외)
+    @Scheduled(cron = "0 0/10 7-17 * * *")
+    public void alarmCommuteDayByManager () {
+        log.info("alarmCommuteDayByManager 시작");
+        scheduleService.alarmCommuteDayByManager();
+        log.info("alarmCommuteDayByManager 종료");
+    }
+
     // 출퇴근 보고 : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(팀원, 팀장 같이 반영) (공휴일 제외)
     @Scheduled(cron = "0 0/10 7-17 * * *")
     public void alarmCommuteDay () {
 
-        // 공휴일 체크 : 해당일이 공휴일인지 확인
-        // 토,일은 공휴일
-        // 공휴일에 테이블에 데이터가 존재하면 공휴일
-        // 공휴일이 아닌 경우만 체크
-        // 해당일에 휴가이력이 존재하면 체크 x
-        // 오전 반차인 경우는 오후 출근시간을 가져와서 해당 시간보다 지나도 출근을 하지 않았을 경우 반영
-        // 오후반차인 경우는 그대로 반영
-
-        // 지정된 출근 시간이 지난 경우
-
-        //> {일자} 출근 체크를 진행해주세요.
-
-        // 오늘날짜 base_date_str
-        // loginUserId
-
-//        지정된 출근 시간이 지난 경우
-//            > {일자} 출근 체크를 진행해주세요.
+//        #2 팀 출퇴근 제출 기한이 지난 경우
+//> {일자} {부서명} 출퇴근 기록을 제출해주세요.(Link)
 
         /*
 
