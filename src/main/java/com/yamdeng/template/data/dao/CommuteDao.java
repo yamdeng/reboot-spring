@@ -24,6 +24,7 @@ public interface CommuteDao {
     // 출/퇴근 대상 직원 전체 목록
     List<BaseCommonVO> selectCommuteTargetUserList();
 
+    // 출퇴근_일일 insert
     int insertCommute(OfficeCommuteDayVO vo);
 
 }

@@ -96,6 +96,7 @@
 		WHERE r.rank_title not in('대표이사', '실장')
 	</select>
 
+	<!-- 출퇴근_일일 insert -->
 	<insert id="insertCommute" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		INSERT INTO office_commute_day (
 			base_date_str
