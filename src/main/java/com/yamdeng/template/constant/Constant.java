@@ -2,6 +2,18 @@ package com.yamdeng.template.constant;
 
 public interface Constant {
 
+    /*
+
+        기본 정책
+
+     */
+
+    static final String POLICY_SYSTEM_USER_ID = "system"; /* 시스템 사용자 ID */
+
+    static final String POLICY_DEFAULT_WORK_START_TIME = "09:00"; /* 근무시작시간 */
+    static final String POLICY_DEFAULT_LUNCH_START_TIME = "12:00"; /* 점심시작시간 */
+    static final String POLICY_DEFAULT_LUNCH_END_TIME = "13:00"; /* 점심종료시간 */
+
     // 출퇴근 상태 코드
     static final String CODE_WORK_STATUS_ING = "ING"; /* 업무중 */
     static final String CODE_WORK_STATUS_HOME_ING = "HOME_ING"; /* 재택중 */
@@ -61,5 +73,30 @@ public interface Constant {
     static final String CODE_REPORT_STATUS_SUBMIT = "SUBMIT"; /* 제출 */
     static final String CODE_REPORT_STATUS_APPROVE = "APPROVE"; /* 승인 */
     static final String CODE_REPORT_STATUS_REJECT = "REJECT"; /* 반려 */
+
+    // 요일구분 코드
+    static final String CODE_WEEKDAY_MON = "MON"; /* 월요일 */
+    static final String CODE_WEEKDAY_TUE = "TUE"; /* 화요일 */
+    static final String CODE_WEEKDAY_WED = "WED"; /* 수요일 */
+    static final String CODE_WEEKDAY_THU = "THU"; /* 목요일 */
+    static final String CODE_WEEKDAY_FRI = "FRI"; /* 금요일 */
+    static final String CODE_WEEKDAY_SAT = "SAT"; /* 토요일 */
+    static final String CODE_WEEKDAY_SUN = "SUM"; /* 일요일 */
+
+    // 주중/주말구분 코드
+    static final String CODE_WEEKEND_WEEKDAY = "WEEKDAY"; /* 주중 */
+    static final String CODE_WEEKEND_WEEKEND = "WEEKEND"; /* 주말 */
+
+    // 푸쉬 알림 코드
+    static final String CODE_ALARM_NOTICE = "ALARM_NOTICE"; /* 공지사항 */
+    static final String CODE_ALARM_COMMUTE_PRIVATE = "ALARM_COMMUTE_PRIVATE"; /* 개인출퇴근 */
+    static final String CODE_ALARM_COMMUTE_MANAGER = "ALARM_COMMUTE_MANAGER"; /* 팀장의팀원출퇴근 */
+    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT = "ALARM_COMMUTE_DEPT_SUBMIT"; /* 부서출퇴근제출 */
+    static final String CODE_ALARM_COMMUTE_DEPT_REJECT = "ALARM_COMMUTE_DEPT_REJECT"; /* 부서출퇴근반려 */
+    static final String CODE_ALARM_REPORT_SUBMIT = "ALARM_REPORT_SUBMIT"; /* 부서업무보고제출 */
+    static final String CODE_ALARM_REPORT_COMMENT = "ALARM_REPORT_COMMENT"; /* 부서업무보고댓글 */
+    static final String CODE_ALARM_REPORT_ISSUE = "ALARM_REPORT_ISSUE"; /* 부서업무보고이슈 */
+    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE = "ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE"; /* 부서출퇴근제출완료 */
+    static final String CODE_ALARM_REPORT_SUBMIT_COMPLETE = "ALARM_REPORT_SUBMIT_COMPLETE"; /* 부서업무보고제출완료 */
 
 }

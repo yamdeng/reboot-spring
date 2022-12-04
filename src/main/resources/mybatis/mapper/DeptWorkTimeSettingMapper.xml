@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.DeptWorkTimeSettingDao">
+
+	<!-- 휴가_휴직_현황(연별) OFFICE_VACATION_YEAR 테이블 select column -->
+<!--	<sql id="vacation_select">-->
+<!--		a.user_id              AS user_id /* 직원ID */-->
+<!--		,a.base_year           AS base_year /* 기준년 */-->
+<!--		,a.annual_count        AS annual_count /* 발생연차 */-->
+<!--		,a.month_count         AS month_count /* 금년월차 */-->
+<!--		,a.useable_count       AS useable_count /* 사용가능일수 */-->
+<!--		,a.plus_vacation_count AS plus_vacation_count /* 포상휴가 수 */-->
+<!--		,a.used_count          AS used_count /* 사용일수 */-->
+<!--		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>-->
+<!--		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>-->
+<!--	</sql>-->
+
+	<!-- 읽지않은 알림 count -->
+	<select id="unreadCountByUserId"
+			parameterType="java.lang.String"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM   office_push_alarm
+		WHERE  user_id = #{userId}
+			AND read_date IS NULL
+	</select>
+
+	<!-- 부서별 근무시간 셋팅 상세정보 -->
+	<select id="selectDeptWorkTimeSettingInfoByDeptId"
+			parameterType="java.lang.String"
+			resultType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
+		SELECT a.dept_id               AS dept_id /* 적용부서ID */
+				,a.time_name            AS time_name /* 근무시간명 */
+				,a.time_description     AS time_description /* 근무시간 설명 */
+				,a.work_location        AS work_location /* 근무지 */
+				,a.work_start_time      AS work_start_time /* 근무시작시간 */
+				,a.work_end_time        AS work_end_time /* 근무종료시간 */
+				,a.lunch_start_time     AS lunch_start_time /* 점심시작시간 */
+				,a.lunch_end_time       AS lunch_end_time /* 점심종료시간 */
+				,a.apply_start_date_str AS apply_start_date_str /* 적용시작일 */
+				,a.apply_end_date_str   AS apply_end_date_str /* 적용종료일 */
+				,a.reg_date             AS reg_date /* 등록일 */
+				,a.mod_date             AS mod_date /* 수정일 */
+				,a.reg_user_id          AS reg_user_id /* 등록자ID */
+				,a.mod_user_id          AS mod_user_id /* 수정자ID */
+		FROM   office_dept_work_time_setting a
+		WHERE dept_id = #{deptId}
+	</select>
+
+</mapper>

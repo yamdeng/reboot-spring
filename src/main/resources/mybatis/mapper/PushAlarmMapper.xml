@@ -15,7 +15,7 @@
 <!--		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>-->
 <!--	</sql>-->
 
-	<!-- 읽지읂은 알림 count -->
+	<!-- 읽지않은 알림 count -->
 	<select id="unreadCountByUserId"
 			parameterType="java.lang.String"
 			resultType="java.lang.Integer">
@@ -24,5 +24,84 @@
 		WHERE  user_id = #{userId}
 			AND read_date IS NULL
 	</select>
+
+	<!-- 이미 알림 테이블에 저장하였는지 확인 -->
+	<select id="checkAlreadySave"
+			parameterType="com.yamdeng.template.vo.db.OfficePushAlarmVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM   office_push_alarm a
+		WHERE  base_date_str = #{baseDateStr}
+			AND user_id = #{userId}
+			AND alarm_kind_code = #{alarmKindCode}
+	</select>
+
+	<insert id="insertPushAlarm" parameterType="com.yamdeng.template.vo.db.OfficePushAlarmVO">
+		INSERT INTO office_push_alarm (
+			user_id
+			<if test='baseDateStr != null and !baseDateStr.equals("")'>
+				,base_date_str
+			</if>
+			<if test='alarmTitle != null and !alarmTitle.equals("")'>
+				,alarm_title
+			</if>
+			<if test='alarmContent != null and !alarmContent.equals("")'>
+				,alarm_content
+			</if>
+			<if test='alarmKindCode != null and !alarmKindCode.equals("")'>
+				,alarm_kind_code
+			</if>
+			<if test='regDate != null and !regDate.equals("")'>
+				,reg_date
+			</if>
+			<if test='readDate != null and !readDate.equals("")'>
+				,read_date
+			</if>
+			<if test='linkYn != null and !linkYn.equals("")'>
+				,link_yn
+			</if>
+			<if test='linkUrl != null and !linkUrl.equals("")'>
+				,link_url
+			</if>
+			<if test='targetId != null and !targetId.equals("")'>
+				,target_id
+			</if>
+			<if test='modDate != null and !modDate.equals("")'>
+				,mod_date
+			</if>
+		) VALUES (
+			#{userId}
+			<if test='baseDateStr != null and !baseDateStr.equals("")'>
+				,#{baseDateStr}
+			</if>
+			<if test='alarmTitle != null and !alarmTitle.equals("")'>
+				,#{alarmTitle}
+			</if>
+			<if test='alarmContent != null and !alarmContent.equals("")'>
+				,#{alarmContent}
+			</if>
+			<if test='alarmKindCode != null and !alarmKindCode.equals("")'>
+				,#{alarmKindCode}
+			</if>
+			<if test='regDate != null and !regDate.equals("")'>
+				,#{regDate}
+			</if>
+			<if test='readDate != null and !readDate.equals("")'>
+				,#{readDate}
+			</if>
+			<if test='linkYn != null and !linkYn.equals("")'>
+				,#{linkYn}
+			</if>
+			<if test='linkUrl != null and !linkUrl.equals("")'>
+				,#{linkUrl}
+			</if>
+			<if test='targetId != null and !targetId.equals("")'>
+				,#{targetId}
+			</if>
+			<if test='modDate != null and !modDate.equals("")'>
+				,#{modDate}
+			</if>
+		)
+	</insert>
 
 </mapper>

@@ -19,4 +19,9 @@ public class ScheduleServiceTest {
         scheduleService.createDayCommute("20221203");
     }
 
+    @Test
+    void alarmCommuteDayByPrivate() {
+        scheduleService.alarmCommuteDayByPrivate();
+    }
+
 }

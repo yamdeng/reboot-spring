@@ -112,4 +112,17 @@ class CommuteDaoTest {
 		log.info("insertCommute result : {}", result);
 	}
 
+	@Test
+	void updateCommute() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.workResultCode(Constant.CODE_WORK_RESULT_TARDY)
+						.modUserId("yamdeng")
+						.build();
+		int result = commuteDao.updateCommute(vo);
+		log.info("updateCommute result : {}", result);
+	}
+
 }

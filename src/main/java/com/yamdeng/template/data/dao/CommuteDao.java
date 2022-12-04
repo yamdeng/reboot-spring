@@ -27,4 +27,7 @@ public interface CommuteDao {
     // 출퇴근_일일 insert
     int insertCommute(OfficeCommuteDayVO vo);
 
+    // 출퇴근_일일 update
+    int updateCommute(OfficeCommuteDayVO vo);
+
 }

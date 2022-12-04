@@ -6,6 +6,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @Slf4j
@@ -18,27 +20,42 @@ public class ScheduleConfigService {
     // 출퇴근_일일_정보 생성 ===> 01:00 실행 (매일)
     @Scheduled(cron = "0 0 1 * * *")
     public void createDayCommute () {
-        // 오늘날짜 base_date_str
-        // loginUserId
+        LocalDateTime now = LocalDateTime.now();
+        String baseDateStr = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("createDayCommute 시작 : {}", baseDateStr);
+        scheduleService.createDayCommute(baseDateStr);
+        log.info("createDayCommute 종료 : {}", baseDateStr);
+    }
 
-        /*
-
-            1.출/퇴근 대상이되는 사용자 목록을 전체 가져온다
-            2.기준날짜는 오늘이됨
-            3.일단 insert 하는데 아래와 같이 근무상태와 근무결과를 휴가가 존재하는지 체크해서 반영함
-
-
-
-         */
-        log.info("createDayCommuteInfo");
+    // 일일출퇴근(개인) 지각 알림 : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(공휴일 제외)
+    @Scheduled(cron = "0 0/10 7-17 * * *")
+    public void alarmCommuteDayByPrivate () {
+        log.info("alarmCommuteDayByPrivate 시작");
+        scheduleService.alarmCommuteDayByPrivate();
+        log.info("alarmCommuteDayByPrivate 종료");
     }
 
     // 출퇴근 보고 : 지정된 출근 시간이 지난 경우 ===> 07:00부터 17:00 까지 10분마다(팀원, 팀장 같이 반영) (공휴일 제외)
     @Scheduled(cron = "0 0/10 7-17 * * *")
     public void alarmCommuteDay () {
-        // 공휴일 체크
+
+        // 공휴일 체크 : 해당일이 공휴일인지 확인
+        // 토,일은 공휴일
+        // 공휴일에 테이블에 데이터가 존재하면 공휴일
+        // 공휴일이 아닌 경우만 체크
+        // 해당일에 휴가이력이 존재하면 체크 x
+        // 오전 반차인 경우는 오후 출근시간을 가져와서 해당 시간보다 지나도 출근을 하지 않았을 경우 반영
+        // 오후반차인 경우는 그대로 반영
+
+        // 지정된 출근 시간이 지난 경우
+
+        //> {일자} 출근 체크를 진행해주세요.
+
         // 오늘날짜 base_date_str
         // loginUserId
+
+//        지정된 출근 시간이 지난 경우
+//            > {일자} 출근 체크를 진행해주세요.
 
         /*
 
