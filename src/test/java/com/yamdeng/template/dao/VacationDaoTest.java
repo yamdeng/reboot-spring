@@ -5,6 +5,7 @@ import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.data.dao.VacationDao;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
+import com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO;
 import com.yamdeng.template.vo.db.OfficeVacationYearVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,18 @@ class VacationDaoTest {
 						.build();
 		OfficeVacationYearVO result = vacationDao.selectVacationInfoByUserId(vo);
 		log.info("selectVacationInfoByUserId result : {}", result);
+	}
+
+	// 해당일에 휴가가 존재하는지 체크
+	@Test
+	void selectVacationDetailDayHistoryInfo() {
+		OfficeVacationDetailDayHistoryVO vo =
+				OfficeVacationDetailDayHistoryVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.build();
+		OfficeVacationDetailDayHistoryVO result = vacationDao.selectVacationDetailDayHistoryInfo(vo);
+		log.info("selectVacationDetailDayHistoryInfo : {}", result);
 	}
 
 }

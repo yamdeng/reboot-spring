@@ -26,4 +26,19 @@
 		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
 	</select>
 
+	<!-- 기준일 기준으로 휴가내역이 존재하는지 체크 -->
+	<select id="selectVacationDetailDayHistoryInfo"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO">
+		SELECT a.user_id             AS user_id /* 직원ID */
+				,a.reg_date           AS reg_date /* 신청일 */
+				,a.vacation_kind_code AS vacation_kind_code /* 휴가종류 */
+				,a.base_date_str      AS base_date_str /* 휴가일(일별) */
+				,a.approve_id         AS approve_id /* 전자결재 연동ID */
+				FROM   office_vacation_detail_day_history a
+		WHERE base_date_str = #{baseDateStr}
+			AND user_id = #{userId}
+	</select>
+
+
 </mapper>
