@@ -8,10 +8,77 @@
 	<select id="selectPortalStatsByHeader"
 			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
-		SELECT user_key
+		SELECT 'user'    AS kind /* 실원 수 */
+			,count(*) AS agg_count
 		FROM   to0_user_main
-		WHERE  dept_key = #{deptId}
-			AND duty_key = 'manager'
+		WHERE  dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		UNION ALL
+		SELECT 'tardy'   AS kind /* 지각 수 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+		WHERE  u.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.tardy_yn = 'Y'
+			AND a.base_date_str = #{searchDateStr}
+		UNION ALL
+		SELECT 'vacation' AS kind /* 휴가/휴직 수 */
+			,count(*)  AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+		WHERE  u.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.vacation_kind_code IN(
+					'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE',
+					'VACATION_CON', 'VACATION_PRIZE', 'VACATION_BABY',
+					'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
+			)
+			AND a.base_date_str = #{searchDateStr}
+		UNION ALL
+		SELECT 'dept_commute_submit' AS kind /* 출퇴근 미제출 수 : 이전평일 기준 */
+			,count(*)             AS agg_count
+		FROM   office_commute_dept_day a
+		WHERE  a.base_date_str = '20221119'
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.submit_date IS NOT NULL
+		UNION ALL
+		SELECT 'report_issue' AS kind /* 업무보고 이슈 수 : 이전평일 기준 */
+			,count(*)      AS agg_count
+		FROM   office_work_report a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.issue_yn = 'Y'
+		UNION ALL
+		SELECT 'report_not_submit' AS kind /* 업무보고 미제출 수 : 이전평일 기준 */
+			,count(*)      AS agg_count
+		FROM   office_work_report a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.report_date IS NOT NULL
 	</select>
 
 </mapper>
