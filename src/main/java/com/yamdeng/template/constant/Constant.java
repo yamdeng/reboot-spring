@@ -88,15 +88,15 @@ public interface Constant {
     static final String CODE_WEEKEND_WEEKEND = "WEEKEND"; /* 주말 */
 
     // 푸쉬 알림 코드
-    static final String CODE_ALARM_NOTICE = "ALARM_NOTICE"; /* 공지사항 */
-    static final String CODE_ALARM_COMMUTE_PRIVATE = "ALARM_COMMUTE_PRIVATE"; /* 개인출퇴근 */
-    static final String CODE_ALARM_COMMUTE_MANAGER = "ALARM_COMMUTE_MANAGER"; /* 팀장의팀원출퇴근 */
-    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT = "ALARM_COMMUTE_DEPT_SUBMIT"; /* 부서출퇴근제출 */
-    static final String CODE_ALARM_COMMUTE_DEPT_REJECT = "ALARM_COMMUTE_DEPT_REJECT"; /* 부서출퇴근반려 */
-    static final String CODE_ALARM_REPORT_SUBMIT = "ALARM_REPORT_SUBMIT"; /* 부서업무보고제출 */
-    static final String CODE_ALARM_REPORT_COMMENT = "ALARM_REPORT_COMMENT"; /* 부서업무보고댓글 */
-    static final String CODE_ALARM_REPORT_ISSUE = "ALARM_REPORT_ISSUE"; /* 부서업무보고이슈 */
-    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE = "ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE"; /* 부서출퇴근제출완료 */
-    static final String CODE_ALARM_REPORT_SUBMIT_COMPLETE = "ALARM_REPORT_SUBMIT_COMPLETE"; /* 부서업무보고제출완료 */
+    static final String CODE_ALARM_NOTICE = "NOTICE"; /* 공지사항 */
+    static final String CODE_ALARM_COMMUTE_PRIVATE = "COMMUTE_PRIVATE"; /* 개인출퇴근 */
+    static final String CODE_ALARM_COMMUTE_MANAGER = "COMMUTE_MANAGER"; /* 팀장의팀원출퇴근 */
+    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT = "COMMUTE_DEPT_SUBMIT"; /* 부서출퇴근제출 */
+    static final String CODE_ALARM_COMMUTE_DEPT_REJECT = "COMMUTE_DEPT_REJECT"; /* 부서출퇴근반려 */
+    static final String CODE_ALARM_REPORT_SUBMIT = "REPORT_SUBMIT"; /* 부서업무보고제출 */
+    static final String CODE_ALARM_REPORT_COMMENT = "REPORT_COMMENT"; /* 부서업무보고댓글 */
+    static final String CODE_ALARM_REPORT_ISSUE = "REPORT_ISSUE"; /* 부서업무보고이슈 */
+    static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE = "COMMUTE_DEPT_SUBMIT_COMPLETE"; /* 부서출퇴근제출완료 */
+    static final String CODE_ALARM_REPORT_SUBMIT_COMPLETE = "REPORT_SUBMIT_COMPLETE"; /* 부서업무보고제출완료 */
 
 }

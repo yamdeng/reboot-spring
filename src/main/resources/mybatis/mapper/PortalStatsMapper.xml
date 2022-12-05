@@ -47,7 +47,7 @@
 			)
 			AND a.base_date_str = #{searchDateStr}
 		UNION ALL
-		SELECT 'dept_commute_submit' AS kind /* 출퇴근 미제출 수 : 이전평일 기준 */
+		SELECT 'dept_commute_not_submit' AS kind /* 출퇴근 미제출 수 : 이전평일 기준 */
 			,count(*)             AS agg_count
 		FROM   office_commute_dept_day a
 		WHERE  a.base_date_str = '20221119'
@@ -79,6 +79,101 @@
 				#{item}
 			</foreach>
 			AND a.report_date IS NOT NULL
+	</select>
+
+	<!-- 포탈 관리자 > 전체현황 통계 정보 -->
+	<select id="selectPortalStatsAdminTypeAll"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'user'    AS kind /* 임직원 수 */
+			,count(*) AS agg_count
+		FROM   to0_user_main
+		UNION ALL
+		SELECT 'dept'    AS kind /* 부서 수 */
+			,count(*) AS agg_count
+		FROM   to0_dept_mast
+		UNION ALL
+		SELECT 'tardy'   AS kind /* 지각 임직원 수 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+		WHERE  a.tardy_yn = 'Y'
+			AND a.base_date_str = #{searchDateStr}
+		UNION ALL
+		SELECT 'dept_commute_not_submit' AS kind /* 출퇴근 미제출 부서 */
+			,count(*)      AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  base_date_str = #{searchDateStr}
+			AND submit_date IS NULL
+		UNION ALL
+		SELECT 'report_submit' AS kind /* 업무보고 등록 */
+			,count(*)       AS agg_count
+		FROM   office_work_report
+		WHERE  base_date_str = #{searchDateStr}
+			AND report_date IS NOT NULL
+		UNION ALL
+		SELECT 'not_approve' AS kind /* 미결재 */
+			,10       AS agg_count
+	</select>
+
+	<!-- 포탈 관리자 > 출퇴근제출 통계 정보 -->
+	<select id="selectPortalStatsAdminTypeCommuteSubmit"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'before_submit' AS kind /* 제출전 */
+			,count(*)       AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  base_date_str = #{searchDateStr}
+			AND submit_date IS NULL
+		UNION ALL
+		SELECT 'reject'  AS kind /* 반려 */
+			,count(*) AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  base_date_str = #{searchDateStr}
+			AND commute_submit_status_code = 'REJECT'
+		UNION ALL
+		SELECT 'submit'  AS kind /* 승인전(제출완료) */
+			,count(*) AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  base_date_str = #{searchDateStr}
+			AND submit_date IS NOT NULL
+		UNION ALL
+		SELECT 'approve_complete' AS kind /* 승인완료 */
+			,count(*)          AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  base_date_str = #{searchDateStr}
+			AND commute_submit_status_code = 'APPROVE'
+	</select>
+
+	<!-- 포탈 관리자 > 업무보고 통계 정보 -->
+	<select id="selectPortalStatsAdminTypeWorkReport"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+			SELECT 'regist'  AS kind /* 등록 */
+				,count(*) AS agg_count
+			FROM   office_work_report
+			WHERE  base_date_str = #{searchDateStr}
+				AND report_date IS NOT NULL
+			UNION ALL
+			SELECT 'no_regist' AS kind /* 미제출 */
+				,count(*)   AS agg_count
+			FROM   office_work_report
+			WHERE  base_date_str = #{searchDateStr}
+				AND report_date IS NULL
+			UNION ALL
+			SELECT 'issue'   AS kind /* 이슈 */
+				,count(*) AS agg_count
+			FROM   office_work_report
+			WHERE  base_date_str = #{searchDateStr}
+				AND issue_yn = 'Y'
+			UNION ALL
+			SELECT 'comment'                    AS kind /* 코멘트 */
+				,count(DISTINCT a.report_id) AS agg_count
+			FROM   office_work_report a
+				INNER JOIN office_work_report_comment c
+						ON a.report_id = c.report_id
+			WHERE  a.base_date_str = #{searchDateStr}
 	</select>
 
 </mapper>
