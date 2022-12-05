@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest(classes = BootStandardApplication.class)
@@ -125,6 +126,21 @@ class CommuteDaoTest {
 						.build();
 		int result = commuteDao.updateCommute(vo);
 		log.info("updateCommute result : {}", result);
+	}
+
+	// 출퇴근 목록 조회 : 부서키 목록 기준
+	@Test
+	void selectCommuteListByDeptIdList() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.loginUserId("yamdeng")
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.limit(10)
+						.build();
+		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteListByDeptIdList(vo);
+		log.info("selectCommuteListByDeptIdList result : {}", result);
 	}
 
 }

@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest(classes = BootStandardApplication.class)
@@ -34,6 +35,18 @@ class WorkReportDaoTest {
 						.build();
 		List<OfficeWorkReportVO> result = workReportDao.selectRecent7DayListByDeptId(vo);
 		log.info("selectRecent7DayListByDeptKey result : {}", result);
+	}
+
+	// 업무보고 목록 : 부서키 목록 기준
+	@Test
+	void selectWorkReportListByDeptIdList() {
+		OfficeWorkReportVO vo =
+				OfficeWorkReportVO.builder()
+						.baseDateStr("20221203")
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.build();
+		List<OfficeWorkReportVO> result = workReportDao.selectWorkReportListByDeptIdList(vo);
+		log.info("selectWorkReportListByDeptIdList result : {}", result);
 	}
 
 }

@@ -270,4 +270,21 @@
 		WHERE base_date_str = #{baseDateStr} AND user_id = #{userId}
 	</update>
 
+	<!-- 출퇴근 목록 조회 : 부서키 목록 기준  -->
+	<select id="selectCommuteListByDeptIdList"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT
+		<include refid="commute_select"/>
+		FROM OFFICE_COMMUTE_DAY a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
 </mapper>

@@ -15,7 +15,7 @@
 		,a.report_submit_status_code AS report_submit_status_code /* 업무보고 제출상태 */
 		,a.issue_yn                  AS issue_yn /* 이슈 여부 */
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_select"/>
 	</sql>
 
 	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
@@ -27,6 +27,22 @@
 		FROM OFFICE_WORK_REPORT a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.BASE_DATE_STR BETWEEN #{startDateStr} AND #{endDateStr} AND a.dept_id = #{deptId}
+	</select>
+
+	<!-- 업무보고 목록 : 부서키 목록 기준 -->
+	<select id="selectWorkReportListByDeptIdList"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+		<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 	</select>
 
 </mapper>
