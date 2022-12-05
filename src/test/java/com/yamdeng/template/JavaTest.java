@@ -2,7 +2,6 @@ package com.yamdeng.template;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +21,26 @@ public class JavaTest {
     }
 
     @Test
+    void manualSetLocalDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse("20220305", formatter);
+        log.info("localDate : {}", localDate);
+    }
+
+    @Test
+    void manualSetLocalDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse("20220305 07:59:59", formatter);
+        log.info("localDateTime : {}", localDateTime);
+
+        LocalDateTime localDateTime2 = LocalDateTime.parse(
+                "2022-12-03 07:59:59",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        );
+        log.info("localDateTime2 : {}", localDateTime2);
+    }
+
+    @Test
     void testNowBaseDateStr() {
         LocalDateTime now = LocalDateTime.now();
         String nowBaseDateStr = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -33,6 +52,21 @@ public class JavaTest {
         LocalDateTime now = LocalDateTime.now();
         String nowBaseYear = now.format(DateTimeFormatter.ofPattern("yyyy"));
         log.info("testNowBaseYear : {}", nowBaseYear);
+    }
+
+    @Test
+    void testNowBaseMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        String nowBaseMonth = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String nowBaseOnlyMonth = now.format(DateTimeFormatter.ofPattern("MM"));
+        log.info("nowBaseMonth : {}", nowBaseMonth);
+        log.info("nowBaseOnlyMonth : {}", nowBaseOnlyMonth);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse("20221205", formatter); // 20220305, 20221205
+        log.info("localDate.month : {}", localDate.format(DateTimeFormatter.ofPattern("MM")));
+        log.info("localDate.month2 : {}", localDate.format(DateTimeFormatter.ofPattern("M")));
+
     }
 
     @Test
