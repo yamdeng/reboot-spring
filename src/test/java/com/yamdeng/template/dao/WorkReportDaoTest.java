@@ -32,7 +32,7 @@ class WorkReportDaoTest {
 						.endDateStr("20221205")
 						.deptId("dept1")
 						.build();
-		List<OfficeWorkReportVO> result = workReportDao.selectRecent7DayListByDeptKey(vo);
+		List<OfficeWorkReportVO> result = workReportDao.selectRecent7DayListByDeptId(vo);
 		log.info("selectRecent7DayListByDeptKey result : {}", result);
 	}
 

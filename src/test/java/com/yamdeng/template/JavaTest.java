@@ -170,4 +170,29 @@ public class JavaTest {
         log.info("uuid string2 : {}", result2);
     }
 
+    @Test
+    void testRecent7Days() {
+        LocalDate today = LocalDate.now();
+        LocalDate before6Day = today.minusDays(6);
+        String before6DayStr = before6Day.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("before6DayStr : {}", before6DayStr);
+    }
+
+    // 오늘 기준으로 이전 평일 구하기
+    @Test
+    void beforeWorkDay() {
+
+        LocalDate today = LocalDate.now();
+        int minusDay = 1;
+        while(true) {
+            LocalDate beforeDate = today.minusDays(minusDay);
+            int weekValue = beforeDate.getDayOfWeek().getValue();
+            // 토요일, 일요일 아니고
+            if(weekValue != 6 && weekValue != 7) {
+                // 공휴일 테이블 확인
+            }
+        }
+
+    }
+
 }

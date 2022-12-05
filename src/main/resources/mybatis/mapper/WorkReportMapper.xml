@@ -19,7 +19,7 @@
 	</sql>
 
 	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
-	<select id="selectRecent7DayListByDeptKey"
+	<select id="selectRecent7DayListByDeptId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
 		SELECT

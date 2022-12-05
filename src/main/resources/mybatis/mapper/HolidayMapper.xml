@@ -23,8 +23,8 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM   office_work_holiday
-		WHERE  base_year = {baseYear}
-			AND holi_date_str = {holiDateStr}
+		WHERE  base_year = #{baseYear}
+			AND holi_date_str = #{holiDateStr}
 	</select>
 
 </mapper>

@@ -9,6 +9,6 @@ import java.util.List;
 public interface WorkReportDao {
 
     // 부서ID 기준 일주일 업무보고 목록(공휴일 포함)
-    List<OfficeWorkReportVO> selectRecent7DayListByDeptKey(OfficeWorkReportVO vo);
+    List<OfficeWorkReportVO> selectRecent7DayListByDeptId(OfficeWorkReportVO vo);
 
 }

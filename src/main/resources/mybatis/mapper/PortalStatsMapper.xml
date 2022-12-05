@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.PortalStatsDao">
+
+	<!-- 포탈 통계 -->
+
+	<!-- 포탈 실장의 통계 정보 -->
+	<select id="selectPortalStatsByHeader"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT user_key
+		FROM   to0_user_main
+		WHERE  dept_key = #{deptId}
+			AND duty_key = 'manager'
+	</select>
+
+</mapper>

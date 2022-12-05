@@ -449,6 +449,7 @@ public class ScheduleService {
                                                     .userId(userKey)
                                                     .workResultCode(Constant.CODE_WORK_RESULT_TARDY)
                                                     .modUserId(Constant.POLICY_SYSTEM_USER_ID)
+                                                    .tardyYn("Y")
                                                     .build();
                                     commuteDao.updateCommute(vo);
                                 }

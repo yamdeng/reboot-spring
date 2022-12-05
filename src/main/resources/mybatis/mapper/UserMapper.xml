@@ -14,4 +14,30 @@
 			AND duty_key = 'manager'
 	</select>
 
+	<!-- 하위 부서 목록 가져오기 -->
+	<select id="selectChildDeptListByDeptKey"
+			parameterType="java.lang.String"
+			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
+		WITH recursive dept_child_list(dept_key, dept_name, upper_dept_key)
+		AS
+		(
+				SELECT a.dept_key,
+						a.upper_dept_key,
+						a.dept_name
+				FROM   to0_dept_mast a
+				WHERE  dept_key = #{deptKey}
+				UNION ALL
+				SELECT a.dept_key,
+						a.upper_dept_key,
+						a.dept_name
+				FROM   to0_dept_mast a,
+						dept_child_list b
+				WHERE  a.upper_dept_key = b.dept_key )
+		SELECT dept_key,
+				dept_name,
+				upper_dept_key
+		FROM   dept_child_list
+		WHERE  dept_key != #{deptKey}
+	</select>
+
 </mapper>

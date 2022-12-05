@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,5 +31,7 @@ public class BaseCommonVO {
     private Integer offset; /* 페이징 종료 */
     private String startDateStr; /* 조회시작일(요청시만 사용) */
     private String endDateStr; /* 조회종료일(요청시만 사용) */
+    private List<String> childDeptIdList; /* 하위 부서ID 목록 */
+    private String beforeWorkDateStr; /* 이전평일 */
 
 }
