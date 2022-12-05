@@ -43,6 +43,7 @@ class PushAlarmDaoTest {
 		log.info("checkHolidayByDateStr result : {}", result);
 	}
 
+	// 알림 등록
 	@Test
 	void insertPushAlarm() {
 		OfficePushAlarmVO vo =

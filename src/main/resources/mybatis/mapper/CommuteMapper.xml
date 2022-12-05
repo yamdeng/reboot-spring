@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yamdeng.template.data.dao.CommuteDao">
 
-	<!-- 일일 출퇴근 OFFICE_COMMUTE_DAY 테이블 select column -->
+	<!-- OFFICE_COMMUTE_DAY(출퇴근_일일) 테이블 -->
+
+	<!-- OFFICE_COMMUTE_DAY select column -->
 	<sql id="commute_select">
 		a.base_date_str                                           AS base_date_str /* 근태기준일 */
 		,a.user_id                                                AS user_id /* 직원ID */

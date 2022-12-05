@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.WorkReportDao">
+
+	<!-- OFFICE_WORK_REPORT(업무보고) 테이블 -->
+
+	<!-- OFFICE_WORK_REPORT select column -->
+	<sql id="work_report_select">
+		a.report_id                  AS report_id /* 업부보고_ID */
+		,a.base_date_str             AS base_date_str /* 보고기준일 */
+		,a.report_date               AS report_date /* 보고일(작성일) */
+		,a.user_id                   AS user_id /* 작성자 */
+		,a.dept_id                   AS dept_id /* 부서 */
+		,a.report_content            AS report_content /* 보고내용 */
+		,a.report_submit_status_code AS report_submit_status_code /* 업무보고 제출상태 */
+		,a.issue_yn                  AS issue_yn /* 이슈 여부 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
+	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
+	<select id="selectRecent7DayListByDeptKey"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+		<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.BASE_DATE_STR BETWEEN #{startDateStr} AND #{endDateStr} AND a.dept_id = #{deptId}
+	</select>
+
+</mapper>

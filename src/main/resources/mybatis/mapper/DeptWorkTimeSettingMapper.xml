@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yamdeng.template.data.dao.DeptWorkTimeSettingDao">
 
-	<!-- 휴가_휴직_현황(연별) OFFICE_VACATION_YEAR 테이블 select column -->
-<!--	<sql id="vacation_select">-->
+	<!-- OFFICE_DEPT_WORK_TIME_SETTING(부서별_근무_시간_관리) 테이블 -->
+
+	<!-- OFFICE_DEPT_WORK_TIME_SETTING select column -->
+<!--	<sql id="dept_work_time_setting_select">-->
 <!--		a.user_id              AS user_id /* 직원ID */-->
 <!--		,a.base_year           AS base_year /* 기준년 */-->
 <!--		,a.annual_count        AS annual_count /* 발생연차 */-->
@@ -14,16 +16,6 @@
 <!--		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>-->
 <!--		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>-->
 <!--	</sql>-->
-
-	<!-- 읽지않은 알림 count -->
-	<select id="unreadCountByUserId"
-			parameterType="java.lang.String"
-			resultType="java.lang.Integer">
-		SELECT count(*)
-		FROM   office_push_alarm
-		WHERE  user_id = #{userId}
-			AND read_date IS NULL
-	</select>
 
 	<!-- 부서별 근무시간 셋팅 상세정보 -->
 	<select id="selectDeptWorkTimeSettingInfoByDeptId"

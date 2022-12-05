@@ -28,5 +28,7 @@ public class BaseCommonVO {
     private String loginUserId; /* 로그인ID */
     private Integer limit; /* 페이징 시작 */
     private Integer offset; /* 페이징 종료 */
+    private String startDateStr; /* 조회시작일(요청시만 사용) */
+    private String endDateStr; /* 조회종료일(요청시만 사용) */
 
 }

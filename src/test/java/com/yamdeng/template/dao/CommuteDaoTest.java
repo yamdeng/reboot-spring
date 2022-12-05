@@ -97,6 +97,7 @@ class CommuteDaoTest {
 		log.info("selectCommuteTargetUserList result : {}", result);
 	}
 
+	// 출퇴근_일일 insert
 	@Test
 	void insertCommute() {
 		OfficeCommuteDayVO vo =
@@ -112,6 +113,7 @@ class CommuteDaoTest {
 		log.info("insertCommute result : {}", result);
 	}
 
+	// 출퇴근_일일 update
 	@Test
 	void updateCommute() {
 		OfficeCommuteDayVO vo =

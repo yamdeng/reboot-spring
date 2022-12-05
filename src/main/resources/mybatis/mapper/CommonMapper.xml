@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yamdeng.template.data.dao.CommonDao">
 
+	<!-- 공통 속성 select column -->
 	<sql id="common_select">
 		,a.reg_date AS reg_date /* 등록일 */
 		,a.mod_date AS mod_date /* 수정일 */
@@ -9,6 +10,7 @@
 		,a.mod_user_id AS mod_user_id /* 수정자ID */
 	</sql>
 
+	<!-- 사용자 공통 속성 select column(사용자, 사용자의 부서, 사용자의 직책/직위/직급) -->
 	<sql id="user_common_select">
 		,u.user_key as user_key /* 사용자키 */
 		,u.user_name as user_name /* 사용자명 */
@@ -22,6 +24,13 @@
 		,po.position_title as position_title /* 직위명 */
 	</sql>
 
+	<!-- 부서 공통 속성 select column -->
+	<sql id="dept_common_select">
+		,d.dept_name as dept_name /* 부서명 */
+		,d.dept_key as dept_key /* 부서명 */
+	</sql>
+
+	<!-- 사용자 공통 join table -->
 	<sql id="user_common_join_table">
 		left outer join TO0_USER_MAIN u
 			on u.user_key = a.user_id
@@ -35,6 +44,13 @@
 			on u.position_key = po.position_key
 	</sql>
 
+	<!-- 부서 공통 join table -->
+	<sql id="dept_common_join_table">
+		left outer join TO0_DEPT_MAST d
+			on d.dept_key = a.dept_id
+	</sql>
+
+	<!-- 페이징 쿼리 공통 -->
 	<sql id="common_page_bottom">
 		<if test="limit != null">
 			limit #{limit}
