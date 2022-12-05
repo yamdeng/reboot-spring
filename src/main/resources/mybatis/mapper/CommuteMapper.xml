@@ -287,4 +287,48 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
+	<!-- {월} 출퇴근 현황 : 개인 -->
+	<select id="selectCommuteStatsTypePrivate"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'tardy'   AS kind /* 지각 */
+			,count(*) AS agg_count
+		FROM   office_commute_day
+		WHERE  user_id = #{userId}
+			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND tardy_yn = 'Y'
+		UNION ALL
+		SELECT 'not_start_work' AS kind /* 출근 미체크 */
+			,count(*)        AS agg_count
+		FROM   office_commute_day
+		WHERE  user_id = #{userId}
+			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND start_work_date IS NULL
+		UNION ALL
+		SELECT 'not_out_work' AS kind /* 퇴근 미체크 */
+			,count(*)      AS agg_count
+		FROM   office_commute_day
+		WHERE  user_id = #{userId}
+			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND out_work_date IS NULL
+	</select>
+
+	<!-- 일일_출퇴근 목록 : 공통 -->
+	<select id="selectCommuteList"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT
+		<include refid="commute_select"/>
+		FROM OFFICE_COMMUTE_DAY a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<if test='userId != null and !userId.equals("")'>
+			AND a.user_id = #{userId}
+		</if>
+		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+		</if>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
 </mapper>

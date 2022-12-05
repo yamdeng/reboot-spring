@@ -4,6 +4,7 @@ import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
+import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -141,6 +142,33 @@ class CommuteDaoTest {
 						.build();
 		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteListByDeptIdList(vo);
 		log.info("selectCommuteListByDeptIdList result : {}", result);
+	}
+
+	// {월} 출퇴근 현황 : 개인
+	@Test
+	void selectCommuteStatsTypePrivate() {
+		List<StatsCommonVO> result = commuteDao.selectCommuteStatsTypePrivate(
+				OfficeCommuteDayVO.builder()
+								.searchMonthStr("202212")
+								.userId("yamdeng")
+								.loginUserId("yamdeng")
+								.build()
+		);
+		log.info("selectCommuteStatsTypePrivate result : {}", result);
+	}
+
+	// 일일_출퇴근 목록 : 공통
+	@Test
+	void selectCommuteList() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.limit(10)
+						.offset(0)
+						.build();
+		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteList(vo);
+		log.info("selectCommuteList result : {}", result);
 	}
 
 }

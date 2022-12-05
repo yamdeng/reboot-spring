@@ -29,7 +29,10 @@ public class BaseCommonVO {
     private String loginUserId; /* 로그인ID */
     private Integer limit; /* 페이징 시작 */
     private Integer offset; /* 페이징 종료 */
+    private Integer pageSize; /* grid 페이징 size(offset 계산시 사용함 : pageSize - 1 * 10) */
     private String searchDateStr; /* 조회시작일(요청시만 사용) */
+    private String searchMonthStr; /* 조회월(요청시만 사용) */
+    private String searchYearStr; /* 조회년(요청시만 사용) */
     private String startDateStr; /* 조회시작일(요청시만 사용) */
     private String endDateStr; /* 조회종료일(요청시만 사용) */
     private List<String> childDeptIdList; /* 하위 부서ID 목록 */
