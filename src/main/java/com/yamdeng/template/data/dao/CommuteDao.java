@@ -40,4 +40,7 @@ public interface CommuteDao {
     // 출퇴근 목록 : 공통
     List<OfficeCommuteDayVO> selectCommuteList(OfficeCommuteDayVO vo);
 
+    // {일} 팀원 출퇴근 현황 : 팀장
+    List<StatsCommonVO> selectCommuteStatsDayTypeManager(OfficeCommuteDayVO vo);
+
 }

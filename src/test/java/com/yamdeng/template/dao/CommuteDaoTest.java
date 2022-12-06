@@ -171,4 +171,17 @@ class CommuteDaoTest {
 		log.info("selectCommuteList result : {}", result);
 	}
 
+	// {일} 팀원 출퇴근 현황 : 팀장
+	@Test
+	void selectCommuteStatsDayTypeManager() {
+		List<StatsCommonVO> result = commuteDao.selectCommuteStatsDayTypeManager(
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.deptKey("dept1")
+						.build()
+		);
+		log.info("selectCommuteStatsDayTypeManager result : {}", result);
+	}
+
+
 }

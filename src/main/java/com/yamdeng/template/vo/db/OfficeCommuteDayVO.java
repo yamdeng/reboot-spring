@@ -36,5 +36,6 @@ public class OfficeCommuteDayVO extends BaseCommonVO {
     private String tardyYn; /* 지각여부 */
     private Double workedTimeValue; /* 근무시간 */
     private String inWorkYn; /* 업무중(Y), 재택중(N) */
+    private String vacationYn; /* 휴가/휴직 여부 */
 
 }

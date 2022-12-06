@@ -322,13 +322,111 @@
 		FROM OFFICE_COMMUTE_DAY a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
+		<if test='baseDateStr != null and !baseDateStr.equals("")'>
+			AND a.base_date_str = #{baseDateStr}
+		</if>
 		<if test='userId != null and !userId.equals("")'>
 			AND a.user_id = #{userId}
+		</if>
+		<if test='deptKey != null and !deptKey.equals("")'>
+			AND d.dept_key = #{deptKey}
+		</if>
+		<if test='tardyYn != null and !tardyYn.equals("Y")'>
+			AND a.tardy_yn = 'Y'
+		</if>
+		<if test='vacationYn != null and !vacationYn.equals("Y")'>
+			AND (
+				a.work_status_code LIKE 'VACATION%'
+					AND a.work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' )
+			)
 		</if>
 		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
 			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
 		</if>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- {일} 팀원 출퇴근 현황 : 팀장 -->
+	<select id="selectCommuteStatsDayTypeManager"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'ing'     AS kind /* 업무중 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.work_status_code = 'ING'
+		UNION ALL
+		SELECT 'home_ing' AS kind /* 재택중 */
+			,count(*)  AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.work_status_code = 'HOME_ING'
+		UNION ALL
+		SELECT 'vacation_morning' AS kind /* 오전반차 */
+			,count(*)          AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.work_status_code = 'VACATION_MORNING'
+		UNION ALL
+		SELECT 'vacation_afternoon' AS kind /* 오후반차 */
+			,count(*)            AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.work_status_code = 'VACATION_AFTERNOON'
+		UNION ALL
+		SELECT 'end'     AS kind /* 업무종료 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.work_status_code = 'END'
+		UNION ALL
+		SELECT 'tardy'   AS kind /* 지각 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND a.tardy_yn = 'Y'
+		UNION ALL
+		SELECT 'vacation' AS kind /* 휴가/휴직 */
+			,count(*)  AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND d.dept_key = #{deptKey}
+			AND ( a.work_status_code LIKE 'VACATION%'
+					AND a.work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' ) ) 
 	</select>
 
 </mapper>
