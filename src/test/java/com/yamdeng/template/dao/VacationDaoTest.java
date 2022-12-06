@@ -48,4 +48,16 @@ class VacationDaoTest {
 		log.info("selectVacationDetailDayHistoryInfo : {}", result);
 	}
 
+	// 휴가이력 목록 : 공통
+	@Test
+	void selectVacationDetailDayHistoryList() {
+		OfficeVacationDetailDayHistoryVO vo =
+				OfficeVacationDetailDayHistoryVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.build();
+		List<OfficeVacationDetailDayHistoryVO> result = vacationDao.selectVacationDetailDayHistoryList(vo);
+		log.info("selectVacationDetailDayHistoryList : {}", result);
+	}
+
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.CommuteDeptDao">
+
+	<!-- OFFICE_COMMUTE_DEPT_DAY(부서별 출퇴근) 테이블 -->
+
+	<!-- OFFICE_COMMUTE_DEPT_DAY select column -->
+	<sql id="commute_dept_select">
+		a.base_date_str               AS base_date_str /* 제출기준일 */
+		,a.dept_id                    AS dept_id /* 제출부서 */
+		,a.user_id                    AS user_id /* 제출자(팀장) */
+		,a.submit_date                AS submit_date /* 제출일 */
+		,a.mod_yn                     AS mod_yn /* 수정여부 */
+		,a.tardy_yn                   AS tardy_yn /* 지각여부 */
+		,a.commute_submit_status_code AS commute_submit_status_code /* 출/퇴근 제출상태 */
+		,fn_get_code_label('COMMUTE_DEPT_STATUS', a.commute_submit_status_code)     AS commute_submit_status_code_name /* 근무상태코드명 */
+		,a.target_count               AS target_count /* 제출대상수 */
+		,a.start_work_complete_count  AS start_work_complete_count /* 출근완료 합계 */
+		,a.out_work_complete_count    AS out_work_complete_count /* 퇴근완료 합계 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_manager_select"/>
+	</sql>
+
+	<!-- 부서별 출퇴근 목록 : 공통 -->
+	<select id="selectCommuteDeptList"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		SELECT
+		<include refid="commute_dept_select"/>
+		FROM OFFICE_COMMUTE_DEPT_DAY a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE 1=1
+		<if test='baseDateStr != null and !baseDateStr.equals("")'>
+			AND a.BASE_DATE_STR = #{searchDateStr}
+		</if>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+</mapper>

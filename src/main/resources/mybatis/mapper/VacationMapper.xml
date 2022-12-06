@@ -5,7 +5,7 @@
 	<!-- 휴가/휴직 테이블 -->
 
 	<!-- OFFICE_VACATION_YEAR select column -->
-	<sql id="vacation_select">
+	<sql id="vacation_year_select">
 		a.user_id              AS user_id /* 직원ID */
 		,a.base_year           AS base_year /* 기준년 */
 		,a.annual_count        AS annual_count /* 발생연차 */
@@ -17,12 +17,23 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
 	</sql>
 
+	<!-- OFFICE_VACATION_DETAIL_DAY_HISTORY select column -->
+	<sql id="vacation_detail_day_history_select">
+		a.user_id             AS user_id /* 직원ID */
+		,a.reg_date           AS reg_date /* 신청일 */
+		,a.vacation_kind_code AS vacation_kind_code /* 휴가종류 */
+		,fn_get_code_label('VACATION_KIND', a.vacation_kind_code) AS vacation_kind_code_name /* 휴가종류코드명 */
+		,a.base_date_str      AS base_date_str /* 휴가일(일별) */
+		,a.approve_id         AS approve_id /* 전자결재 연동ID */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
 	<!-- 휴가/휴직(연별) 상세 조회 : 사용자ID 기준 -->
 	<select id="selectVacationInfoByUserId"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationYearVO">
 		SELECT
-		<include refid="vacation_select"/>
+		<include refid="vacation_year_select"/>
 		FROM OFFICE_VACATION_YEAR a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
@@ -32,15 +43,24 @@
 	<select id="selectVacationDetailDayHistoryInfo"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO">
-		SELECT a.user_id             AS user_id /* 직원ID */
-				,a.reg_date           AS reg_date /* 신청일 */
-				,a.vacation_kind_code AS vacation_kind_code /* 휴가종류 */
-				,a.base_date_str      AS base_date_str /* 휴가일(일별) */
-				,a.approve_id         AS approve_id /* 전자결재 연동ID */
-				FROM   office_vacation_detail_day_history a
-		WHERE base_date_str = #{baseDateStr}
-			AND user_id = #{userId}
+		SELECT <include refid="vacation_detail_day_history_select"/>
+		FROM   office_vacation_detail_day_history a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.base_date_str = #{baseDateStr}
+			AND a.user_id = #{userId}
 	</select>
 
+	<!-- 휴가이력 목록 : 공통 -->
+	<select id="selectVacationDetailDayHistoryList"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO">
+		SELECT <include refid="vacation_detail_day_history_select"/>
+		FROM   office_vacation_detail_day_history a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<if test='baseDateStr != null and !baseDateStr.equals("")'>
+			AND a.base_date_str = #{baseDateStr}
+		</if>
+	</select>
 
 </mapper>

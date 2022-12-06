@@ -14,6 +14,8 @@ public class BaseCommonVO {
 
     private String userKey; /* 사용자키 */
     private String userName; /* 사용자이름 */
+    private String mobileTel; /* 핸드폰번호 */
+    private String email; /* 이메일 */
     private String deptKey; /* 부서키 */
     private String deptName; /* 부서명 */
     private String rankKey; /* 직급키 */
@@ -37,5 +39,7 @@ public class BaseCommonVO {
     private String endDateStr; /* 조회종료일(요청시만 사용) */
     private List<String> childDeptIdList; /* 하위 부서ID 목록 */
     private String beforeWorkDateStr; /* 이전평일 */
+    private String managerMobileName; /* 팀장명 */
+    private String managerMobileTel; /* 팀장연락처 */
 
 }

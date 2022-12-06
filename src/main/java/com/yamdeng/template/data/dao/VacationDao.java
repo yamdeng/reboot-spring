@@ -17,4 +17,7 @@ public interface VacationDao {
     // 기준일 기준으로 휴가내역이 존재하는지 체크
     OfficeVacationDetailDayHistoryVO selectVacationDetailDayHistoryInfo(OfficeVacationDetailDayHistoryVO vo);
 
+    // 휴가이력 목록 : 공통
+    List<OfficeVacationDetailDayHistoryVO> selectVacationDetailDayHistoryList(OfficeVacationDetailDayHistoryVO vo);
+
 }

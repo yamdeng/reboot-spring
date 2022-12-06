@@ -17,6 +17,8 @@
 		,u.dept_key as dept_key /* 부서키 */
 		,u.rank_key as rank_key /* 직급명 */
 		,u.duty_key as duty_key /* 직책키 */
+		,u.mobile_tel /* 핸드폰번호 */
+		,u.email /* 이메일 */
 		,u.position_key as position_key /* 직위키 */
 		,d.dept_name as dept_name /* 부서명 */
 		,r.rank_title as rank_title /* 직급명 */
@@ -58,6 +60,12 @@
 		<if test="offset != null">
 			offset #{offset}
 		</if>
+	</sql>
+
+	<!-- 팀장 이름, 연락처 공통 select subquery -->
+	<sql id="common_manager_select">
+		,(select user_name from to0_user_main where dept_key = a.dept_id and duty_key = 'manager') as manager_name
+		,(select mobile_tel from to0_user_main where dept_key = a.dept_id and duty_key = 'manager') as manager_mobile_tel
 	</sql>
 
 </mapper>

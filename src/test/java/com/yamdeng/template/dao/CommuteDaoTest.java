@@ -162,7 +162,7 @@ class CommuteDaoTest {
 	void selectCommuteList() {
 		OfficeCommuteDayVO vo =
 				OfficeCommuteDayVO.builder()
-						.baseDateStr("20221203")
+						.searchMonthStr("202212")
 						.userId("yamdeng")
 						.limit(10)
 						.offset(0)
