@@ -31,8 +31,33 @@
 		FROM OFFICE_COMMUTE_DEPT_DAY a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1=1
-		<if test='baseDateStr != null and !baseDateStr.equals("")'>
+		<if test='searchDateStr != null and !searchDateStr.equals("")'>
 			AND a.BASE_DATE_STR = #{searchDateStr}
+		</if>
+		<if test='searchKind != null and !searchKind.equals("")'>
+			<!-- 제출전/반려(SUBMIT_AND_REJECT) -->
+			<if test='searchKind.equals("SUBMIT_AND_REJECT")'>
+				AND ( submit_date IS NOT NULL
+						OR commute_submit_status_code = 'REJECT' )
+			</if>
+			<!-- 승인전(BEFORE_APPROVE) -->
+			<if test='searchKind.equals("BEFORE_APPROVE")'>
+				AND submit_date IS NOT NULL
+				AND commute_submit_status_code != 'REJECT'
+				AND commute_submit_status_code != 'APPROVE'
+			</if>
+			<!-- 승인완료(APPROVE) -->
+			<if test='searchKind.equals("APPROVE")'>
+				AND commute_submit_status_code = 'APPROVE'
+			</if>
+			<!-- 출근완료(START_WORK_COMPLETE) -->
+			<if test='searchKind.equals("START_WORK_COMPLETE")'>
+				AND target_count = start_work_complete_count
+			</if>
+			<!-- 퇴근완료(OUT_WORK_COMPLETE) -->
+			<if test='searchKind.equals("OUT_WORK_COMPLETE")'>
+				AND target_count = out_work_complete_count 
+			</if>
 		</if>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
