@@ -42,6 +42,9 @@ public interface CommuteDao {
     // 출퇴근 목록 : 공통
     List<OfficeCommuteDayVO> selectCommuteList(OfficeCommuteDayVO vo);
 
+    // 출퇴근 목록 : 공통(total count)
+    int selectCommuteListTotalCount(OfficeCommuteDayVO vo);
+
     // {일} 팀원 출퇴근 현황 : 팀장
     List<StatsCommonVO> selectCommuteStatsDayTypeManager(OfficeCommuteDayVO vo);
 
@@ -56,5 +59,8 @@ public interface CommuteDao {
 
     // {월, 기간} 팀원 출퇴근 현황 2 : 실장
     List<OfficeCommuteDeyHeaderStatsVO> selectCommuteStatsMonthTypeHeader(OfficeCommuteDayVO vo);
+
+    // 전체 현황 : 하루, 기간
+    List<StatsCommonVO> selectCommuteStatsDayTypeAdmin(OfficeCommuteDayVO vo);
 
 }

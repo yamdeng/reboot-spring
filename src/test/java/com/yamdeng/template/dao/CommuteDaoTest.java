@@ -170,7 +170,9 @@ class CommuteDaoTest {
 						.offset(0)
 						.build();
 		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteList(vo);
+		Integer totalCount = commuteDao.selectCommuteListTotalCount(vo);
 		log.info("selectCommuteList result : {}", result);
+		log.info("selectCommuteListTotalCount totalCount : {}", totalCount);
 	}
 
 	// {일} 팀원 출퇴근 현황 : 팀장
@@ -238,6 +240,17 @@ class CommuteDaoTest {
 						.build();
 		List<OfficeCommuteDeyHeaderStatsVO> result = commuteDao.selectCommuteStatsMonthTypeHeader(vo);
 		log.info("selectCommuteStatsMonthTypeHeader result : {}", result);
+	}
+
+	// 전체 현황 : 하루, 기간
+	@Test
+	void selectCommuteStatsDayTypeAdmin() {
+		List<StatsCommonVO> result = commuteDao.selectCommuteStatsDayTypeAdmin(
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.build()
+		);
+		log.info("selectCommuteStatsDayTypeAdmin result : {}", result);
 	}
 
 }
