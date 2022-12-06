@@ -359,7 +359,7 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
-	<!-- {일} 팀원 출퇴근 현황 : 팀장 -->
+	<!-- {일} 팀원 출퇴근 현황 : 팀장, 실장 -->
 	<select id="selectCommuteStatsDayTypeManager"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
@@ -371,7 +371,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.work_status_code = 'ING'
 		UNION ALL
 		SELECT 'home_ing' AS kind /* 재택중 */
@@ -382,7 +386,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.work_status_code = 'HOME_ING'
 		UNION ALL
 		SELECT 'vacation_morning' AS kind /* 오전반차 */
@@ -393,7 +401,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.work_status_code = 'VACATION_MORNING'
 		UNION ALL
 		SELECT 'vacation_afternoon' AS kind /* 오후반차 */
@@ -404,7 +416,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.work_status_code = 'VACATION_AFTERNOON'
 		UNION ALL
 		SELECT 'end'     AS kind /* 업무종료 */
@@ -415,7 +431,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.work_status_code = 'END'
 		UNION ALL
 		SELECT 'tardy'   AS kind /* 지각 */
@@ -426,7 +446,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND a.tardy_yn = 'Y'
 		UNION ALL
 		SELECT 'vacation' AS kind /* 휴가/휴직 */
@@ -437,7 +461,11 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  a.base_date_str = #{baseDateStr}
-			AND d.dept_key = #{deptKey}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 			AND ( a.work_status_code LIKE 'VACATION%'
 					AND a.work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' ) ) 
 	</select>
@@ -519,6 +547,123 @@
 			LEFT OUTER JOIN to0_position_main po
 							ON u.position_key = po.position_key
 		WHERE  u.dept_key = #{deptKey}
+	</select>
+
+	<!-- {월, 기간} 팀원 출퇴근 현황 1 : 실장 -->
+	<select id="selectCommuteSimpleStatsMonthTypeHeader"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'tardy'   AS kind /* 지각 */
+			,count(*) AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE  d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND a.tardy_yn = 'Y'
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+		UNION ALL
+		SELECT 'vacation' AS kind /* 휴가/휴직 */
+			,count(*)  AS agg_count
+		FROM   office_commute_day a
+			INNER JOIN to0_user_main u
+					ON u.user_key = a.user_id
+			INNER JOIN to0_dept_mast d
+					ON u.dept_key = d.dept_key
+		WHERE d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND ( a.work_status_code LIKE 'VACATION%'
+					AND a.work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' ) )
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+	</select>
+
+	<!-- {월, 기간} 팀원 출퇴근 현황 2 : 실장 -->
+	<select id="selectCommuteStatsMonthTypeHeader"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeCommuteDeyHeaderStatsVO">
+		SELECT dept_key                                                           AS dept_key
+			,dept_name                                                         AS dept_name
+			,(SELECT count(*)
+				FROM   office_commute_dept_day
+				WHERE  dept_id = d.dept_key
+						AND success_yn = 'Y'
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>) AS success_commute_count /* 정상출근 수 */
+			,(SELECT sum(tardy_count)
+				FROM   office_commute_dept_day
+				WHERE  dept_id = d.dept_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>) AS tardy_commute_count /* 지각 수 */
+			,(SELECT sum(vacation_count)
+				FROM   office_commute_dept_day
+				WHERE  dept_id = d.dept_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>) AS vacation_count /* 휴가 수 */
+			,(SELECT avg(worked_time_value)
+				FROM   office_commute_day a
+						INNER JOIN to0_user_main u
+								ON u.user_key = a.user_id
+				WHERE  u.dept_key = d.dept_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>) AS avg_worked_time_value /* 평균근무시간 */
+		FROM   to0_dept_mast d
+		WHERE  dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 	</select>
 
 </mapper>

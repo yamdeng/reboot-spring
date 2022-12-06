@@ -3,6 +3,7 @@ package com.yamdeng.template.data.dao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
+import com.yamdeng.template.vo.stats.OfficeCommuteDeyHeaderStatsVO;
 import com.yamdeng.template.vo.stats.OfficeCommuteDeyManagerStatsVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -49,5 +50,11 @@ public interface CommuteDao {
 
     // {월, 기간} 팀원 출퇴근 현황 : 팀장
     List<OfficeCommuteDeyManagerStatsVO> selectCommuteStatsMonthTypeManager(OfficeCommuteDayVO vo);
+
+    // {월, 기간} 팀원 출퇴근 현황 1 : 실장
+    List<StatsCommonVO> selectCommuteSimpleStatsMonthTypeHeader(OfficeCommuteDayVO vo);
+
+    // {월, 기간} 팀원 출퇴근 현황 2 : 실장
+    List<OfficeCommuteDeyHeaderStatsVO> selectCommuteStatsMonthTypeHeader(OfficeCommuteDayVO vo);
 
 }

@@ -6,6 +6,7 @@ import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
+import com.yamdeng.template.vo.stats.OfficeCommuteDeyHeaderStatsVO;
 import com.yamdeng.template.vo.stats.OfficeCommuteDeyManagerStatsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -178,7 +179,7 @@ class CommuteDaoTest {
 		List<StatsCommonVO> result = commuteDao.selectCommuteStatsDayTypeManager(
 				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
-						.deptKey("dept1")
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
 						.build()
 		);
 		log.info("selectCommuteStatsDayTypeManager result : {}", result);
@@ -209,6 +210,34 @@ class CommuteDaoTest {
 						.build();
 		List<OfficeCommuteDeyManagerStatsVO> result = commuteDao.selectCommuteStatsMonthTypeManager(vo);
 		log.info("selectCommuteStatsMonthTypeManager result : {}", result);
+	}
+
+	// {월, 기간} 팀원 출퇴근 현황 1 : 실장
+	@Test
+	void selectCommuteSimpleStatsMonthTypeHeader() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.searchMonthStr("202212")
+//						.startDateStr("20221201")
+//						.endDateStr("20221231")
+						.build();
+		List<StatsCommonVO> result = commuteDao.selectCommuteSimpleStatsMonthTypeHeader(vo);
+		log.info("selectCommuteSimpleStatsMonthTypeHeader result : {}", result);
+	}
+
+	// {월, 기간} 팀원 출퇴근 현황 2 : 실장
+	@Test
+	void selectCommuteStatsMonthTypeHeader() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.searchMonthStr("202212")
+//						.startDateStr("20221201")
+//						.endDateStr("20221231")
+						.build();
+		List<OfficeCommuteDeyHeaderStatsVO> result = commuteDao.selectCommuteStatsMonthTypeHeader(vo);
+		log.info("selectCommuteStatsMonthTypeHeader result : {}", result);
 	}
 
 }
