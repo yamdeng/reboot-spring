@@ -82,4 +82,119 @@
 		WHERE base_date_str = #{baseDateStr} and dept_id = #{deptId}
 	</update>
 
+	<!-- 출퇴근 관리 현황 : 일, 월, 기간 -->
+	<select id="selectCommuteDeptStatsTypeAdmin"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'all'     AS kind /* 전체 */
+			,count(*) AS agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+		UNION ALL
+		SELECT 'submit_and_reject'     AS kind /* 제출, 반려 */
+			,count(*) agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+			AND ( submit_date IS NOT NULL
+					OR commute_submit_status_code = 'REJECT' )
+		UNION ALL
+		SELECT 'before_approve' AS kind /* 승인전 */
+			,count(*)        agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+			AND submit_date IS NOT NULL
+			AND commute_submit_status_code != 'REJECT'
+			AND commute_submit_status_code != 'APPROVE'
+		UNION ALL
+		SELECT 'approve' AS kind /* 승인완료 */
+			,count(*) agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+			AND commute_submit_status_code = 'APPROVE'
+		UNION ALL
+		SELECT 'start_work_complete' AS kind /* 출근완료 */
+			,count(*)             agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+			AND target_count = start_work_complete_count
+		UNION ALL
+		SELECT 'out_work_complete' AS kind /* 퇴근완료 */
+			,count(*)           agg_count
+		FROM   office_commute_dept_day
+		WHERE  1 = 1
+			<if test='searchDateStr != null and !searchDateStr.equals("")'>
+				AND base_date_str = #{searchDateStr}
+			</if>
+			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			</if>
+			<if test='startDateStr != null and !startDateStr.equals("")'>
+				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+			</if>
+			<if test='endDateStr != null and !endDateStr.equals("")'>
+				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+			</if>
+			AND target_count = out_work_complete_count 
+	</select>
+
 </mapper>

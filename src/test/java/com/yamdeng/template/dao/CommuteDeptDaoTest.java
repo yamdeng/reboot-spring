@@ -69,4 +69,18 @@ class CommuteDeptDaoTest {
 		log.info("updateCommuteDept result : {}", result);
 	}
 
+	// 출퇴근 관리 현황 : 일, 월, 기간
+	@Test
+	void selectCommuteDeptStatsTypeAdmin() {
+		OfficeCommuteDeptDayVO vo =
+				OfficeCommuteDeptDayVO.builder()
+//						.searchDateStr("20221203")
+//						.searchMonthStr("202212")
+						.startDateStr("20221203")
+						.endDateStr("20221203")
+						.build();
+		List<StatsCommonVO> result = commuteDeptDao.selectCommuteDeptStatsTypeAdmin(vo);
+		log.info("selectCommuteDeptStatsTypeAdmin result : {}", result);
+	}
+
 }
