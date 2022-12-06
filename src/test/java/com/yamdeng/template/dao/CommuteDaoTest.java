@@ -183,5 +183,17 @@ class CommuteDaoTest {
 		log.info("selectCommuteStatsDayTypeManager result : {}", result);
 	}
 
+	// 부서 출퇴근 반영시 일일_출퇴근 테이블 제출여부 반영완료
+	@Test
+    void completeDeptSubmit() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.userId("yamdeng")
+						.loginUserId("yamdeng")
+						.baseDateStr("20221203")
+						.build();
+		int result = commuteDao.completeDeptSubmit(vo);
+		log.info("completeDeptSubmit result : {}", result);
+	}
 
 }

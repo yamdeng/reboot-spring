@@ -37,4 +37,49 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
+	<!-- 부서별 출퇴근 상세 : 공통 -->
+	<select id="selectCommuteDateInfo"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		SELECT
+		<include refid="commute_dept_select"/>
+		FROM OFFICE_COMMUTE_DEPT_DAY a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+		AND a.dept_id = #{deptId}
+	</select>
+
+	<!-- 부서 출퇴근 수정 : [제출] 액션과 동일 -->
+	<update id="updateCommuteDept" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		UPDATE OFFICE_COMMUTE_DEPT_DAY
+		SET
+		mod_date = NOW()
+		,mod_user_id = #{loginUserId}
+		<if test='userId != null and !userId.equals("")'>
+			,user_id = #{userId}
+		</if>
+		<if test='submitDate != null and !submitDate.equals("")'>
+			,submit_date = #{submitDate}
+		</if>
+		<if test='modYn != null and !modYn.equals("")'>
+			,mod_yn = #{modYn}
+		</if>
+		<if test='tardyYn != null and !tardyYn.equals("")'>
+			,tardy_yn = #{tardyYn}
+		</if>
+		<if test='commuteSubmitStatusCode != null and !commuteSubmitStatusCode.equals("")'>
+			,commute_submit_status_code = #{commuteSubmitStatusCode}
+		</if>
+		<if test='targetCount != null and !targetCount.equals("")'>
+			,target_count = #{targetCount}
+		</if>
+		<if test='startWorkCompleteCount != null and !startWorkCompleteCount.equals("")'>
+			,start_work_complete_count = #{startWorkCompleteCount}
+		</if>
+		<if test='outWorkCompleteCount != null and !outWorkCompleteCount.equals("")'>
+			,out_work_complete_count = #{outWorkCompleteCount}
+		</if>
+		WHERE base_date_str = #{baseDateStr} and dept_id = #{deptId}
+	</update>
+
 </mapper>

@@ -43,4 +43,7 @@ public interface CommuteDao {
     // {일} 팀원 출퇴근 현황 : 팀장
     List<StatsCommonVO> selectCommuteStatsDayTypeManager(OfficeCommuteDayVO vo);
 
+    // 부서 출퇴근 반영시 일일_출퇴근 테이블 제출여부 반영완료
+    int completeDeptSubmit(OfficeCommuteDayVO vo);
+
 }

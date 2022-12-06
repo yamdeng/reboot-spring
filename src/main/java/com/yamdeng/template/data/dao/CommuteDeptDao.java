@@ -12,4 +12,10 @@ public interface CommuteDeptDao {
     // 부서별 출퇴근 목록 : 공통
     List<OfficeCommuteDeptDayVO> selectCommuteDeptList(OfficeCommuteDeptDayVO vo);
 
+    // 부서별 출퇴근 상세 : 공통
+    OfficeCommuteDeptDayVO selectCommuteDateInfo(OfficeCommuteDeptDayVO vo);
+
+    // 부서 출퇴근 수정 : [제출] 액션과 동일
+    int updateCommuteDept(OfficeCommuteDeptDayVO vo);
+
 }

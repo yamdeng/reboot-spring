@@ -38,4 +38,35 @@ class CommuteDeptDaoTest {
 		log.info("selectCommuteDeptList result : {}", result);
 	}
 
+	// 부서별 출퇴근 상세 : 공통
+	@Test
+	void selectCommuteDateInfo() {
+		OfficeCommuteDeptDayVO vo =
+				OfficeCommuteDeptDayVO.builder()
+						.baseDateStr("20221203")
+						.deptId("dept1")
+						.build();
+		OfficeCommuteDeptDayVO result = commuteDeptDao.selectCommuteDateInfo(vo);
+		log.info("selectCommuteDateInfo result : {}", result);
+	}
+
+	// 부서 출퇴근 수정 : [제출] 액션과 동일
+	@Test
+    void updateCommuteDept() {
+		OfficeCommuteDeptDayVO vo =
+				OfficeCommuteDeptDayVO.builder()
+						.userId("yamdeng")
+						.deptId("dept1")
+						.baseDateStr("20221203")
+						.submitDate(LocalDateTime.now())
+						.tardyYn("Y")
+						.commuteSubmitStatusCode("SUBMIT")
+						.targetCount(10)
+						.startWorkCompleteCount(10)
+						.outWorkCompleteCount(10)
+						.build();
+		int result = commuteDeptDao.updateCommuteDept(vo);
+		log.info("updateCommuteDept result : {}", result);
+	}
+
 }
