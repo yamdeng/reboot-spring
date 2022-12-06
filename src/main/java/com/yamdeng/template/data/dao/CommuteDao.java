@@ -3,6 +3,7 @@ package com.yamdeng.template.data.dao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
+import com.yamdeng.template.vo.stats.OfficeCommuteDeyManagerStatsVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -45,5 +46,8 @@ public interface CommuteDao {
 
     // 부서 출퇴근 반영시 일일_출퇴근 테이블 제출여부 반영완료
     int completeDeptSubmit(OfficeCommuteDayVO vo);
+
+    // {월, 기간} 팀원 출퇴근 현황 : 팀장
+    List<OfficeCommuteDeyManagerStatsVO> selectCommuteStatsMonthTypeManager(OfficeCommuteDayVO vo);
 
 }

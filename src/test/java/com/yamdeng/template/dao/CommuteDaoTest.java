@@ -6,6 +6,7 @@ import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
 import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
+import com.yamdeng.template.vo.stats.OfficeCommuteDeyManagerStatsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,6 +195,20 @@ class CommuteDaoTest {
 						.build();
 		int result = commuteDao.completeDeptSubmit(vo);
 		log.info("completeDeptSubmit result : {}", result);
+	}
+
+	// {월, 기간} 팀원 출퇴근 현황 : 팀장
+	@Test
+	void selectCommuteStatsMonthTypeManager() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.deptKey("dept1")
+//						.searchMonthStr("202212")
+						.startDateStr("20221201")
+						.endDateStr("20221231")
+						.build();
+		List<OfficeCommuteDeyManagerStatsVO> result = commuteDao.selectCommuteStatsMonthTypeManager(vo);
+		log.info("selectCommuteStatsMonthTypeManager result : {}", result);
 	}
 
 }

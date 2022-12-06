@@ -343,6 +343,19 @@
 		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
 			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
 		</if>
+		<if test='startDateStr != null and !startDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+		</if>
+		<if test='endDateStr != null and !endDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
+		</if>
+		<if test='childDeptIdList != null and childDeptIdList.size != 0'>
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -438,5 +451,74 @@
 			,mod_user_id = #{loginUserId}
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
+
+	<!-- {월, 기간} 팀원 출퇴근 현황 : 팀장 -->
+	<select id="selectCommuteStatsMonthTypeManager"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeCommuteDeyManagerStatsVO">
+		SELECT u.user_key                                                                                AS user_key /* 사용자키 */
+			,u.user_name                                                                              AS user_name /* 사용자명 */
+			,u.dept_key                                                                               AS dept_key /* 부서키 */
+			,u.rank_key                                                                               AS rank_key /* 직급명 */
+			,u.duty_key                                                                               AS duty_key /* 직책키 */
+			,u.mobile_tel /* 핸드폰번호 */
+			,u.email /* 이메일 */
+			,u.position_key                                                                           AS position_key /* 직위키 */
+			,d.dept_name                                                                              AS dept_name /* 부서명 */
+			,r.rank_title                                                                             AS rank_title /* 직급명 */
+			,du.duty_title                                                                            AS duty_title /* 직책명 */
+			,po.position_title                                                                        AS position_title /* 직위명 */
+			,(SELECT count(*)
+				FROM   office_commute_day
+				WHERE  user_id = u.user_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>
+						AND start_work_date IS NOT NULL
+						AND tardy_yn = 'N')                                                              AS success_commute_count /* 정상출근 수 */
+			,(SELECT count(*)
+				FROM   office_commute_day
+				WHERE  user_id = u.user_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>
+						AND tardy_yn = 'Y')                                                              AS tardy_commute_count /* 지각 수 */
+			,(SELECT count(*)
+				FROM   office_commute_day
+				WHERE  user_id = u.user_key
+						<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+							AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+						</if>
+						<if test='startDateStr != null and !startDateStr.equals("")'>
+							AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
+						</if>
+						<if test='endDateStr != null and !endDateStr.equals("")'>
+							AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
+						</if>
+						AND ( work_status_code LIKE 'VACATION%'
+							AND work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' ) )) AS vacation_count /* 휴가/휴직 수 */
+		FROM   to0_user_main u
+			LEFT OUTER JOIN to0_dept_mast d
+							ON u.dept_key = d.dept_key
+			LEFT OUTER JOIN to0_rank_main r
+							ON u.rank_key = r.rank_key
+			LEFT OUTER JOIN to0_duty_main du
+							ON u.duty_key = du.duty_key
+			LEFT OUTER JOIN to0_position_main po
+							ON u.position_key = po.position_key
+		WHERE  u.dept_key = #{deptKey}
+	</select>
 
 </mapper>
