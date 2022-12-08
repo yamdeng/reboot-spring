@@ -6,6 +6,7 @@ import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.data.dao.VacationDao;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO;
+import com.yamdeng.template.vo.db.OfficeVacationDetailVO;
 import com.yamdeng.template.vo.db.OfficeVacationYearVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,34 @@ class VacationDaoTest {
 						.build();
 		List<OfficeVacationDetailDayHistoryVO> result = vacationDao.selectVacationDetailDayHistoryList(vo);
 		log.info("selectVacationDetailDayHistoryList : {}", result);
+	}
+
+	// 휴가_휴직_상세 list
+	@Test
+	void selectVacationDetailList() {
+		OfficeVacationDetailVO vo =
+				OfficeVacationDetailVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.build();
+		List<OfficeVacationDetailVO> result = vacationDao.selectVacationDetailList(vo);
+		int totalCount = vacationDao.selectVacationDetailListTotalCount(vo);
+		log.info("selectVacationDetailList result : {}", result);
+		log.info("selectVacationDetailList totalCount : {}", totalCount);
+	}
+
+	// 휴가_휴직_현황(연별) list
+	@Test
+	void selectVacationYearList() {
+		OfficeVacationYearVO vo =
+				OfficeVacationYearVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.build();
+		List<OfficeVacationYearVO> result = vacationDao.selectVacationYearList(vo);
+		int totalCount = vacationDao.selectVacationYearListTotalCount(vo);
+		log.info("selectVacationYearList result : {}", result);
+		log.info("selectVacationYearList totalCount : {}", totalCount);
 	}
 
 }

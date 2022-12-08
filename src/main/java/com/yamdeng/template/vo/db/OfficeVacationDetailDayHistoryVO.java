@@ -1,20 +1,18 @@
 package com.yamdeng.template.vo.db;
 
+import com.yamdeng.template.vo.common.BaseCommonVO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OfficeVacationDetailDayHistoryVO {
+public class OfficeVacationDetailDayHistoryVO extends BaseCommonVO {
 
     private String userId; /* 직원ID */
-    private LocalDateTime regDate; /* 신청일 */
     private String vacationKindCode; /* 휴가종류 */
     private String baseDateStr; /* 휴가일(일별) */
     private String approveId; /* 전자결재 연동ID */

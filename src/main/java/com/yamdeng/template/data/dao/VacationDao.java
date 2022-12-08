@@ -1,8 +1,7 @@
 package com.yamdeng.template.data.dao;
 
-import com.yamdeng.template.vo.common.BaseCommonVO;
-import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO;
+import com.yamdeng.template.vo.db.OfficeVacationDetailVO;
 import com.yamdeng.template.vo.db.OfficeVacationYearVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,5 +18,17 @@ public interface VacationDao {
 
     // 휴가이력 목록 : 공통
     List<OfficeVacationDetailDayHistoryVO> selectVacationDetailDayHistoryList(OfficeVacationDetailDayHistoryVO vo);
+
+    // 휴가_휴직_상세 list
+    List<OfficeVacationDetailVO> selectVacationDetailList(OfficeVacationDetailVO vo);
+
+    // 휴가_휴직_상세 list totalCount
+    int selectVacationDetailListTotalCount(OfficeVacationDetailVO vo);
+
+    // 휴가_휴직_현황(연별) list
+    List<OfficeVacationYearVO> selectVacationYearList(OfficeVacationYearVO vo);
+
+    // 휴가_휴직_현황(연별) list totalCount
+    int selectVacationYearListTotalCount(OfficeVacationYearVO vo);
 
 }
