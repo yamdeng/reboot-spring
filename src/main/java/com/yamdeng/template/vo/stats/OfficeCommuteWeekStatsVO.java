@@ -40,4 +40,6 @@ public class OfficeCommuteWeekStatsVO extends BaseCommonVO  {
     @Builder.Default
     private Double sunWorkTimeValue = 0.0; /* 일 근무시간 */
 
+    private String workWeekTimeKind; /* 근무시간 52시간 미만(LESS), 근무시간 52시간 초과(GREATER) */
+
 }

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.CommuteStatsDao">
+
+	<!-- OFFICE_COMMUTE_WEEK_STATS(통계_출퇴근_주간) 테이블 -->
+	<!-- OFFICE_COMMUTE_MONTH_D_STATS(통계_출퇴근_월간_주별) 테이블 -->
+	<!-- OFFICE_COMMUTE_MONTH_H_STATS(통계_출퇴근_월간_휴일) 테이블 -->
+
+	<!-- OFFICE_COMMUTE_WEEK_STATS select column -->
+	<sql id="commute_stats_week_select">
+		a.user_id AS user_id /* 직원ID */
+		,a.monday_start_date_str AS monday_start_date_str /* 월요일 시작 일 */
+		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
+		,a.mon_work_time_value AS mon_work_time_value /* 월 근무시간 */
+		,a.tue_work_time_value AS tue_work_time_value /* 화 근무시간 */
+		,a.wed_work_time_value AS wed_work_time_value /* 수 근무시간 */
+		,a.thu_work_time_value AS thu_work_time_value /* 목 근무시간 */
+		,a.fri_work_time_value AS fri_work_time_value /* 금 근무시간 */
+		,a.sat_work_time_value AS sat_work_time_value /* 토 근무시간 */
+		,a.sun_work_time_value AS sun_work_time_value /* 일 근무시간 */
+		,a.reg_date AS reg_date /* 등록일 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
+	<!-- OFFICE_COMMUTE_WEEK_STATS where -->
+	<sql id="commute_stats_week_where">
+		AND MONDAY_START_DATE_STR = #{mondayStartDateStr}
+		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
+			<!-- 52시간 미만 (LESS) -->
+			<if test='workWeekTimeKind.equals("LESS")'>
+				AND SUN_WORK_TIME_VALUE <![CDATA[ < ]]> 52
+			</if>
+			<!-- 52시간 초과(GREATER) -->
+			<if test='workWeekTimeKind.equals("GREATER")'>
+				AND SUN_WORK_TIME_VALUE <![CDATA[ >= ]]> 52
+			</if>
+		</if>
+	</sql>
+
+	<!-- OFFICE_COMMUTE_MONTH_D_STATS select column -->
+	<sql id="commute_stats_month_d_select">
+		a.user_id AS user_id /* 직원ID */
+		,a.base_month_str AS base_month_str /* 기준년월 */
+		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
+		,a.first_week_time_value AS first_week_time_value /* 1주 근무시간 */
+		,a.second_week_time_value AS second_week_time_value /* 2주 근무시간 */
+		,a.three_week_time_value AS three_week_time_value /* 3주 근무시간 */
+		,a.four_week_time_value AS four_week_time_value /* 4주 근무시간 */
+		,a.five_week_time_value AS five_week_time_value /* 5주 근무시간 */
+		,a.six_week_time_value AS six_week_time_value /* 6주 근무시간 */
+		,a.reg_date AS reg_date /* 등록일 */
+	</sql>
+
+	<!-- OFFICE_COMMUTE_MONTH_D_STATS where -->
+	<sql id="commute_stats_month_d_where">
+		AND BASE_MONTH_STR = #{baseMonthStr}
+		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
+			<!-- 52시간 미만 (LESS) -->
+			<!-- 52시간 초과한 주가 하나도 없는 경우 -->
+			<if test='workWeekTimeKind.equals("LESS")'>
+				AND (
+					FIRST_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and SECOND_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and THREE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
+					and FOUR_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and FIVE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND SIX_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
+				)
+			</if>
+			<!-- 52시간 초과(GREATER) -->
+			<!-- 한주라도 52시간 초과한 주가 존재할 경우 -->
+			<if test='workWeekTimeKind.equals("GREATER")'>
+				AND (
+					FIRST_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or SECOND_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or THREE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
+					or FOUR_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or FIVE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or SIX_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
+				)
+			</if>
+		</if>
+	</sql>
+
+	<!-- OFFICE_COMMUTE_MONTH_H_STATS select column -->
+	<sql id="commute_stats_month_h_select">
+		a.user_id AS user_id /* 직원ID */
+		,a.base_month_str AS base_month_str /* 기준년월 */
+		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
+		,a.hd1_work_time_value AS hd1_work_time_value /* 휴일 1일째 근무시간 */
+		,a.hd2_work_time_value AS hd2_work_time_value /* 휴일 2일째 근무시간 */
+		,a.hd3_work_time_value AS hd3_work_time_value /* 휴일 3일째 근무시간 */
+		,a.hd4_work_time_value AS hd4_work_time_value /* 휴일 4일째 근무시간 */
+		,a.hd5_work_time_value AS hd5_work_time_value /* 휴일 5일째 근무시간 */
+		,a.hd6_work_time_value AS hd6_work_time_value /* 휴일 6일째 근무시간 */
+		,a.hd7_work_time_value AS hd7_work_time_value /* 휴일 7일째 근무시간 */
+		,a.hd8_work_time_value AS hd8_work_time_value /* 휴일 8일째 근무시간 */
+		,a.hd9_work_time_value AS hd9_work_time_value /* 휴일 9일째 근무시간 */
+		,a.hd10_work_time_value AS hd10_work_time_value /* 휴일 10일째 근무시간 */
+		,a.hd11_work_time_value AS hd11_work_time_value /* 휴일 11일째 근무시간 */
+		,a.hd12_work_time_value AS hd12_work_time_value /* 휴일 12일째 근무시간 */
+		,a.hd13_work_time_value AS hd13_work_time_value /* 휴일 13일째 근무시간 */
+		,a.hd14_work_time_value AS hd14_work_time_value /* 휴일 14일째 근무시간 */
+		,a.hd15_work_time_value AS hd15_work_time_value /* 휴일 15일째 근무시간 */
+		,a.hd16_work_time_value AS hd16_work_time_value /* 휴일 16일째 근무시간 */
+		,a.hd17_work_time_value AS hd17_work_time_value /* 휴일 17일째 근무시간 */
+		,a.hd18_work_time_value AS hd18_work_time_value /* 휴일 18일째 근무시간 */
+		,a.hd19_work_time_value AS hd19_work_time_value /* 휴일 19일째 근무시간 */
+		,a.hd20_work_time_value AS hd20_work_time_value /* 휴일 20일째 근무시간 */
+		,a.reg_date AS reg_date /* 등록일 */
+	</sql>
+
+	<!-- OFFICE_COMMUTE_MONTH_H_STATS where -->
+	<sql id="commute_stats_month_h_where">
+		AND BASE_MONTH_STR = #{baseMonthStr}
+	</sql>
+
+	<!-- 통계_출퇴근_주간 list -->
+	<select id="selectCommuteStatsWeekList"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteWeekStatsVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeCommuteWeekStatsVO">
+		SELECT
+		<include refid="commute_stats_week_select"/>
+		FROM OFFICE_COMMUTE_WEEK_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_week_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 통계_출퇴근_주간 list totalCount -->
+	<select id="selectCommuteStatsWeekListTotalCount"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteWeekStatsVO"
+			resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM OFFICE_COMMUTE_WEEK_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_week_where"/>
+	</select>
+
+	<!-- 통계_출퇴근_월간_주별 list -->
+	<select id="selectCommuteStatsMonthDList"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthDStatsVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeCommuteMonthDStatsVO">
+		SELECT
+		<include refid="commute_stats_month_d_select"/>
+		FROM OFFICE_COMMUTE_MONTH_D_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_month_d_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 통계_출퇴근_월간_주별 list totalCount -->
+	<select id="selectCommuteStatsMonthDListTotalCount"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthDStatsVO"
+			resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM OFFICE_COMMUTE_MONTH_D_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_month_d_where"/>
+	</select>
+
+	<!-- 통계_출퇴근_월간_휴일 list -->
+	<select id="selectCommuteStatsMonthHList"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthHStatsVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeCommuteMonthHStatsVO">
+		SELECT
+		<include refid="commute_stats_month_h_select"/>
+		FROM OFFICE_COMMUTE_MONTH_H_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_month_h_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 통계_출퇴근_월간_휴일 list totalCount -->
+	<select id="selectCommuteStatsMonthHListTotalCount"
+			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthHStatsVO"
+			resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM OFFICE_COMMUTE_MONTH_H_STATS a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="commute_stats_month_h_where"/>
+	</select>
+
+</mapper>

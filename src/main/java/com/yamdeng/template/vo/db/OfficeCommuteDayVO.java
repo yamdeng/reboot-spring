@@ -37,7 +37,7 @@ public class OfficeCommuteDayVO extends BaseCommonVO {
     private Double workedTimeValue; /* 근무시간 */
     private String inWorkYn; /* 업무중(Y), 재택중(N) */
     private String vacationYn; /* 휴가/휴직 여부 */
-    private String workedTimeKind; /* 근무시간 8시간 미만(LESS), 근무시간 8시간 초과(GREATER) */
+    private String workTimeKind; /* 근무시간 8시간 미만(LESS), 근무시간 8시간 초과(GREATER) */
     private String notStartWorkYn; /* 출근미체크 */
     private String notOutWorkYn; /* 퇴근미체크 */
 

@@ -86,13 +86,13 @@
 				#{item}
 			</foreach>
 		</if>
-		<if test='workedTimeKind != null and !workedTimeKind.equals("")'>
+		<if test='workTimeKind != null and !workTimeKind.equals("")'>
 			<!-- 8시간 미만 (LESS) -->
-			<if test='workedTimeKind.equals("LESS")'>
+			<if test='workTimeKind.equals("LESS")'>
 				AND worked_time_value <![CDATA[ < ]]> 8
 			</if>
 			<!-- 8시간 초과(GREATER) -->
-			<if test='workedTimeKind.equals("GREATER")'>
+			<if test='workTimeKind.equals("GREATER")'>
 				AND worked_time_value <![CDATA[ >= ]]> 8
 			</if>
 		</if>

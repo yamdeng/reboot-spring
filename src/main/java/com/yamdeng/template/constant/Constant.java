@@ -99,4 +99,21 @@ public interface Constant {
     static final String CODE_ALARM_COMMUTE_DEPT_SUBMIT_COMPLETE = "COMMUTE_DEPT_SUBMIT_COMPLETE"; /* 부서출퇴근제출완료 */
     static final String CODE_ALARM_REPORT_SUBMIT_COMPLETE = "REPORT_SUBMIT_COMPLETE"; /* 부서업무보고제출완료 */
 
+    // 출퇴근 통계 종류
+    static final String CODE_COMMUTE_SUMMARY_STATS_KIND_WEEK = "WEEK"; /* 주간 */
+    static final String CODE_COMMUTE_SUMMARY_STATS_KIND_MONTH_WEEK = "MONTH_WEEK"; /* 월간(주별) */
+    static final String CODE_COMMUTE_SUMMARY_STATS_KIND_MONTH_HOLIDAY = "MONTH_HOLIDAY"; /* 월간(휴일) */
+
+    // 하루 근무시간 기준(8)
+    static final String CODE_DAY_NORMAL_WORK_TIME_BASE_LESS = "LESS"; /* 근무시간 8시간 미만 */
+    static final String CODE_DAY_NORMAL_WORK_TIME_BASE_GREATER = "GREATER"; /* 근무시간 8시간 초과 */
+
+    // 일주일 근무시간 기준(52)
+    static final String CODE_WEEK_NORMAL_WORK_TIME_BASE_LESS = "LESS"; /* 근무시간 52시간 미만 */
+    static final String CODE_WEEK_NORMAL_WORK_TIME_BASE_GREATER = "GREATER"; /* 근무시간 52시간 초과 */
+
+    // 포상휴가 부여 기준
+    static final String CODE_PRIZE_VACATION_YEAR_1 = "1"; /* 입사일 기준 1년 이상인 직원 */
+    static final String CODE_PRIZE_VACATION_YEAR_10 = "10"; /* 입사일 기준 10년 이상인 직원 */
+
 }

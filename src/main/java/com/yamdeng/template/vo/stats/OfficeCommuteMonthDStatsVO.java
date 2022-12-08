@@ -37,6 +37,8 @@ public class OfficeCommuteMonthDStatsVO extends BaseCommonVO  {
     @Builder.Default
     private Double sixWeekTimeValue = 0.0; /* 6주 근무시간 */
 
+    private String workWeekTimeKind; /* 근무시간 52시간 미만(LESS), 근무시간 52시간 초과(GREATER) */
+
     public void plusFirstWorkTimeValue(double workTimeValue) {
         this.firstWeekTimeValue = this.firstWeekTimeValue + workTimeValue;
     }
