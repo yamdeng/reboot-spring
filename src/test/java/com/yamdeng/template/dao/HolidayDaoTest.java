@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @SpringBootTest(classes = BootStandardApplication.class)
 @Slf4j
@@ -58,6 +59,20 @@ class HolidayDaoTest {
 			minusDay++;
 		}
 		log.info("beforeWorkDate result : {}", beforeWorkDateStr);
+	}
+
+	// 공휴일 list
+	@Test
+	void selectWorkHolidayList() {
+		OfficeWorkHolidayVO vo = OfficeWorkHolidayVO.builder()
+//				.baseYear("2022")
+				.startDateStr("20221201")
+				.endDateStr("20221231")
+				.build();
+		List<OfficeWorkHolidayVO> result = holidayDao.selectWorkHolidayList(vo);
+		int totalCount = holidayDao.selectWorkHolidayListTotalCount(vo);
+		log.info("selectWorkHolidayList result : {}", result);
+		log.info("selectWorkHolidayList totalCount : {}", totalCount);
 	}
 
 }
