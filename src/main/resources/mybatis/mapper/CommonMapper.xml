@@ -64,8 +64,8 @@
 
 	<!-- 팀장 이름, 연락처 공통 select subquery -->
 	<sql id="common_manager_select">
-		,(select user_name from to0_user_main where dept_key = a.dept_id and duty_key = 'manager') as manager_name
-		,(select mobile_tel from to0_user_main where dept_key = a.dept_id and duty_key = 'manager') as manager_mobile_tel
+		,(select user_name from to0_user_main where user_key = a.user_id) as manager_name
+		,(select mobile_tel from to0_user_main where user_key = a.user_id) as manager_mobile_tel
 	</sql>
 
 </mapper>

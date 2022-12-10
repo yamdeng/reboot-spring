@@ -5,6 +5,7 @@ import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.data.dao.WorkReportDao;
 import com.yamdeng.template.vo.common.BaseCommonVO;
+import com.yamdeng.template.vo.common.StatsCommonVO;
 import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
 import com.yamdeng.template.vo.db.OfficeWorkReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,32 @@ class WorkReportDaoTest {
 						.build();
 		List<OfficeWorkReportVO> result = workReportDao.selectWorkReportListByDeptIdList(vo);
 		log.info("selectWorkReportListByDeptIdList result : {}", result);
+	}
+
+	// 업무보고 list
+	@Test
+	void selectWorkReportList() {
+		OfficeWorkReportVO vo =
+				OfficeWorkReportVO.builder()
+						.baseDateStr("20221203")
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.build();
+		List<OfficeWorkReportVO> result = workReportDao.selectWorkReportList(vo);
+		int totalCount = workReportDao.selectWorkReportListTotalCount(vo);
+		log.info("selectWorkReportList result : {}", result);
+		log.info("selectWorkReportList totalCount : {}", totalCount);
+	}
+
+	// 업무보고 현황 : 월간, 하루, 기간
+	@Test
+	void selectWorkReportStats() {
+		OfficeWorkReportVO vo =
+				OfficeWorkReportVO.builder()
+						.baseDateStr("20221203")
+						.childDeptIdList(Arrays.asList("dept1", "dept2"))
+						.build();
+		List<StatsCommonVO> result = workReportDao.selectWorkReportStats(vo);
+		log.info("selectWorkReportStats result : {}", result);
 	}
 
 }

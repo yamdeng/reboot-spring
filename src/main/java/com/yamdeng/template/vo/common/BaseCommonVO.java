@@ -39,6 +39,7 @@ public class BaseCommonVO {
     private String endDateStr; /* 조회종료일(요청시만 사용) */
     private List<String> childDeptIdList; /* 하위 부서ID 목록 */
     private String beforeWorkDateStr; /* 이전평일 */
+    private String twoBeforeWorkDateStr; /* 이전전평일 */
     private String managerMobileName; /* 팀장명 */
     private String managerMobileTel; /* 팀장연락처 */
 

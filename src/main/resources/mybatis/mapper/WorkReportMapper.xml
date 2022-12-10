@@ -15,7 +15,34 @@
 		,a.report_submit_status_code AS report_submit_status_code /* 업무보고 제출상태 */
 		,a.issue_yn                  AS issue_yn /* 이슈 여부 */
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_manager_select"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_select"/>
+	</sql>
+	
+	<!-- OFFICE_WORK_REPORT where -->
+	<sql id="work_report_where">
+		<if test='searchDateStr != null and !searchDateStr.equals("")'>
+			AND a.base_date_str = #{searchDateStr}
+		</if>
+		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+		</if>
+		<if test='startDateStr != null and !startDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+		</if>
+		<if test='endDateStr != null and !endDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
+		</if>
+		<if test='deptId != null and !deptId.equals("")'>
+			AND a.dept_id = #{deptId}
+		</if>
+		<if test='childDeptIdList != null and childDeptIdList.size != 0'>
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
 	</sql>
 
 	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
@@ -43,6 +70,73 @@
 					 open="(" separator="," close=")">
 				#{item}
 			</foreach>
+	</select>
+
+	<!-- 업무보고 list -->
+	<select id="selectWorkReportList"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+		<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE 1 = 1
+		<include refid="work_report_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 업무보고 list totalCount -->
+	<select id="selectWorkReportListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM OFFICE_WORK_REPORT a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE 1 = 1
+		<include refid="work_report_where"/>
+	</select>
+
+	<!-- 업무보고 현황 : 월간, 하루, 기간 -->
+	<select id="selectWorkReportStats"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'all'     AS kind /* 업무보고 */
+			,count(*) AS agg_count
+		FROM   office_work_report a
+		WHERE  1 = 1
+		<include refid="work_report_where"/>
+		UNION ALL
+		SELECT 'submit'  AS kind /* 제출 */
+			,count(*) AS agg_count
+		FROM   office_work_report a
+		WHERE  1 = 1
+		<include refid="work_report_where"/>
+			AND report_date IS NOT NULL
+		UNION ALL
+		SELECT 'report_not_submit' AS kind /* 미제출 */
+      		 ,count(*)           AS agg_count
+		FROM   office_work_report a
+		WHERE  1 = 1
+			<include refid="work_report_where"/>
+			AND ( ( report_date IS NULL
+					AND base_date_str <![CDATA[ <= ]]> 'twoBeforeWorkDateStr' )
+					OR ( report_date IS NOT NULL
+						AND fn_check_work_report_not_submit(base_date_str, to_char(report_date, 'yyyyMMdd')) <![CDATA[ >= ]]> 0 ) )
+		UNION ALL
+		SELECT 'report_issue' AS kind /* 업무보고 이슈 수 */
+			,count(*)      AS agg_count
+		FROM   office_work_report a
+		WHERE  1 = 1
+		<include refid="work_report_where"/>
+			AND issue_yn = 'Y'
+		UNION ALL
+		SELECT 'comment'                    AS kind /* 코멘트 */
+			,count(DISTINCT a.report_id) AS agg_count
+		FROM   office_work_report a
+			INNER JOIN office_work_report_comment c
+					ON a.report_id = c.report_id
+		WHERE  1 = 1
+		<include refid="work_report_where"/>
 	</select>
 
 </mapper>

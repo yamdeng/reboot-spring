@@ -258,17 +258,91 @@ public class JavaTest {
     // 오늘 기준으로 이전 평일 구하기
     @Test
     void beforeWorkDay() {
-
         LocalDate today = LocalDate.now();
         int minusDay = 1;
+        String result = "";
         while(true) {
             LocalDate beforeDate = today.minusDays(minusDay);
             int weekValue = beforeDate.getDayOfWeek().getValue();
             // 토요일, 일요일 아니고
             if(weekValue != 6 && weekValue != 7) {
                 // 공휴일 테이블 확인
+                result = beforeDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                break;
             }
+            minusDay++;
         }
+        log.info("beforeWorkDay result : {}", result);
+    }
+
+    // 오늘 기준으로 이전평일의 이전일 구하기
+    @Test
+    void beforeWorkDayYesterday() {
+        LocalDate today = LocalDate.now();
+        int minusDay = 1;
+        String beforeWorkDateStr = "";
+        while(true) {
+            LocalDate beforeDate = today.minusDays(minusDay);
+            int weekValue = beforeDate.getDayOfWeek().getValue();
+            // 토요일, 일요일 아니고
+            if(weekValue != 6 && weekValue != 7) {
+                // 공휴일 테이블 확인
+                beforeWorkDateStr = beforeDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                break;
+            }
+            minusDay++;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse(beforeWorkDateStr, formatter);
+        LocalDate yesterday = localDate.minusDays(1);
+        String result = yesterday.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("beforeWorkDayYesterday result : {}", result);
+    }
+
+    // 오늘 기준으로 다음 평일 구하기
+    @Test
+    void afterWorkDay() {
+        LocalDate today = LocalDate.now();
+        int plusDay = 1;
+        String result = "";
+        while(true) {
+            LocalDate afterDate = today.plusDays(plusDay);
+            int weekValue = afterDate.getDayOfWeek().getValue();
+            // 토요일, 일요일 아니고
+            if(weekValue != 6 && weekValue != 7) {
+                // 공휴일 테이블 확인
+                result = afterDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                break;
+            }
+            plusDay++;
+        }
+        log.info("afterWorkDay result : {}", result);
+    }
+
+    // 오늘 기준으로 다음평일의 다음일 구하기
+    @Test
+    void afterWorkDayTomorrow() {
+        LocalDate today = LocalDate.now();
+        int plusDay = 1;
+        String afterWorkDateStr = "";
+        while(true) {
+            LocalDate afterDate = today.minusDays(plusDay);
+            int weekValue = afterDate.getDayOfWeek().getValue();
+            // 토요일, 일요일 아니고
+            if(weekValue != 6 && weekValue != 7) {
+                // 공휴일 테이블 확인
+                afterWorkDateStr = afterDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                break;
+            }
+            plusDay++;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse(afterWorkDateStr, formatter);
+        LocalDate tomorrow = localDate.minusDays(1);
+        String result = tomorrow.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("afterWorkDayTomorrow result : {}", result);
     }
 
     // 특정일(월요일의 날짜) 기준으로 일요일날짜 구하기

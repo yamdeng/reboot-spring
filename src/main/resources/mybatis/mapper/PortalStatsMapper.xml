@@ -50,7 +50,7 @@
 		SELECT 'dept_commute_not_submit' AS kind /* 출퇴근 미제출 수 : 이전평일 기준 */
 			,count(*)             AS agg_count
 		FROM   office_commute_dept_day a
-		WHERE  a.base_date_str = '20221119'
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND a.dept_id IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
