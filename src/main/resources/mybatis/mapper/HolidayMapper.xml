@@ -50,7 +50,7 @@
 	<select id="selectWorkHolidayListTotalCount"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO"
 			resultType="java.lang.Integer">
-		SELECT COUNT(*)
+		SELECT count(*)
 		FROM   office_work_holiday a
 		WHERE  1 = 1
 		<include refid="work_holiday_where"/>

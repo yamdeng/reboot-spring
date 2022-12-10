@@ -142,7 +142,7 @@
 	<select id="selectVacationDetailListTotalCount"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailVO"
 			resultType="java.lang.Integer">
-		SELECT COUNT(*)
+		SELECT count(*)
 		FROM office_vacation_detail a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1 = 1
@@ -165,7 +165,7 @@
 	<select id="selectVacationYearListTotalCount"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearVO"
 			resultType="java.lang.Integer">
-		SELECT COUNT(*)
+		SELECT count(*)
 		FROM office_vacation_year a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1 = 1

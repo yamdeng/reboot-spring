@@ -405,7 +405,7 @@
 	<select id="selectCommuteListTotalCount"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="java.lang.Integer">
-		SELECT COUNT(*)
+		SELECT count(*)
 		FROM OFFICE_COMMUTE_DAY a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
