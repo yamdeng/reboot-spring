@@ -24,4 +24,16 @@ public interface WorkReportDao {
     // 업무보고 현황 : 월간, 하루, 기간
     List<StatsCommonVO> selectWorkReportStats(OfficeWorkReportVO vo);
 
+    // 업무보고 상세 : 기준날짜 + 부서 ID 기준
+    OfficeWorkReportVO selectWorkReportInfoByBaseDateStrAndDeptId(OfficeWorkReportVO vo);
+
+    // 업무보고 상세 : report_id 기준
+    OfficeWorkReportVO selectWorkReportInfoByReportId(OfficeWorkReportVO vo);
+
+    // 업무보고 insert
+    int insertWorkReport(OfficeWorkReportVO vo);
+
+    // 업무보고 update
+    int updateWorkReport(OfficeWorkReportVO vo);
+
 }

@@ -45,6 +45,39 @@
 		</if>
 	</sql>
 
+	<!-- OFFICE_WORK_REPORT dashboard where -->
+	<sql id="work_report_dashboard_where">
+		<if test='searchKind != null and !searchKind.equals("")'>
+			<!-- 제출전(SUBMIT) -->
+			<if test='searchKind.equals("SUBMIT")'>
+				AND report_date IS NOT NULL
+			</if>
+			<!-- 미제출(NOT_SUBMIT) -->
+			<if test='searchKind.equals("NOT_SUBMIT")'>
+				AND (
+					( report_date IS NULL AND base_date_str <![CDATA[ <= ]]> #{twoBeforeWorkDateStr} )
+						OR ( report_date IS NOT NULL
+							AND fn_check_work_report_not_submit(base_date_str, to_char(report_date, 'yyyyMMdd')) <![CDATA[ >= ]]> 0 )
+				)
+			</if>
+			<!-- 이슈(ISSUE) -->
+			<if test='searchKind.equals("ISSUE")'>
+				AND a.issue_yn = 'Y'
+			</if>
+			<!-- 댓글(COMMENT) -->
+			<if test='searchKind.equals("COMMENT")'>
+				AND a.report_id IN(SELECT report_id
+				FROM   office_work_report_comment
+				WHERE  report_id IN(SELECT report_id
+				FROM   office_work_report a
+				WHERE  1 = 1
+				<include refid="work_report_where"/>
+				)
+				)
+			</if>
+		</if>
+	</sql>
+
 	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
 	<select id="selectRecent7DayListByDeptId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
@@ -52,7 +85,7 @@
 		SELECT
 		<include refid="work_report_select"/>
 		FROM OFFICE_WORK_REPORT a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE a.BASE_DATE_STR BETWEEN #{startDateStr} AND #{endDateStr} AND a.dept_id = #{deptId}
 	</select>
 
@@ -82,6 +115,7 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1 = 1
 		<include refid="work_report_where"/>
+		<include refid="work_report_dashboard_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -94,6 +128,7 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1 = 1
 		<include refid="work_report_where"/>
+		<include refid="work_report_dashboard_where"/>
 	</select>
 
 	<!-- 업무보고 현황 : 월간, 하루, 기간 -->
@@ -119,7 +154,7 @@
 		WHERE  1 = 1
 			<include refid="work_report_where"/>
 			AND ( ( report_date IS NULL
-					AND base_date_str <![CDATA[ <= ]]> 'twoBeforeWorkDateStr' )
+					AND base_date_str <![CDATA[ <= ]]> #{twoBeforeWorkDateStr} )
 					OR ( report_date IS NOT NULL
 						AND fn_check_work_report_not_submit(base_date_str, to_char(report_date, 'yyyyMMdd')) <![CDATA[ >= ]]> 0 ) )
 		UNION ALL
@@ -128,15 +163,143 @@
 		FROM   office_work_report a
 		WHERE  1 = 1
 		<include refid="work_report_where"/>
-			AND issue_yn = 'Y'
+			AND a.issue_yn = 'Y'
 		UNION ALL
 		SELECT 'comment'                    AS kind /* 코멘트 */
-			,count(DISTINCT a.report_id) AS agg_count
+			,count(*) AS agg_count
 		FROM   office_work_report a
-			INNER JOIN office_work_report_comment c
-					ON a.report_id = c.report_id
 		WHERE  1 = 1
 		<include refid="work_report_where"/>
+		AND a.report_id IN(SELECT report_id
+                          FROM   office_work_report_comment
+                          WHERE  report_id IN(SELECT report_id
+                                              FROM   office_work_report a
+                                              WHERE  1 = 1
+											  <include refid="work_report_where"/>
+											  )
+							)
 	</select>
+
+	<!-- 업무보고 상세 : 기준날짜 + 부서 ID 기준 -->
+	<select id="selectWorkReportInfoByBaseDateStrAndDeptId"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+		<include refid="work_report_select"/>
+		FROM office_work_report a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.dept_id = #{deptId} AND a.base_date_str = #{baseDateStr}
+	</select>
+
+	<!-- 업무보고 상세 : report_id 기준 -->
+	<select id="selectWorkReportInfoByReportId"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+		<include refid="work_report_select"/>
+		FROM office_work_report a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.report_id = #{reportId}
+	</select>
+
+	<!-- 업무보고 insert -->
+	<insert id="insertWorkReport" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		INSERT INTO office_work_report (
+			report_id
+			,base_date_str
+			<if test='reportDate != null and !reportDate.equals("")'>
+			,report_date
+			</if>
+			<if test='userId != null and !userId.equals("")'>
+			,user_id
+			</if>
+			<if test='deptId != null and !deptId.equals("")'>
+			,dept_id
+			</if>
+			<if test='reportContent != null and !reportContent.equals("")'>
+			,report_content
+			</if>
+			<if test='reportSubmitStatusCode != null and !reportSubmitStatusCode.equals("")'>
+			,report_submit_status_code
+			</if>
+			<if test='issueYn != null and !issueYn.equals("")'>
+			,issue_yn
+			</if>
+			<if test='regDate != null'>
+			,reg_date
+			</if>
+			<if test='modDate != null'>
+			,mod_date
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,reg_user_id
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id
+			</if>
+		) VALUES (
+			#{reportId}
+			,#{baseDateStr}
+			<if test='reportDate != null and !reportDate.equals("")'>
+			,#{reportDate}
+			</if>
+			<if test='userId != null and !userId.equals("")'>
+			,#{userId}
+			</if>
+			<if test='deptId != null and !deptId.equals("")'>
+			,#{deptId}
+			</if>
+			<if test='reportContent != null and !reportContent.equals("")'>
+			,#{reportContent}
+			</if>
+			<if test='reportSubmitStatusCode != null and !reportSubmitStatusCode.equals("")'>
+			,#{reportSubmitStatusCode}
+			</if>
+			<if test='issueYn != null and !issueYn.equals("")'>
+			,#{issueYn}
+			</if>
+			<if test='regDate != null'>
+			,#{regDate}
+			</if>
+			<if test='modDate != null'>
+			,#{modDate}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+			</if>
+		)
+	</insert>
+
+	<!-- 업무보고 update -->
+	<update id="updateWorkReport" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		UPDATE office_work_report
+		 SET 
+		 	mod_date = now()
+			<if test='reportDate != null and !reportDate.equals("")'>
+			,report_date = #{reportDate}
+			</if>
+			<if test='userId != null and !userId.equals("")'>
+			,user_id = #{userId}
+			</if>
+			<if test='deptId != null and !deptId.equals("")'>
+			,dept_id = #{deptId}
+			</if>
+			<if test='reportContent != null and !reportContent.equals("")'>
+			,report_content = #{reportContent}
+			</if>
+			<if test='reportSubmitStatusCode != null and !reportSubmitStatusCode.equals("")'>
+			,report_submit_status_code = #{reportSubmitStatusCode}
+			</if>
+			<if test='issueYn != null and !issueYn.equals("")'>
+			,issue_yn = #{issueYn}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id = #{loginUserId}
+			</if>
+		WHERE report_id = #{reportId}
+	</update>
 
 </mapper>
