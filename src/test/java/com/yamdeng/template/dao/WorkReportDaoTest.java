@@ -3,6 +3,7 @@ package com.yamdeng.template.dao;
 import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.data.dao.WorkReportDao;
 import com.yamdeng.template.vo.common.StatsCommonVO;
+import com.yamdeng.template.vo.db.OfficeWorkReportCommentVO;
 import com.yamdeng.template.vo.db.OfficeWorkReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -114,7 +115,7 @@ class WorkReportDaoTest {
 		log.info("insertWorkReport result : {}", result);
 	}
 
-	// 업무보고 insert
+	// 업무보고 update
 	@Test
 	void updateWorkReport() {
 		String reportId = "fcb6fcdf-1aab-41e9-8ead-181dfc05b320";
@@ -129,6 +130,63 @@ class WorkReportDaoTest {
 						.build();
 		int result = workReportDao.updateWorkReport(vo);
 		log.info("updateWorkReport result : {}", result);
+	}
+
+	// 업무보고 댓글 상세 : report_id 기준
+	@Test
+	void selectWorkReportCommentInfoByReportId() {
+		String reportId = "fcb6fcdf-1aab-41e9-8ead-181dfc05b320";
+		OfficeWorkReportCommentVO vo =
+				OfficeWorkReportCommentVO.builder()
+						.reportId(reportId)
+						.build();
+		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByReportId(vo);
+		log.info("selectWorkReportCommentInfoByReportId result : {}", result);
+	}
+
+	// 업무보고 댓글 상세 : comment_id 기준
+	@Test
+	void selectWorkReportCommentInfoByCommentId() {
+		String commentId = "ebc911cb-321d-493c-90d3-a23c7779549f";
+		OfficeWorkReportCommentVO vo =
+				OfficeWorkReportCommentVO.builder()
+						.commentId(commentId)
+						.build();
+		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByCommentId(vo);
+		log.info("selectWorkReportCommentInfoByCommentId result : {}", result);
+	}
+
+	// 업무보고 댓글 insert
+	@Test
+	void insertWorkReportComment() {
+		String reportId = "fcb6fcdf-1aab-41e9-8ead-181dfc05b320";
+		String commentId = UUID.randomUUID().toString();
+		OfficeWorkReportCommentVO vo =
+				OfficeWorkReportCommentVO.builder()
+						.commentId(commentId)
+						.reportId(reportId)
+						.userId("yamdeng")
+						.commentContent("댓글 내용")
+						.loginUserId("yamdeng")
+						.build();
+		int result = workReportDao.insertWorkReportComment(vo);
+		log.info("insertWorkReportComment result : {}", result);
+	}
+
+	// 업무보고 댓글 update
+	@Test
+	void updateWorkReportComment() {
+		String commentId = "ebc911cb-321d-493c-90d3-a23c7779549f";
+		OfficeWorkReportCommentVO vo =
+				OfficeWorkReportCommentVO.builder()
+						.commentId(commentId)
+						.commentContent("댓글 내용2")
+						.userId("sb")
+						.modDate(LocalDateTime.now())
+						.loginUserId("yamdeng")
+						.build();
+		int result = workReportDao.updateWorkReportComment(vo);
+		log.info("updateWorkReportComment result : {}", result);
 	}
 
 }

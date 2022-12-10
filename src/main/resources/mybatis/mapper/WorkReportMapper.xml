@@ -67,15 +67,25 @@
 			<!-- 댓글(COMMENT) -->
 			<if test='searchKind.equals("COMMENT")'>
 				AND a.report_id IN(SELECT report_id
-				FROM   office_work_report_comment
-				WHERE  report_id IN(SELECT report_id
-				FROM   office_work_report a
-				WHERE  1 = 1
-				<include refid="work_report_where"/>
-				)
+									FROM   office_work_report_comment
+									WHERE  report_id IN(SELECT report_id
+														FROM   office_work_report a
+														WHERE  1 = 1
+												<include refid="work_report_where"/>
+									)
 				)
 			</if>
 		</if>
+	</sql>
+
+	<!-- OFFICE_WORK_REPORT_COMMENT select column -->
+	<sql id="work_report_comment_select">
+		a.comment_id       AS comment_id /* 댓글_ID */
+		,a.report_id       AS report_id /* 업부보고_ID */
+		,a.user_id         AS user_id /* 작성자 */
+		,a.comment_content AS comment_content /* 댓글내용 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
 	</sql>
 
 	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
@@ -300,6 +310,73 @@
 			,mod_user_id = #{loginUserId}
 			</if>
 		WHERE report_id = #{reportId}
+	</update>
+
+	<!-- 업무보고 댓글 상세 조회 : report_id 기준 -->
+	<select id="selectWorkReportCommentInfoByReportId"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
+		SELECT
+			<include refid="work_report_comment_select"/>
+		FROM   office_work_report_comment a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE  a.report_id = #{reportId}
+	</select>
+
+	<!-- 업무보고 댓글 insert -->
+	<insert id="insertWorkReportComment" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
+		INSERT INTO office_work_report_comment (
+			comment_id
+			,report_id
+			,user_id
+		<if test='commentContent != null and !commentContent.equals("")'>
+			,comment_content
+		</if>
+		<if test='regDate != null and !regDate.equals("")'>
+			,reg_date
+		</if>
+		<if test='modDate != null and !modDate.equals("")'>
+			,mod_date
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,reg_user_id
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id
+		</if>
+		) VALUES (
+			#{commentId}
+			,#{reportId}
+			,#{userId}
+		<if test='commentContent != null and !commentContent.equals("")'>
+			,#{commentContent}
+		</if>
+		<if test='regDate != null and !regDate.equals("")'>
+			,#{regDate}
+		</if>
+		<if test='modDate != null and !modDate.equals("")'>
+			,#{modDate}
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+		</if>
+		)
+	</insert>
+
+	<!-- 업무보고 댓글 update -->
+	<update id="updateWorkReportComment" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
+		UPDATE office_work_report_comment
+		SET
+			mod_date = now()
+			,user_id = #{userId}
+			,comment_content = #{commentContent}
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id = #{loginUserId}
+		</if>
+		WHERE comment_id = #{commentId}
 	</update>
 
 </mapper>

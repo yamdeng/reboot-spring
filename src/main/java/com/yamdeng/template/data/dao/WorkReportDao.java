@@ -1,6 +1,7 @@
 package com.yamdeng.template.data.dao;
 
 import com.yamdeng.template.vo.common.StatsCommonVO;
+import com.yamdeng.template.vo.db.OfficeWorkReportCommentVO;
 import com.yamdeng.template.vo.db.OfficeWorkReportVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -35,5 +36,17 @@ public interface WorkReportDao {
 
     // 업무보고 update
     int updateWorkReport(OfficeWorkReportVO vo);
+
+    // 업무보고 댓글 상세 조회 : report_id 기준
+    OfficeWorkReportCommentVO selectWorkReportCommentInfoByReportId(OfficeWorkReportCommentVO vo);
+
+    // 업무보고 댓글 상세 조회 : comment_id 기준
+    OfficeWorkReportCommentVO selectWorkReportCommentInfoByCommentId(OfficeWorkReportCommentVO vo);
+
+    // 업무보고 댓글 insert
+    int insertWorkReportComment(OfficeWorkReportCommentVO vo);
+
+    // 업무보고 댓글 update
+    int updateWorkReportComment(OfficeWorkReportCommentVO vo);
 
 }
