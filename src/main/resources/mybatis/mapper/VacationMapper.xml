@@ -254,7 +254,7 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearVO">
 		UPDATE office_vacation_year
 		SET
-			mod_date = now()
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			<if test='annualCount != null and !annualCount.equals("")'>
 				,annual_count = #{annualCount}
 			</if>
@@ -343,7 +343,7 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusVO">
 		UPDATE office_vacation_plus
 		SET
-		mod_date = now()
+		mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 		<if test='vacationName != null and !vacationName.equals("")'>
 			,vacation_name = #{vacationName}
 		</if>

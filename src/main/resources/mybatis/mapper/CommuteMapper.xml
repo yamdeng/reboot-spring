@@ -113,11 +113,11 @@
 	<update id="startWork" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
-			start_work_date = now()
+			start_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,start_work_ip = #{startWorkIp}
 			,work_status_code = #{workStatusCode}
 			,work_result_code = #{workResultCode}
-			,mod_date = now()
+			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,mod_user_id = #{loginUserId}
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
@@ -126,12 +126,12 @@
 	<update id="outWork" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
-			out_work_date = now()
+			out_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,out_work_ip = #{outWorkIp}
 			,work_status_code = #{workStatusCode}
 			,work_result_code = #{workResultCode}
 			,worked_time_value = #{workedTimeValue}
-			,mod_date = now()
+			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,mod_user_id = #{loginUserId}
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
@@ -289,7 +289,7 @@
 	<update id="updateCommute" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
-			mod_date = now()
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			<if test='startWorkDate != null and !startWorkDate.equals("")'>
 				,start_work_date = #{startWorkDate}
 			</if>
@@ -528,7 +528,7 @@
 		UPDATE OFFICE_COMMUTE_DAY
 		SET
 			dept_submit_yn = 'Y'
-			,mod_date = now()
+			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,mod_user_id = #{loginUserId}
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>

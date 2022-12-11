@@ -170,7 +170,7 @@
 			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO">
 		UPDATE office_vacation_month_stats
 		SET
-			mod_date = now()
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			<if test='use1monthCount != null and !use1monthCount.equals("")'>
 				,use_1month_count = #{use1monthCount}
 			</if>

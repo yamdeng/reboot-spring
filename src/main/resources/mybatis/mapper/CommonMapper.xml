@@ -68,4 +68,9 @@
 		,(select mobile_tel from to0_user_main where user_key = a.user_id) as manager_mobile_tel
 	</sql>
 
+	<!-- 현재 날짜 DBMS 함수 -->
+	<sql id="current_date_function">
+		now()
+	</sql>
+
 </mapper>

@@ -287,7 +287,7 @@
 	<update id="updateWorkReport" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
 		UPDATE office_work_report
 		 SET 
-		 	mod_date = now()
+		 	mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			<if test='reportDate != null and !reportDate.equals("")'>
 			,report_date = #{reportDate}
 			</if>
@@ -381,7 +381,7 @@
 	<update id="updateWorkReportComment" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
 		UPDATE office_work_report_comment
 		SET
-			mod_date = now()
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			,user_id = #{userId}
 			,comment_content = #{commentContent}
 		<if test='loginUserId != null and !loginUserId.equals("")'>

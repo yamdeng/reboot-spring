@@ -145,7 +145,7 @@
 	<update id="updateDeptWorkTimeSetting"
 			parameterType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
 		UPDATE office_dept_work_time_setting
-		 SET mod_date = now()
+		 SET mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			 <if test='timeName != null and !timeName.equals("")'>
 				 ,time_name = #{timeName}
 			 </if>
