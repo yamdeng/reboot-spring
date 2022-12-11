@@ -25,6 +25,9 @@ public class OfficeCommuteDeptDayVO extends BaseCommonVO {
     private Integer targetCount; /* 제출대상수 : 제출시 반영*/
     private Integer startWorkCompleteCount; /* 출근완료 합계 : 제출시 반영 */
     private Integer outWorkCompleteCount; /* 퇴근완료 합계 : 제출시 반영 */
+    private String successYn; /* 정상출근 여부 */
+    private Integer tardyCount; /* 지각수 */
+    private Integer vacationCount; /* 휴가/휴직 수 */
     private String searchKind; /* 검색종류 : 전체(ALL), 제출전/반려(SUBMIT_AND_REJECT), 승인전(BEFORE_APPROVE), 승인완료(APPROVE), 출근완료(START_WORK_COMPLETE), 퇴근완료(OUT_WORK_COMPLETE) */
 
 }

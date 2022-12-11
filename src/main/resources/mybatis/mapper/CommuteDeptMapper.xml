@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yamdeng.template.data.dao.CommuteDeptDao">
 
-	<!-- OFFICE_COMMUTE_DEPT_DAY(부서별 출퇴근) 테이블 -->
+	<!-- OFFICE_COMMUTE_DEPT_DAY(부서별_출퇴근제출) 테이블 -->
 
 	<!-- OFFICE_COMMUTE_DEPT_DAY select column -->
 	<sql id="commute_dept_select">
@@ -22,17 +22,10 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_manager_select"/>
 	</sql>
 
-	<!-- 부서별 출퇴근 목록 : 공통 -->
-	<select id="selectCommuteDeptList"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
-			resultType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
-		SELECT
-		<include refid="commute_dept_select"/>
-		FROM OFFICE_COMMUTE_DEPT_DAY a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE 1=1
+	<!-- OFFICE_COMMUTE_DEPT_DAY where -->
+	<sql id="commute_dept_where">
 		<if test='searchDateStr != null and !searchDateStr.equals("")'>
-			AND a.BASE_DATE_STR = #{searchDateStr}
+				AND a.BASE_DATE_STR = #{searchDateStr}
 		</if>
 		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
 			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
@@ -46,189 +39,255 @@
 		<if test='searchKind != null and !searchKind.equals("")'>
 			<!-- 제출전/반려(SUBMIT_AND_REJECT) -->
 			<if test='searchKind.equals("SUBMIT_AND_REJECT")'>
-				AND ( submit_date IS NOT NULL
-						OR commute_submit_status_code = 'REJECT' )
+				AND ( a.submit_date IS NOT NULL
+						OR a.commute_submit_status_code = 'REJECT' )
 			</if>
 			<!-- 승인전(BEFORE_APPROVE) -->
 			<if test='searchKind.equals("BEFORE_APPROVE")'>
-				AND submit_date IS NOT NULL
-				AND commute_submit_status_code != 'REJECT'
-				AND commute_submit_status_code != 'APPROVE'
+				AND a.submit_date IS NOT NULL
+				AND a.commute_submit_status_code != 'REJECT'
+				AND a.commute_submit_status_code != 'APPROVE'
 			</if>
 			<!-- 승인완료(APPROVE) -->
 			<if test='searchKind.equals("APPROVE")'>
-				AND commute_submit_status_code = 'APPROVE'
+				AND a.commute_submit_status_code = 'APPROVE'
 			</if>
 			<!-- 출근완료(START_WORK_COMPLETE) -->
 			<if test='searchKind.equals("START_WORK_COMPLETE")'>
-				AND target_count = start_work_complete_count
+				AND a.target_count = a.start_work_complete_count
 			</if>
 			<!-- 퇴근완료(OUT_WORK_COMPLETE) -->
 			<if test='searchKind.equals("OUT_WORK_COMPLETE")'>
-				AND target_count = out_work_complete_count 
+				AND a.target_count = a.out_work_complete_count 
 			</if>
 		</if>
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
-	</select>
+	</sql>
 
-	<!-- 부서별 출퇴근 상세 : 공통 -->
-	<select id="selectCommuteDateInfo"
+	<!-- 부서별_출퇴근 통계 where -->
+	<sql id="commute_dept_stats_where">
+		<if test='searchDateStr != null and !searchDateStr.equals("")'>
+			AND a.base_date_str = #{searchDateStr}
+		</if>
+		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+		</if>
+		<if test='startDateStr != null and !startDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+		</if>
+		<if test='endDateStr != null and !endDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
+		</if>
+	</sql>
+
+	<!-- 부서별_출퇴근제출 list -->
+	<select id="selectCommuteDeptList"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
 			resultType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
 		SELECT
-		<include refid="commute_dept_select"/>
-		FROM OFFICE_COMMUTE_DEPT_DAY a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr}
-		AND a.dept_id = #{deptId}
+			<include refid="commute_dept_select"/>
+		FROM office_commute_dept_day a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE 1=1
+			<include refid="commute_dept_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
-	<!-- 부서 출퇴근 수정 : [제출] 액션과 동일, [승인], [반려]도 같이 반영 -->
-	<update id="updateCommuteDept" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
-		UPDATE OFFICE_COMMUTE_DEPT_DAY
+	<!-- 부서별_출퇴근제출 list totalCount -->
+	<select id="selectCommuteDeptListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM office_commute_dept_day a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE 1=1
+			<include refid="commute_dept_where"/>
+	</select>
+
+	<!-- 부서별_출퇴근제출 detail -->
+	<select id="selectCommuteDeptInfo"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		SELECT
+			<include refid="commute_dept_select"/>
+		FROM office_commute_dept_day a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.base_date_str = #{baseDateStr}
+			AND a.dept_id = #{deptId}
+	</select>
+
+	<!-- 부서별_출퇴근제출 insert -->
+	<insert id="insertCommuteDept"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		INSERT INTO office_commute_dept_day (
+			base_date_str
+			,dept_id
+			<if test='userId != null and !userId.equals("")'>
+				,user_id
+			</if>
+			<if test='submitDate != null and !submitDate.equals("")'>
+				,submit_date
+			</if>
+			<if test='modYn != null and !modYn.equals("")'>
+				,mod_yn
+			</if>
+			<if test='tardyYn != null and !tardyYn.equals("")'>
+				,tardy_yn
+			</if>
+			<if test='commuteSubmitStatusCode != null and !commuteSubmitStatusCode.equals("")'>
+				,commute_submit_status_code
+			</if>
+			<if test='targetCount != null'>
+				,target_count
+			</if>
+			<if test='startWorkCompleteCount != null'>
+				,start_work_complete_count
+			</if>
+			<if test='outWorkCompleteCount != null'>
+				,out_work_complete_count
+			</if>
+			<if test='tardyCount != null'>
+				,tardy_count
+			</if>
+			<if test='vacationCount != null'>
+				,vacation_count
+			</if>
+			<if test='successYn != null and !successYn.equals("")'>
+				,success_yn
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,reg_user_id
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id
+			</if>
+		) VALUES (
+			#{baseDateStr}
+			,#{deptId}
+			<if test='userId != null and !userId.equals("")'>
+				,#{userId}
+			</if>
+			<if test='submitDate != null and !submitDate.equals("")'>
+				,#{submitDate}
+			</if>
+			<if test='modYn != null and !modYn.equals("")'>
+				,#{modYn}
+			</if>
+			<if test='tardyYn != null and !tardyYn.equals("")'>
+				,#{tardyYn}
+			</if>
+			<if test='commuteSubmitStatusCode != null and !commuteSubmitStatusCode.equals("")'>
+				,#{commuteSubmitStatusCode}
+			</if>
+			<if test='targetCount != null'>
+				,#{targetCount}
+			</if>
+			<if test='startWorkCompleteCount != null'>
+				,#{startWorkCompleteCount}
+			</if>
+			<if test='outWorkCompleteCount != null'>
+				,#{outWorkCompleteCount}
+			</if>
+			<if test='tardyCount != null'>
+				,#{tardyCount}
+			</if>
+			<if test='vacationCount != null'>
+				,#{vacationCount}
+			</if>
+			<if test='successYn != null and !successYn.equals("")'>
+				,#{successYn}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
+			</if>
+		)
+	</insert>
+
+	<!-- 부서별_출퇴근제출 update : [제출] 액션과 동일, [승인], [반려]도 같이 반영 -->
+	<update id="updateCommuteDept"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
+		UPDATE office_commute_dept_day
 		SET
-		mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-		,mod_user_id = #{loginUserId}
-		<if test='userId != null and !userId.equals("")'>
-			,user_id = #{userId}
-		</if>
-		<if test='submitDate != null and !submitDate.equals("")'>
-			,submit_date = #{submitDate}
-		</if>
-		<if test='modYn != null and !modYn.equals("")'>
-			,mod_yn = #{modYn}
-		</if>
-		<if test='tardyYn != null and !tardyYn.equals("")'>
-			,tardy_yn = #{tardyYn}
-		</if>
-		<if test='commuteSubmitStatusCode != null and !commuteSubmitStatusCode.equals("")'>
-			,commute_submit_status_code = #{commuteSubmitStatusCode}
-		</if>
-		<if test='targetCount != null and !targetCount.equals("")'>
-			,target_count = #{targetCount}
-		</if>
-		<if test='startWorkCompleteCount != null and !startWorkCompleteCount.equals("")'>
-			,start_work_complete_count = #{startWorkCompleteCount}
-		</if>
-		<if test='outWorkCompleteCount != null and !outWorkCompleteCount.equals("")'>
-			,out_work_complete_count = #{outWorkCompleteCount}
-		</if>
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			<if test='userId != null and !userId.equals("")'>
+				,user_id = #{userId}
+			</if>
+			<if test='submitDate != null and !submitDate.equals("")'>
+				,submit_date = #{submitDate}
+			</if>
+			<if test='modYn != null and !modYn.equals("")'>
+				,mod_yn = #{modYn}
+			</if>
+			<if test='tardyYn != null and !tardyYn.equals("")'>
+				,tardy_yn = #{tardyYn}
+			</if>
+			<if test='commuteSubmitStatusCode != null and !commuteSubmitStatusCode.equals("")'>
+				,commute_submit_status_code = #{commuteSubmitStatusCode}
+			</if>
+			<if test='targetCount != null'>
+				,target_count = #{targetCount}
+			</if>
+			<if test='startWorkCompleteCount != null'>
+				,start_work_complete_count = #{startWorkCompleteCount}
+			</if>
+			<if test='outWorkCompleteCount != null'>
+				,out_work_complete_count = #{outWorkCompleteCount}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id = #{loginUserId}
+			</if>
 		WHERE base_date_str = #{baseDateStr} and dept_id = #{deptId}
 	</update>
 
-	<!-- 출퇴근 관리 현황 : 일, 월, 기간 -->
+	<!-- 출퇴근 관리 현황 stats -->
 	<select id="selectCommuteDeptStatsTypeAdmin"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO"
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
 		SELECT 'all'     AS kind /* 전체 */
 			,count(*) AS agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_dept_stats_where"/>
 		UNION ALL
 		SELECT 'submit_and_reject'     AS kind /* 제출, 반려 */
 			,count(*) agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND ( submit_date IS NOT NULL
-					OR commute_submit_status_code = 'REJECT' )
+			<include refid="commute_dept_stats_where"/>
+			AND ( a.submit_date IS NOT NULL
+					OR a.commute_submit_status_code = 'REJECT' )
 		UNION ALL
 		SELECT 'before_approve' AS kind /* 승인전 */
 			,count(*)        agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND submit_date IS NOT NULL
-			AND commute_submit_status_code != 'REJECT'
-			AND commute_submit_status_code != 'APPROVE'
+			<include refid="commute_dept_stats_where"/>
+			AND a.submit_date IS NOT NULL
+			AND a.commute_submit_status_code != 'REJECT'
+			AND a.commute_submit_status_code != 'APPROVE'
 		UNION ALL
 		SELECT 'approve' AS kind /* 승인완료 */
 			,count(*) agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_dept_stats_where"/>
 			AND commute_submit_status_code = 'APPROVE'
 		UNION ALL
 		SELECT 'start_work_complete' AS kind /* 출근완료 */
 			,count(*)             agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND target_count = start_work_complete_count
+			<include refid="commute_dept_stats_where"/>
+			AND a.target_count = start_work_complete_count
 		UNION ALL
 		SELECT 'out_work_complete' AS kind /* 퇴근완료 */
 			,count(*)           agg_count
-		FROM   office_commute_dept_day
+		FROM   office_commute_dept_day a
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND base_date_str = #{searchDateStr}
-			</if>
-			<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
-				AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND target_count = out_work_complete_count 
+			<include refid="commute_dept_stats_where"/>
+			AND a.target_count = out_work_complete_count
 	</select>
 	
 </mapper>

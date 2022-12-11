@@ -64,8 +64,8 @@
 
 	<!-- 팀장 이름, 연락처 공통 select subquery -->
 	<sql id="common_manager_select">
-		,(select user_name from to0_user_main where user_key = a.user_id) as manager_name
-		,(select mobile_tel from to0_user_main where user_key = a.user_id) as manager_mobile_tel
+		,(SELECT user_name FROM to0_user_main WHERE user_key = a.user_id) as manager_name /* 팀장명 */
+		,(SELECT mobile_tel FROM to0_user_main WHERE user_key = a.user_id) as manager_mobile_tel /* 팀장연락처 */
 	</sql>
 
 	<!-- 현재 날짜 DBMS 함수 -->

@@ -25,7 +25,7 @@ class CommuteDeptDaoTest {
 	@Autowired
 	private CommuteDeptDao commuteDeptDao;
 
-	// 부서별 출퇴근 목록 : 공통
+	// 부서별_출퇴근제출 list
 	@Test
 	void selectCommuteDeptList() {
 		OfficeCommuteDeptDayVO vo =
@@ -35,22 +35,43 @@ class CommuteDeptDaoTest {
 						.offset(0)
 						.build();
 		List<OfficeCommuteDeptDayVO> result = commuteDeptDao.selectCommuteDeptList(vo);
+		int totalCount = commuteDeptDao.selectCommuteDeptListTotalCount(vo);
 		log.info("selectCommuteDeptList result : {}", result);
+		log.info("selectCommuteDeptList totalCount : {}", totalCount);
 	}
 
-	// 부서별 출퇴근 상세 : 공통
+	// 부서별_출퇴근제출 detail
 	@Test
-	void selectCommuteDateInfo() {
+	void selectCommuteDeptInfo() {
 		OfficeCommuteDeptDayVO vo =
 				OfficeCommuteDeptDayVO.builder()
 						.baseDateStr("20221203")
 						.deptId("dept1")
 						.build();
-		OfficeCommuteDeptDayVO result = commuteDeptDao.selectCommuteDateInfo(vo);
-		log.info("selectCommuteDateInfo result : {}", result);
+		OfficeCommuteDeptDayVO result = commuteDeptDao.selectCommuteDeptInfo(vo);
+		log.info("selectCommuteDeptInfo result : {}", result);
 	}
 
-	// 부서 출퇴근 수정 : [제출] 액션과 동일
+	// 부서별_출퇴근제출 insert
+	@Test
+	void insertCommuteDept() {
+		OfficeCommuteDeptDayVO vo =
+				OfficeCommuteDeptDayVO.builder()
+						.userId("yamdeng")
+						.deptId("dept1")
+						.baseDateStr("20221203")
+						.submitDate(LocalDateTime.now())
+						.tardyYn("Y")
+						.commuteSubmitStatusCode("SUBMIT")
+						.targetCount(10)
+						.startWorkCompleteCount(10)
+						.outWorkCompleteCount(10)
+						.build();
+		int result = commuteDeptDao.insertCommuteDept(vo);
+		log.info("insertCommuteDept result : {}", result);
+	}
+
+	// 부서별_출퇴근제출 update : [제출] 액션과 동일, [승인], [반려]도 같이 반영
 	@Test
     void updateCommuteDept() {
 		OfficeCommuteDeptDayVO vo =
@@ -69,7 +90,7 @@ class CommuteDeptDaoTest {
 		log.info("updateCommuteDept result : {}", result);
 	}
 
-	// 출퇴근 관리 현황 : 일, 월, 기간
+	// 출퇴근 관리 현황 stats
 	@Test
 	void selectCommuteDeptStatsTypeAdmin() {
 		OfficeCommuteDeptDayVO vo =
