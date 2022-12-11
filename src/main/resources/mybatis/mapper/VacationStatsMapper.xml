@@ -25,6 +25,22 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
 	</sql>
 
+	<!-- OFFICE_VACATION_MONTH_STATS select column(외부제공용) -->
+	<sql id="vacation_month_stats_select_external">
+		,s.use_1month_count  AS use_1month_count /* 1월 사용일수 */
+		,s.use_2month_count  AS use_2month_count /* 2월 사용일수 */
+		,s.use_3month_count  AS use_3month_count /* 3월 사용일수 */
+		,s.use_4month_count  AS use_4month_count /* 4월 사용일수 */
+		,s.use_5month_count  AS use_5month_count /* 5월 사용일수 */
+		,s.use_6month_count  AS use_6month_count /* 6월 사용일수 */
+		,s.use_7month_count  AS use_7month_count /* 7월 사용일수 */
+		,s.use_8month_count  AS use_8month_count /* 8월 사용일수 */
+		,s.use_9month_count  AS use_9month_count /* 9월 사용일수 */
+		,s.use_10month_count AS use_10month_count /* 10월 사용일수 */
+		,s.use_11month_count AS use_11month_count /* 11월 사용일수 */
+		,s.use_12month_count AS use_12month_count /* 12월 사용일수 */
+	</sql>
+
 	<!-- OFFICE_VACATION_MONTH_STATS where -->
 	<sql id="vacation_month_stats_where">
 		AND a.base_year = #{baseYear}

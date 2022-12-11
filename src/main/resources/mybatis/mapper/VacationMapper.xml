@@ -365,4 +365,34 @@
 		WHERE base_year = #{baseYear} AND user_id = #{userId}
 	</update>
 
+	<!-- 전체 휴가 관리 list -->
+	<select id="selectVacationMonthStatsAllList"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsAllVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsAllVO">
+		SELECT
+			<include refid="vacation_year_select"/>
+			<include refid="com.yamdeng.template.data.dao.VacationStatsDao.vacation_month_stats_select_external"/>
+		FROM   office_vacation_year a
+				left outer join office_vacation_month_stats s
+							on a.user_id = s.user_id and a.base_year = s.base_year
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+			AND a.base_year = #{baseYear}
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 전체 휴가 관리 list totalCount -->
+	<select id="selectVacationMonthStatsAllListTotalCount"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsAllVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM   office_vacation_year a
+				left outer join office_vacation_month_stats s
+				on a.user_id = s.user_id and a.base_year = s.base_year
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+			AND a.base_year = #{baseYear}
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
 </mapper>

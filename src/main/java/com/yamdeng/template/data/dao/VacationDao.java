@@ -4,6 +4,7 @@ import com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO;
 import com.yamdeng.template.vo.db.OfficeVacationDetailVO;
 import com.yamdeng.template.vo.db.OfficeVacationPlusVO;
 import com.yamdeng.template.vo.db.OfficeVacationYearVO;
+import com.yamdeng.template.vo.stats.OfficeVacationMonthStatsAllVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -46,5 +47,11 @@ public interface VacationDao {
 
     // 휴가_휴직_현황(포상휴가) update
     int updateVacationPlus(OfficeVacationPlusVO vo);
+
+    // 전체 휴가 관리 list
+    List<OfficeVacationMonthStatsAllVO> selectVacationMonthStatsAllList(OfficeVacationMonthStatsAllVO vo);
+
+    // 전체 휴가 관리 list totalCount
+    int selectVacationMonthStatsAllListTotalCount(OfficeVacationMonthStatsAllVO vo);
 
 }

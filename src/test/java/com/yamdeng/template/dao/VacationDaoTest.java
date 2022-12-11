@@ -5,6 +5,7 @@ import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.data.dao.VacationDao;
 import com.yamdeng.template.vo.db.*;
+import com.yamdeng.template.vo.stats.OfficeVacationMonthStatsAllVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,6 +159,19 @@ class VacationDaoTest {
 						.build();
 		int result = vacationDao.updateVacationPlus(vo);
 		log.info("updateVacationPlus result : {}", result);
+	}
+
+	// 전체 휴가 관리 list
+	@Test
+	void selectVacationMonthStatsAllList() {
+		OfficeVacationMonthStatsAllVO vo =
+				OfficeVacationMonthStatsAllVO.builder()
+						.baseYear("2022")
+						.build();
+		List<OfficeVacationMonthStatsAllVO> result = vacationDao.selectVacationMonthStatsAllList(vo);
+		int totalCount = vacationDao.selectVacationMonthStatsAllListTotalCount(vo);
+		log.info("selectVacationMonthStatsAllList result : {}", result);
+		log.info("selectVacationMonthStatsAllList totalCount : {}", totalCount);
 	}
 
 }
