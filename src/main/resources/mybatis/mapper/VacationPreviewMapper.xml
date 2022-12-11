@@ -50,6 +50,7 @@
 
 	<!-- OFFICE_VACATION_PLUS_PREVIEW where -->
 	<sql id="vacation_plus_preview_where">
+		AND base_year = #{baseYear}
 	</sql>
 
 	<!-- 휴가_휴직_현황(연별)_미리보기 list -->
@@ -182,5 +183,129 @@
 			</if>
 		WHERE base_year = #{baseYear} AND user_id = #{userId}
 	</update>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 list -->
+	<select id="selectVacationPlusPreviewList"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO">
+		SELECT
+		<include refid="vacation_plus_preview_select"/>
+		FROM office_vacation_plus_preview a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1 = 1
+		<include refid="vacation_plus_preview_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 list totalCount -->
+	<select id="selectVacationPlusPreviewListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM office_vacation_plus_preview a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1 = 1
+		<include refid="vacation_plus_preview_where"/>
+	</select>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 detail -->
+	<select id="selectVacationPlusPreviewInfo"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO">
+		SELECT
+		<include refid="vacation_plus_preview_select"/>
+		FROM office_vacation_plus_preview a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
+	</select>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 insert -->
+	<insert id="insertVacationPlusPreview"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO">
+		INSERT INTO office_vacation_plus_preview (
+			user_id
+			,base_year
+			<if test='vacationName != null and !vacationName.equals("")'>
+				,vacation_name
+			</if>
+			<if test='vacationCount != null and !vacationCount.equals("")'>
+				,vacation_count
+			</if>
+			<if test='regDate != null and !regDate.equals("")'>
+				,reg_date
+			</if>
+			<if test='modDate != null and !modDate.equals("")'>
+				,mod_date
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,reg_user_id
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id
+			</if>
+		) VALUES (
+			#{userId}
+			,#{baseYear}
+			<if test='vacationName != null and !vacationName.equals("")'>
+				,#{vacationName}
+			</if>
+			<if test='vacationCount != null and !vacationCount.equals("")'>
+				,#{vacationCount}
+			</if>
+			<if test='regDate != null and !regDate.equals("")'>
+				,#{regDate}
+			</if>
+			<if test='modDate != null and !modDate.equals("")'>
+				,#{modDate}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
+			</if>
+		)
+	</insert>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 update -->
+	<update id="updateVacationPlusPreview"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO">
+		UPDATE office_vacation_plus_preview
+		SET
+		mod_date = now()
+		<if test='vacationName != null and !vacationName.equals("")'>
+			,vacation_name = #{vacationName}
+		</if>
+		<if test='vacationCount != null and !vacationCount.equals("")'>
+			,vacation_count = #{vacationCount}
+		</if>
+		<if test='regDate != null and !regDate.equals("")'>
+			,reg_date = #{regDate}
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,reg_user_id = #{loginUserId}
+		</if>
+		<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id = #{loginUserId}
+		</if>
+		WHERE base_year = #{baseYear} AND user_id = #{userId}
+	</update>
+
+	<!-- 휴가_휴직_현황(포상휴가)_미리보기 delete -->
+	<delete id="deleteVacationPlusPreview"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusPreviewVO">
+		DELETE FROM office_vacation_plus_preview
+		WHERE  base_year = #{baseYear}
+		<if test='userId != null and !userId.equals("")'>
+			AND user_id = #{userId}
+		</if>
+		<if test='userIdList != null and userIdList.size != 0'>
+			AND user_id IN
+			<foreach item="item" index="index" collection="userIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
 
 </mapper>

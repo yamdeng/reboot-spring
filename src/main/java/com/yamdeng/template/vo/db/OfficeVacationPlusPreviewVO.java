@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Data
 @SuperBuilder
 @AllArgsConstructor
@@ -17,5 +19,6 @@ public class OfficeVacationPlusPreviewVO extends BaseCommonVO {
     private String vacationName; /* 휴가이름 */
     private Double vacationCount; /* 휴가일 수 */
     private String searchKind; /* 입사일 기준 1년 이상인 직원(1), 입사일 기준 10년 이상인 직원(10) */
+    private List<String> userIdList; /* 선택한 직원 ID 목록 */
 
 }
