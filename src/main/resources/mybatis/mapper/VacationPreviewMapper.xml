@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.VacationPreviewDao">
+
+	<!-- OFFICE_VACATION_YEAR_PREVIEW(휴가_휴직_현황(연별)_미리보기) 테이블 -->
+	<!-- OFFICE_VACATION_PLUS_PREVIEW(휴가_휴직_현황(포상휴가)_미리보기) 테이블 -->
+
+	<!-- OFFICE_VACATION_YEAR_PREVIEW select column -->
+	<sql id="vacation_year_preview_select">
+		a.user_id              AS user_id /* 직원ID */
+		,a.base_year           AS base_year /* 기준년 */
+		,a.annual_count        AS annual_count /* 발생연차 */
+		,a.month_count         AS month_count /* 금년월차 */
+		,a.useable_count       AS useable_count /* 사용가능일수 */
+		,a.plus_vacation_count AS plus_vacation_count /* 포상휴가 수 */
+		,a.used_count          AS used_count /* 사용일수 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
+	<!-- OFFICE_VACATION_YEAR_PREVIEW where -->
+	<sql id="vacation_year_preview_where">
+		AND BASE_YEAR = #{baseYear}
+		<if test='userIdList != null and userIdList.size != 0'>
+			AND a.user_id IN
+			<foreach item="item" index="index" collection="userIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 휴가발생데이터가 없는 직원 -->
+		<if test='newEmployeeYn != null and newEmployeeYn.equals("Y")'>
+			AND a.user_id IN(SELECT user_key
+					FROM   to0_user_main
+					WHERE  user_key NOT IN(SELECT user_id
+											FROM   office_vacation_year
+											WHERE  base_year = #{baseYear}))
+		</if>
+	</sql>
+
+	<!-- OFFICE_VACATION_PLUS_PREVIEW select column -->
+	<sql id="vacation_plus_preview_select">
+		a.user_id         AS user_id /* 직원ID */
+		,a.base_year      AS base_year /* 기준년 */
+		,a.vacation_name  AS vacation_name /* 휴가이름 */
+		,a.vacation_count AS vacation_count /* 휴가일 수 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_select"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
+	<!-- OFFICE_VACATION_PLUS_PREVIEW where -->
+	<sql id="vacation_plus_preview_where">
+	</sql>
+
+	<!-- 휴가_휴직_현황(연별)_미리보기 list -->
+	<select id="selectVacationYearPreviewList"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO">
+		SELECT
+			<include refid="vacation_year_preview_select"/>
+		FROM office_vacation_year_preview a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1 = 1
+			<include refid="vacation_year_preview_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 휴가_휴직_현황(연별)_미리보기 list totalCount -->
+	<select id="selectVacationYearPreviewListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM office_vacation_year_preview a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1 = 1
+			<include refid="vacation_year_preview_where"/>
+	</select>
+
+	<!-- 휴가_휴직_현황(연별)_미리보기 detail -->
+	<select id="selectVacationYearPreviewInfo"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO"
+			resultType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO">
+		SELECT
+			<include refid="vacation_year_preview_select"/>
+		FROM office_vacation_year_preview a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
+	</select>
+
+	<!-- 휴가_휴직_현황(연별)_미리보기 insert -->
+	<insert id="insertVacationYearPreview"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO">
+		INSERT INTO office_vacation_year_preview (
+			user_id
+			,base_year
+			<if test='annualCount != null'>
+			,annual_count
+			</if>
+			<if test='monthCount != null'>
+			,month_count
+			</if>
+			<if test='useableCount != null'>
+			,useable_count
+			</if>
+			<if test='plusVacationCount != null'>
+			,plus_vacation_count
+			</if>
+			<if test='usedCount != null'>
+			,used_count
+			</if>
+			<if test='regDate != null'>
+			,reg_date
+			</if>
+			<if test='modDate != null'>
+			,mod_date
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,reg_user_id
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id
+			</if>
+		) VALUES (
+			#{userId}
+			,#{baseYear}
+			<if test='annualCount != null'>
+			,#{annualCount}
+			</if>
+			<if test='monthCount != null'>
+			,#{monthCount}
+			</if>
+			<if test='useableCount != null'>
+			,#{useableCount}
+			</if>
+			<if test='plusVacationCount != null'>
+			,#{plusVacationCount}
+			</if>
+			<if test='usedCount != null'>
+			,#{usedCount}
+			</if>
+			<if test='regDate != null'>
+			,#{regDate}
+			</if>
+			<if test='modDate != null'>
+			,#{modDate}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,#{loginUserId}
+			</if>
+		)
+	</insert>
+
+	<!-- 휴가_휴직_현황(연별)_미리보기 update -->
+	<update id="updateVacationYearPreview"
+			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearPreviewVO">
+		UPDATE office_vacation_year_preview
+		SET
+			mod_date = now()
+			<if test='annualCount != null and !annualCount.equals("")'>
+			,annual_count = #{annualCount}
+			</if>
+			<if test='monthCount != null and !monthCount.equals("")'>
+			,month_count = #{monthCount}
+			</if>
+			<if test='useableCount != null and !useableCount.equals("")'>
+			,useable_count = #{useableCount}
+			</if>
+			<if test='plusVacationCount != null and !plusVacationCount.equals("")'>
+			,plus_vacation_count = #{plusVacationCount}
+			</if>
+			<if test='usedCount != null and !usedCount.equals("")'>
+			,used_count = #{usedCount}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,reg_user_id = #{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+			,mod_user_id = #{loginUserId}
+			</if>
+		WHERE base_year = #{baseYear} AND user_id = #{userId}
+	</update>
+
+</mapper>

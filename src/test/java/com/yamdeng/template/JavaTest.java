@@ -887,4 +887,35 @@ public class JavaTest {
 
     }
 
+    @Test
+    void getBaseYearByCurrentDate() {
+
+        // 12월10일 이전이면 올해
+        // 12월10일 이후이면 내년
+        String checkDateMonthStr = "1209";
+        String resultYear = "";
+
+        // 올해 추출
+        LocalDate now = LocalDate.now();
+        String nowYear = now.format(DateTimeFormatter.ofPattern("yyyy"));
+
+        // 기준날짜 추출
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse(nowYear + checkDateMonthStr, formatter);
+
+        // 오늘과 기준날짜 비교
+        Period diffPeriod = Period.between(localDate, now);
+        int diffDays = diffPeriod.getDays();
+        log.info("diffDays : {}", diffDays);
+
+        // 오늘이 기준날짜 보다 크면 내년 반환 else 올해
+        if(diffDays > 0) {
+            resultYear = now.plusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
+        } else {
+            resultYear = nowYear;
+        }
+
+        log.info("getBaseYearByCurrentDate : {}", resultYear);
+    }
+
 }
