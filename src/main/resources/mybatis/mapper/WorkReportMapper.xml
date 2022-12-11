@@ -70,7 +70,7 @@
 									FROM   office_work_report_comment
 									WHERE  report_id IN(SELECT report_id
 														FROM   office_work_report a
-														WHERE  1 = 1
+														WHERE  1=1
 												<include refid="work_report_where"/>
 									)
 				)
@@ -123,7 +123,7 @@
 		<include refid="work_report_select"/>
 		FROM OFFICE_WORK_REPORT a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 		<include refid="work_report_where"/>
 		<include refid="work_report_dashboard_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
@@ -136,7 +136,7 @@
 		SELECT count(*)
 		FROM OFFICE_WORK_REPORT a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 		<include refid="work_report_where"/>
 		<include refid="work_report_dashboard_where"/>
 	</select>
@@ -148,20 +148,20 @@
 		SELECT 'all'     AS kind /* 업무보고 */
 			,count(*) AS agg_count
 		FROM   office_work_report a
-		WHERE  1 = 1
+		WHERE  1=1
 		<include refid="work_report_where"/>
 		UNION ALL
 		SELECT 'submit'  AS kind /* 제출 */
 			,count(*) AS agg_count
 		FROM   office_work_report a
-		WHERE  1 = 1
+		WHERE  1=1
 		<include refid="work_report_where"/>
 			AND report_date IS NOT NULL
 		UNION ALL
 		SELECT 'report_not_submit' AS kind /* 미제출 */
       		 ,count(*)           AS agg_count
 		FROM   office_work_report a
-		WHERE  1 = 1
+		WHERE  1=1
 			<include refid="work_report_where"/>
 			AND ( ( report_date IS NULL
 					AND base_date_str <![CDATA[ <= ]]> #{twoBeforeWorkDateStr} )
@@ -171,20 +171,20 @@
 		SELECT 'report_issue' AS kind /* 업무보고 이슈 수 */
 			,count(*)      AS agg_count
 		FROM   office_work_report a
-		WHERE  1 = 1
+		WHERE  1=1
 		<include refid="work_report_where"/>
 			AND a.issue_yn = 'Y'
 		UNION ALL
 		SELECT 'comment'                    AS kind /* 코멘트 */
 			,count(*) AS agg_count
 		FROM   office_work_report a
-		WHERE  1 = 1
+		WHERE  1=1
 		<include refid="work_report_where"/>
 		AND a.report_id IN(SELECT report_id
                           FROM   office_work_report_comment
                           WHERE  report_id IN(SELECT report_id
                                               FROM   office_work_report a
-                                              WHERE  1 = 1
+                                              WHERE  1=1
 											  <include refid="work_report_where"/>
 											  )
 							)
@@ -321,6 +321,17 @@
 		FROM   office_work_report_comment a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE  a.report_id = #{reportId}
+	</select>
+
+	<!-- 업무보고 댓글 상세 조회 : comment_id 기준 -->
+	<select id="selectWorkReportCommentInfoByCommentId"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
+		SELECT
+		<include refid="work_report_comment_select"/>
+		FROM   office_work_report_comment a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE  a.comment_id = #{commentId}
 	</select>
 
 	<!-- 업무보고 댓글 insert -->

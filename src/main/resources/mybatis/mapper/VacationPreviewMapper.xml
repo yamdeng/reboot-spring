@@ -61,7 +61,7 @@
 			<include refid="vacation_year_preview_select"/>
 		FROM office_vacation_year_preview a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 			<include refid="vacation_year_preview_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
@@ -73,7 +73,7 @@
 		SELECT count(*)
 		FROM office_vacation_year_preview a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 			<include refid="vacation_year_preview_where"/>
 	</select>
 
@@ -192,7 +192,7 @@
 		<include refid="vacation_plus_preview_select"/>
 		FROM office_vacation_plus_preview a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 		<include refid="vacation_plus_preview_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
@@ -204,7 +204,7 @@
 		SELECT count(*)
 		FROM office_vacation_plus_preview a
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1 = 1
+		WHERE 1=1
 		<include refid="vacation_plus_preview_where"/>
 	</select>
 

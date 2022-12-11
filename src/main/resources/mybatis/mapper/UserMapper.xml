@@ -40,4 +40,24 @@
 		WHERE  dept_key != #{deptKey}
 	</select>
 
+	<!-- 사용자 목록 -->
+	<select id="selectUserList"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
+		SELECT
+		u.user_id as user_id
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+		FROM TO0_USER_MAIN u
+		left outer join TO0_DEPT_MAST d
+		on u.dept_key = d.dept_key
+		left outer join TO0_RANK_MAIN r
+		on u.rank_key = r.rank_key
+		left outer join TO0_DUTY_MAIN du
+		on u.duty_key = du.duty_key
+		left outer join TO0_POSITION_MAIN po
+		on u.position_key = po.position_key
+		WHERE 1=1
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
 </mapper>

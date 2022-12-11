@@ -87,7 +87,7 @@
 	<update id="updateCommuteDept" parameterType="com.yamdeng.template.vo.db.OfficeCommuteDeptDayVO">
 		UPDATE OFFICE_COMMUTE_DEPT_DAY
 		SET
-		mod_date = NOW()
+		mod_date = now()
 		,mod_user_id = #{loginUserId}
 		<if test='userId != null and !userId.equals("")'>
 			,user_id = #{userId}
@@ -123,7 +123,7 @@
 		SELECT 'all'     AS kind /* 전체 */
 			,count(*) AS agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>
@@ -140,7 +140,7 @@
 		SELECT 'submit_and_reject'     AS kind /* 제출, 반려 */
 			,count(*) agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>
@@ -159,7 +159,7 @@
 		SELECT 'before_approve' AS kind /* 승인전 */
 			,count(*)        agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>
@@ -179,7 +179,7 @@
 		SELECT 'approve' AS kind /* 승인완료 */
 			,count(*) agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>
@@ -197,7 +197,7 @@
 		SELECT 'start_work_complete' AS kind /* 출근완료 */
 			,count(*)             agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>
@@ -215,7 +215,7 @@
 		SELECT 'out_work_complete' AS kind /* 퇴근완료 */
 			,count(*)           agg_count
 		FROM   office_commute_dept_day
-		WHERE  1 = 1
+		WHERE  1=1
 			<if test='searchDateStr != null and !searchDateStr.equals("")'>
 				AND base_date_str = #{searchDateStr}
 			</if>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamdeng.template.data.dao.VacationStatsDao">
+
+	<!-- OFFICE_VACATION_MONTH_STATS(통계_휴가_월별_사용현황) 테이블 -->
+
+	<!-- OFFICE_VACATION_MONTH_STATS select column -->
+	<sql id="vacation_month_stats_select">
+		a.user_id            AS user_id /* 직원ID */
+		,a.base_year         AS base_year /* 기준년 */
+		,a.use_1month_count  AS use_1month_count /* 1월 사용일수 */
+		,a.use_2month_count  AS use_2month_count /* 2월 사용일수 */
+		,a.use_3month_count  AS use_3month_count /* 3월 사용일수 */
+		,a.use_4month_count  AS use_4month_count /* 4월 사용일수 */
+		,a.use_5month_count  AS use_5month_count /* 5월 사용일수 */
+		,a.use_6month_count  AS use_6month_count /* 6월 사용일수 */
+		,a.use_7month_count  AS use_7month_count /* 7월 사용일수 */
+		,a.use_8month_count  AS use_8month_count /* 8월 사용일수 */
+		,a.use_9month_count  AS use_9month_count /* 9월 사용일수 */
+		,a.use_10month_count AS use_10month_count /* 10월 사용일수 */
+		,a.use_11month_count AS use_11month_count /* 11월 사용일수 */
+		,a.use_12month_count AS use_12month_count /* 12월 사용일수 */
+		,a.reg_date          AS reg_date /* 등록일 */
+		,a.mod_date          AS mod_date /* 수정일 */
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+	</sql>
+
+	<!-- OFFICE_VACATION_MONTH_STATS where -->
+	<sql id="vacation_month_stats_where">
+		AND a.base_year = #{baseYear}
+	</sql>
+
+	<!-- 통계_휴가_월별_사용현황 list -->
+	<select id="selectVacationMonthStatsList"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO">
+		SELECT
+			<include refid="vacation_month_stats_select"/>
+		FROM office_vacation_month_stats a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+			<include refid="vacation_month_stats_where"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 통계_휴가_월별_사용현황 list totalCount -->
+	<select id="selectVacationMonthStatsListTotalCount"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM office_vacation_month_stats a
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+		<include refid="vacation_month_stats_where"/>
+	</select>
+
+	<!-- 통계_휴가_월별_사용현황 detail -->
+	<select id="selectVacationMonthStatsInfo"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO"
+			resultType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO">
+		SELECT
+			<include refid="vacation_month_stats_select"/>
+		FROM office_vacation_month_stats a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.base_year = #{baseYear} and a.user_id = #{userId}
+	</select>
+
+	<!-- 통계_휴가_월별_사용현황 insert -->
+	<insert id="insertVacationMonthStats"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO">
+		INSERT INTO office_vacation_month_stats (
+			user_id
+			,base_year
+			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+				,use_1month_count
+			</if>
+			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+				,use_2month_count
+			</if>
+			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+				,use_3month_count
+			</if>
+			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+				,use_4month_count
+			</if>
+			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+				,use_5month_count
+			</if>
+			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+				,use_6month_count
+			</if>
+			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+				,use_7month_count
+			</if>
+			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+				,use_8month_count
+			</if>
+			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+				,use_9month_count
+			</if>
+			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+				,use_10month_count
+			</if>
+			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+				,use_11month_count
+			</if>
+			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+				,use_12month_count
+			</if>
+		) VALUES (
+			#{userId}
+			,#{baseYear}
+			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+				,#{use1monthCount}
+			</if>
+			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+				,#{use2monthCount}
+			</if>
+			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+				,#{use3monthCount}
+			</if>
+			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+				,#{use4monthCount}
+			</if>
+			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+				,#{use5monthCount}
+			</if>
+			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+				,#{use6monthCount}
+			</if>
+			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+				,#{use7monthCount}
+			</if>
+			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+				,#{use8monthCount}
+			</if>
+			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+				,#{use9monthCount}
+			</if>
+			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+				,#{use10monthCount}
+			</if>
+			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+				,#{use11monthCount}
+			</if>
+			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+				,#{use12monthCount}
+			</if>
+		)
+	</insert>
+
+	<!-- 통계_휴가_월별_사용현황 update -->
+	<update id="updateVacationMonthStats"
+			parameterType="com.yamdeng.template.vo.stats.OfficeVacationMonthStatsVO">
+		UPDATE office_vacation_month_stats
+		SET
+			mod_date = now()
+			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+				,use_1month_count = #{use1monthCount}
+			</if>
+			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+				,use_2month_count = #{use2monthCount}
+			</if>
+			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+				,use_3month_count = #{use3monthCount}
+			</if>
+			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+				,use_4month_count = #{use4monthCount}
+			</if>
+			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+				,use_5month_count = #{use5monthCount}
+			</if>
+			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+				,use_6month_count = #{use6monthCount}
+			</if>
+			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+				,use_7month_count = #{use7monthCount}
+			</if>
+			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+				,use_8month_count = #{use8monthCount}
+			</if>
+			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+				,use_9month_count = #{use9monthCount}
+			</if>
+			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+				,use_10month_count = #{use10monthCount}
+			</if>
+			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+				,use_11month_count = #{use11monthCount}
+			</if>
+			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+				,use_12month_count = #{use12monthCount}
+			</if>
+		WHERE base_year = #{baseYear} and user_id = #{userId}
+	</update>
+
+</mapper>
