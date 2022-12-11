@@ -31,4 +31,18 @@ class UserDaoTest {
 		log.info("selectChildDeptListByDeptKey result : {}", result);
 	}
 
+	// 사용자 list
+	@Test
+	void selectUserList() {
+		BaseCommonVO vo =
+				BaseCommonVO.builder()
+						.offset(0)
+						.limit(10)
+						.build();
+		List<BaseCommonVO> result = userDao.selectUserList(vo);
+		int totalCount = userDao.selectUserListTotalCount(vo);
+		log.info("selectUserList result : {}", result);
+		log.info("selectUserList totalCount : {}", totalCount);
+	}
+
 }

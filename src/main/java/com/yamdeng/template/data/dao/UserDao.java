@@ -14,4 +14,10 @@ public interface UserDao {
     // 하위 부서 목록 가져오기
     List<BaseCommonVO> selectChildDeptListByDeptKey(String deptKey);
 
+    // 사용자 list
+    List<BaseCommonVO> selectUserList(BaseCommonVO vo);
+
+    // 사용자 list totalCount
+    int selectUserListTotalCount(BaseCommonVO vo);
+
 }
