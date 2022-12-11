@@ -4,10 +4,7 @@ import com.yamdeng.template.BootStandardApplication;
 import com.yamdeng.template.constant.Constant;
 import com.yamdeng.template.data.dao.CommuteDao;
 import com.yamdeng.template.data.dao.VacationDao;
-import com.yamdeng.template.vo.db.OfficeCommuteDayVO;
-import com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO;
-import com.yamdeng.template.vo.db.OfficeVacationDetailVO;
-import com.yamdeng.template.vo.db.OfficeVacationYearVO;
+import com.yamdeng.template.vo.db.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +23,15 @@ class VacationDaoTest {
 
 	// 휴가/휴직(연별) 상세 조회 : 사용자ID 기준
 	@Test
-	void selectVacationInfoByUserId() {
+	void selectVacationYearInfoByUserId() {
 		OfficeVacationYearVO vo =
 				OfficeVacationYearVO.builder()
 						.baseYear("2022")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
 						.build();
-		OfficeVacationYearVO result = vacationDao.selectVacationInfoByUserId(vo);
-		log.info("selectVacationInfoByUserId result : {}", result);
+		OfficeVacationYearVO result = vacationDao.selectVacationYearInfoByUserId(vo);
+		log.info("selectVacationYearInfoByUserId result : {}", result);
 	}
 
 	// 해당일에 휴가가 존재하는지 체크
@@ -87,6 +84,80 @@ class VacationDaoTest {
 		int totalCount = vacationDao.selectVacationYearListTotalCount(vo);
 		log.info("selectVacationYearList result : {}", result);
 		log.info("selectVacationYearList totalCount : {}", totalCount);
+	}
+
+	// 휴가_휴직_현황(연별) insert
+	@Test
+	void insertVacationYear() {
+		OfficeVacationYearVO vo =
+				OfficeVacationYearVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.annualCount(15.0)
+						.monthCount(0.0)
+						.useableCount(15.0)
+						.plusVacationCount(1.0)
+						.usedCount(0.0)
+						.build();
+		int result = vacationDao.insertVacationYear(vo);
+		log.info("insertVacationYear result : {}", result);
+	}
+
+	// 휴가_휴직_현황(연별) update
+	@Test
+	void updateVacationYear() {
+		OfficeVacationYearVO vo =
+				OfficeVacationYearVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.annualCount(15.0)
+						.monthCount(0.0)
+						.useableCount(15.0)
+						.plusVacationCount(1.0)
+						.usedCount(0.0)
+						.build();
+		int result = vacationDao.updateVacationYear(vo);
+		log.info("updateVacationYear result : {}", result);
+	}
+
+	// 휴가_휴직_현황(포상휴가) detail
+	@Test
+	void selectVacationPlusInfoByUserId() {
+		OfficeVacationPlusVO vo =
+				OfficeVacationPlusVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.build();
+		OfficeVacationPlusVO result = vacationDao.selectVacationPlusInfoByUserId(vo);
+		log.info("selectVacationPlusInfoByUserId result : {}", result);
+	}
+
+	// 휴가_휴직_현황(포상휴가) insert
+	@Test
+	void insertVacationPlus() {
+		OfficeVacationPlusVO vo =
+				OfficeVacationPlusVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.vacationName("포상휴가1")
+						.vacationCount(10.0)
+						.build();
+		int result = vacationDao.insertVacationPlus(vo);
+		log.info("insertVacationPlus result : {}", result);
+	}
+
+	// 휴가_휴직_현황(포상휴가) update
+	@Test
+	void updateVacationPlus() {
+		OfficeVacationPlusVO vo =
+				OfficeVacationPlusVO.builder()
+						.baseYear("2022")
+						.userId("yamdeng")
+						.vacationName("포상휴가1")
+						.vacationCount(10.0)
+						.build();
+		int result = vacationDao.updateVacationPlus(vo);
+		log.info("updateVacationPlus result : {}", result);
 	}
 
 }
