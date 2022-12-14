@@ -4,6 +4,30 @@
 
 	<!-- 조직도 공통 -->
 
+	<!-- 사용자 list -->
+	<select id="selectUserList"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
+		SELECT
+			u.user_id as user_id
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+		FROM
+			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
+		WHERE 1=1
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 사용자 list totalCount -->
+	<select id="selectUserListTotalCount"
+			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM
+			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
+		WHERE 1=1
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
 	<!-- 부서의 팀장 사용자ID 가져오기 -->
 	<select id="getDeptManagerUserId"
 			parameterType="java.lang.String"
@@ -38,30 +62,6 @@
 				upper_dept_key
 		FROM   dept_child_list
 		WHERE  dept_key != #{deptKey}
-	</select>
-
-	<!-- 사용자 list -->
-	<select id="selectUserList"
-			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
-			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
-		SELECT
-			u.user_id as user_id
-			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
-		FROM
-			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
-		WHERE 1=1
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
-	</select>
-
-	<!-- 사용자 list totalCount -->
-	<select id="selectUserListTotalCount"
-			parameterType="com.yamdeng.template.vo.common.BaseCommonVO"
-			resultType="java.lang.Integer">
-		SELECT count(*)
-		FROM
-			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
-		WHERE 1=1
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
 </mapper>

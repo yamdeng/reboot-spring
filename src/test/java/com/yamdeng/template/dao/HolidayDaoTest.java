@@ -21,18 +21,6 @@ class HolidayDaoTest {
 	@Autowired
 	private HolidayDao holidayDao;
 
-	// 공휴일여부 확인
-	@Test
-	void checkHolidayByDateStr() {
-		int result = holidayDao.checkHolidayByDateStr(
-				OfficeWorkHolidayVO.builder()
-						.baseYear("2022")
-						.holiDateStr("20221205")
-						.build()
-		);
-		log.info("checkHolidayByDateStr result : {}", result);
-	}
-
 	// 이전 평일 구하기
 	@Test
 	void beforeWorkDate() {
@@ -73,6 +61,18 @@ class HolidayDaoTest {
 		int totalCount = holidayDao.selectWorkHolidayListTotalCount(vo);
 		log.info("selectWorkHolidayList result : {}", result);
 		log.info("selectWorkHolidayList totalCount : {}", totalCount);
+	}
+
+	// 공휴일여부 확인
+	@Test
+	void checkHolidayByDateStr() {
+		int result = holidayDao.checkHolidayByDateStr(
+				OfficeWorkHolidayVO.builder()
+						.baseYear("2022")
+						.holiDateStr("20221205")
+						.build()
+		);
+		log.info("checkHolidayByDateStr result : {}", result);
 	}
 
 }

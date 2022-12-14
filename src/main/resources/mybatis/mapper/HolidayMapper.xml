@@ -24,16 +24,6 @@
 		</if>
 	</sql>
 
-	<!-- 공휴일여부 확인 -->
-	<select id="checkHolidayByDateStr"
-			parameterType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO"
-			resultType="java.lang.Integer">
-		SELECT count(*)
-		FROM   office_work_holiday
-		WHERE  base_year = #{baseYear}
-			AND holi_date_str = #{holiDateStr}
-	</select>
-
 	<!-- 공휴일 list -->
 	<select id="selectWorkHolidayList"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO"
@@ -54,6 +44,16 @@
 		FROM   office_work_holiday a
 		WHERE  1=1
 			<include refid="work_holiday_where"/>
+	</select>
+
+	<!-- 공휴일여부 확인 -->
+	<select id="checkHolidayByDateStr"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM   office_work_holiday a
+		WHERE  base_year = #{baseYear}
+			AND holi_date_str = #{holiDateStr}
 	</select>
 
 </mapper>

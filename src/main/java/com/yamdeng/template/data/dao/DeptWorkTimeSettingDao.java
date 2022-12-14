@@ -11,14 +11,14 @@ import java.util.List;
 @Mapper
 public interface DeptWorkTimeSettingDao {
 
-    // 부서별_근무_시간_관리 detail
-    OfficeDeptWorkTimeSettingVO selectDeptWorkTimeSettingInfoByDeptId(String deptId);
-
     // 부서별_근무_시간_관리 list
     List<OfficeDeptWorkTimeSettingVO> selectDeptWorkTimeSettingList(OfficeDeptWorkTimeSettingVO vo);
 
     // 부서별_근무_시간_관리 list totalCount
     int selectDeptWorkTimeSettingListTotalCount(OfficeDeptWorkTimeSettingVO vo);
+
+    // 부서별_근무_시간_관리 detail
+    OfficeDeptWorkTimeSettingVO selectDeptWorkTimeSettingInfoByDeptId(String deptId);
 
     // 부서별_근무_시간_관리 insert
     int insertDeptWorkTimeSetting(OfficeDeptWorkTimeSettingVO vo);

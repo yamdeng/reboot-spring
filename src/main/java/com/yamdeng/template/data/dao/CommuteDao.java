@@ -12,8 +12,20 @@ import java.util.List;
 @Mapper
 public interface CommuteDao {
 
+    // 출퇴근_일일 list
+    List<OfficeCommuteDayVO> selectCommuteList(OfficeCommuteDayVO vo);
+
+    // 출퇴근_일일 list totalCount
+    int selectCommuteListTotalCount(OfficeCommuteDayVO vo);
+
     // 출퇴근_일일 detail
     OfficeCommuteDayVO selectCommuteInfo(OfficeCommuteDayVO vo);
+
+    // 출퇴근_일일 insert
+    int insertCommute(OfficeCommuteDayVO vo);
+
+    // 출퇴근_일일 update
+    int updateCommute(OfficeCommuteDayVO vo);
 
     // 출근
     int startWork(OfficeCommuteDayVO vo);
@@ -30,23 +42,17 @@ public interface CommuteDao {
     // 춭/퇴근 대상 직원 list
     List<BaseCommonVO> selectCommuteTargetUserList();
 
-    // 출퇴근_일일 insert
-    int insertCommute(OfficeCommuteDayVO vo);
+    // 춭/퇴근 대상 직원 list totalCount
+    int selectCommuteTargetUserListTotalCount();
 
-    // 출퇴근_일일 update
-    int updateCommute(OfficeCommuteDayVO vo);
-
-    // 실원 근무/출퇴근 현황
+    // 출퇴근_일일 list-ByDeptIdList : 부서키 목록 기준
     List<OfficeCommuteDayVO> selectCommuteListByDeptIdList(OfficeCommuteDayVO vo);
+
+    // 출퇴근_일일 list-ByDeptIdList totalCount : 부서키 목록 기준
+    int selectCommuteListByDeptIdListTotalCount(OfficeCommuteDayVO vo);
 
     // {월} 출퇴근 현황 : 개인
     List<StatsCommonVO> selectCommuteStatsTypePrivate(OfficeCommuteDayVO vo);
-
-    // 출퇴근 목록 : 공통
-    List<OfficeCommuteDayVO> selectCommuteList(OfficeCommuteDayVO vo);
-
-    // 출퇴근 목록 : 공통(total count)
-    int selectCommuteListTotalCount(OfficeCommuteDayVO vo);
 
     // {일} 팀원 출퇴근 현황 : 팀장
     List<StatsCommonVO> selectCommuteStatsDayTypeManager(OfficeCommuteDayVO vo);

@@ -3,6 +3,7 @@
 <mapper namespace="com.yamdeng.template.data.dao.WorkReportDao">
 
 	<!-- OFFICE_WORK_REPORT(업무보고) 테이블 -->
+	<!-- OFFICE_WORK_REPORT_COMMENT(업무보고_댓글) 테이블 -->
 
 	<!-- OFFICE_WORK_REPORT select column -->
 	<sql id="work_report_select">
@@ -88,33 +89,6 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
 	</sql>
 
-	<!-- 부서ID 기준 일주일 업무보고 목록(공휴일 포함) -->
-	<select id="selectRecent7DayListByDeptId"
-			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
-			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
-		SELECT
-			<include refid="work_report_select"/>
-		FROM OFFICE_WORK_REPORT a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE a.BASE_DATE_STR BETWEEN #{startDateStr} AND #{endDateStr} AND a.dept_id = #{deptId}
-	</select>
-
-	<!-- 업무보고 목록 : 부서키 목록 기준 -->
-	<select id="selectWorkReportListByDeptIdList"
-			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
-			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
-		SELECT
-			<include refid="work_report_select"/>
-		FROM OFFICE_WORK_REPORT a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr}
-			AND a.dept_id IN
-			<foreach item="item" index="index" collection="childDeptIdList"
-					 open="(" separator="," close=")">
-				#{item}
-			</foreach>
-	</select>
-
 	<!-- 업무보고 list -->
 	<select id="selectWorkReportList"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
@@ -141,56 +115,52 @@
 			<include refid="work_report_dashboard_where"/>
 	</select>
 
-	<!-- 업무보고 현황 : 월간, 하루, 기간 -->
-	<select id="selectWorkReportStats"
+	<!-- 부서ID 기준 일주일 업무보고 list(공휴일 포함) -->
+	<select id="selectRecent7DayListByDeptId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
-			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
-		SELECT 'all'     AS kind /* 업무보고 */
-			,count(*) AS agg_count
-		FROM   office_work_report a
-		WHERE  1=1
-		<include refid="work_report_where"/>
-		UNION ALL
-		SELECT 'submit'  AS kind /* 제출 */
-			,count(*) AS agg_count
-		FROM   office_work_report a
-		WHERE  1=1
-		<include refid="work_report_where"/>
-			AND report_date IS NOT NULL
-		UNION ALL
-		SELECT 'report_not_submit' AS kind /* 미제출 */
-      		 ,count(*)           AS agg_count
-		FROM   office_work_report a
-		WHERE  1=1
-			<include refid="work_report_where"/>
-			AND ( ( report_date IS NULL
-					AND base_date_str <![CDATA[ <= ]]> #{twoBeforeWorkDateStr} )
-					OR ( report_date IS NOT NULL
-						AND fn_check_work_report_not_submit(base_date_str, to_char(report_date, 'yyyyMMdd')) <![CDATA[ >= ]]> 0 ) )
-		UNION ALL
-		SELECT 'report_issue' AS kind /* 업무보고 이슈 수 */
-			,count(*)      AS agg_count
-		FROM   office_work_report a
-		WHERE  1=1
-		<include refid="work_report_where"/>
-			AND a.issue_yn = 'Y'
-		UNION ALL
-		SELECT 'comment'                    AS kind /* 코멘트 */
-			,count(*) AS agg_count
-		FROM   office_work_report a
-		WHERE  1=1
-		<include refid="work_report_where"/>
-		AND a.report_id IN(SELECT report_id
-                          FROM   office_work_report_comment
-                          WHERE  report_id IN(SELECT report_id
-                                              FROM   office_work_report a
-                                              WHERE  1=1
-											  <include refid="work_report_where"/>
-											  )
-							)
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+			<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.BASE_DATE_STR BETWEEN #{startDateStr}
+			AND #{endDateStr} AND a.dept_id = #{deptId}
+	</select>
+ 
+	<!-- 업무보고 list-ByDeptIdList : 부서키 목록 기준 -->
+	<select id="selectWorkReportListByDeptIdList"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
+		SELECT
+			<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
-	<!-- 업무보고 상세 : 기준날짜 + 부서 ID 기준 -->
+	<!-- 업무보고 list-ByDeptIdList totalCount : 부서키 목록 기준 -->
+	<select id="selectWorkReportListByDeptIdListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="java.lang.Integer">
+		SELECT
+			<include refid="work_report_select"/>
+		FROM OFFICE_WORK_REPORT a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+			AND a.dept_id IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</select>
+
+	<!-- 업무보고 detail : 기준날짜 + 부서 ID 기준 -->
 	<select id="selectWorkReportInfoByBaseDateStrAndDeptId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
@@ -201,7 +171,7 @@
 		WHERE a.dept_id = #{deptId} AND a.base_date_str = #{baseDateStr}
 	</select>
 
-	<!-- 업무보고 상세 : report_id 기준 -->
+	<!-- 업무보고 detail : report_id 기준 -->
 	<select id="selectWorkReportInfoByReportId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkReportVO">
@@ -312,7 +282,7 @@
 		WHERE report_id = #{reportId}
 	</update>
 
-	<!-- 업무보고 댓글 상세 조회 : report_id 기준 -->
+	<!-- 업무보고_댓글 detail : report_id 기준 -->
 	<select id="selectWorkReportCommentInfoByReportId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
@@ -323,7 +293,7 @@
 		WHERE  a.report_id = #{reportId}
 	</select>
 
-	<!-- 업무보고 댓글 상세 조회 : comment_id 기준 -->
+	<!-- 업무보고_댓글 detail : comment_id 기준 -->
 	<select id="selectWorkReportCommentInfoByCommentId"
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
@@ -334,7 +304,7 @@
 		WHERE  a.comment_id = #{commentId}
 	</select>
 
-	<!-- 업무보고 댓글 insert -->
+	<!-- 업무보고_댓글 insert -->
 	<insert id="insertWorkReportComment" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
 		INSERT INTO office_work_report_comment (
 			comment_id
@@ -377,7 +347,7 @@
 		)
 	</insert>
 
-	<!-- 업무보고 댓글 update -->
+	<!-- 업무보고_댓글 update -->
 	<update id="updateWorkReportComment" parameterType="com.yamdeng.template.vo.db.OfficeWorkReportCommentVO">
 		UPDATE office_work_report_comment
 		SET
@@ -389,5 +359,54 @@
 			</if>
 		WHERE comment_id = #{commentId}
 	</update>
+
+	<!-- 업무보고 현황 : 월간, 하루, 기간 -->
+	<select id="selectWorkReportStats"
+			parameterType="com.yamdeng.template.vo.db.OfficeWorkReportVO"
+			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
+		SELECT 'all'     AS kind /* 업무보고 */
+			,count(*) AS agg_count
+		FROM   office_work_report a
+		WHERE  1=1
+		<include refid="work_report_where"/>
+		UNION ALL
+		SELECT 'submit'  AS kind /* 제출 */
+			,count(*) AS agg_count
+		FROM   office_work_report a
+		WHERE  1=1
+		<include refid="work_report_where"/>
+			AND report_date IS NOT NULL
+		UNION ALL
+		SELECT 'report_not_submit' AS kind /* 미제출 */
+      		 ,count(*)           AS agg_count
+		FROM   office_work_report a
+		WHERE  1=1
+			<include refid="work_report_where"/>
+			AND ( ( report_date IS NULL
+					AND base_date_str <![CDATA[ <= ]]> #{twoBeforeWorkDateStr} )
+					OR ( report_date IS NOT NULL
+						AND fn_check_work_report_not_submit(base_date_str, to_char(report_date, 'yyyyMMdd')) <![CDATA[ >= ]]> 0 ) )
+		UNION ALL
+		SELECT 'report_issue' AS kind /* 업무보고 이슈 수 */
+			,count(*)      AS agg_count
+		FROM   office_work_report a
+		WHERE  1=1
+		<include refid="work_report_where"/>
+			AND a.issue_yn = 'Y'
+		UNION ALL
+		SELECT 'comment'                    AS kind /* 코멘트 */
+			,count(*) AS agg_count
+		FROM   office_work_report a
+		WHERE  1=1
+		<include refid="work_report_where"/>
+		AND a.report_id IN(SELECT report_id
+                          FROM   office_work_report_comment
+                          WHERE  report_id IN(SELECT report_id
+                                              FROM   office_work_report a
+                                              WHERE  1=1
+											  <include refid="work_report_where"/>
+											  )
+							)
+	</select>
 
 </mapper>

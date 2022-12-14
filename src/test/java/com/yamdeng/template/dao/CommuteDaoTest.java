@@ -25,6 +25,22 @@ class CommuteDaoTest {
 	@Autowired
 	private CommuteDao commuteDao;
 
+	// 출퇴근_일일 list
+	@Test
+	void selectCommuteList() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.searchMonthStr("202212")
+						.userId("yamdeng")
+						.limit(10)
+						.offset(0)
+						.build();
+		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteList(vo);
+		Integer totalCount = commuteDao.selectCommuteListTotalCount(vo);
+		log.info("selectCommuteList result : {}", result);
+		log.info("selectCommuteListTotalCount totalCount : {}", totalCount);
+	}
+
 	// 출퇴근_일일 detail
 	@Test
 	void selectCommuteInfo() {
@@ -36,6 +52,36 @@ class CommuteDaoTest {
 						.build();
 		OfficeCommuteDayVO result = commuteDao.selectCommuteInfo(vo);
 		log.info("selectCommuteInfo result : {}", result);
+	}
+
+	// 출퇴근_일일 insert
+	@Test
+	void insertCommute() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("sb")
+						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
+						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
+						.vacationKindCode(Constant.CODE_VACATION_KIND_VACATION_AFTERNOON)
+						.workedTimeValue(0.0)
+						.build();
+		int result = commuteDao.insertCommute(vo);
+		log.info("insertCommute result : {}", result);
+	}
+
+	// 출퇴근_일일 update
+	@Test
+	void updateCommute() {
+		OfficeCommuteDayVO vo =
+				OfficeCommuteDayVO.builder()
+						.baseDateStr("20221203")
+						.userId("yamdeng")
+						.workResultCode(Constant.CODE_WORK_RESULT_TARDY)
+						.modUserId("yamdeng")
+						.build();
+		int result = commuteDao.updateCommute(vo);
+		log.info("updateCommute result : {}", result);
 	}
 
 	// 출근
@@ -100,40 +146,12 @@ class CommuteDaoTest {
 	@Test
 	void selectCommuteTargetUserList() {
 		List<BaseCommonVO> result = commuteDao.selectCommuteTargetUserList();
+		int totalCount = commuteDao.selectCommuteTargetUserListTotalCount();
 		log.info("selectCommuteTargetUserList result : {}", result);
+		log.info("selectCommuteTargetUserList totalCount : {}", totalCount);
 	}
 
-	// 출퇴근_일일 insert
-	@Test
-	void insertCommute() {
-		OfficeCommuteDayVO vo =
-				OfficeCommuteDayVO.builder()
-						.baseDateStr("20221203")
-						.userId("sb")
-						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
-						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
-						.vacationKindCode(Constant.CODE_VACATION_KIND_VACATION_AFTERNOON)
-						.workedTimeValue(0.0)
-						.build();
-		int result = commuteDao.insertCommute(vo);
-		log.info("insertCommute result : {}", result);
-	}
-
-	// 출퇴근_일일 update
-	@Test
-	void updateCommute() {
-		OfficeCommuteDayVO vo =
-				OfficeCommuteDayVO.builder()
-						.baseDateStr("20221203")
-						.userId("yamdeng")
-						.workResultCode(Constant.CODE_WORK_RESULT_TARDY)
-						.modUserId("yamdeng")
-						.build();
-		int result = commuteDao.updateCommute(vo);
-		log.info("updateCommute result : {}", result);
-	}
-
-	// 출퇴근 목록 조회 : 부서키 목록 기준
+	// 출퇴근_일일 list-ByDeptIdList : 부서키 목록 기준
 	@Test
 	void selectCommuteListByDeptIdList() {
 		OfficeCommuteDayVO vo =
@@ -145,7 +163,9 @@ class CommuteDaoTest {
 						.limit(10)
 						.build();
 		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteListByDeptIdList(vo);
+		int totalCount = commuteDao.selectCommuteListByDeptIdListTotalCount(vo);
 		log.info("selectCommuteListByDeptIdList result : {}", result);
+		log.info("selectCommuteListByDeptIdList totalCount : {}", totalCount);
 	}
 
 	// {월} 출퇴근 현황 : 개인
@@ -159,22 +179,6 @@ class CommuteDaoTest {
 								.build()
 		);
 		log.info("selectCommuteStatsTypePrivate result : {}", result);
-	}
-
-	// 일일_출퇴근 목록 : 공통
-	@Test
-	void selectCommuteList() {
-		OfficeCommuteDayVO vo =
-				OfficeCommuteDayVO.builder()
-						.searchMonthStr("202212")
-						.userId("yamdeng")
-						.limit(10)
-						.offset(0)
-						.build();
-		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteList(vo);
-		Integer totalCount = commuteDao.selectCommuteListTotalCount(vo);
-		log.info("selectCommuteList result : {}", result);
-		log.info("selectCommuteListTotalCount totalCount : {}", totalCount);
 	}
 
 	// {일} 팀원 출퇴근 현황 : 팀장

@@ -20,13 +20,6 @@ class DeptWorkTimeSettingDaoTest {
 	@Autowired
 	private DeptWorkTimeSettingDao deptWorkTimeSettingDao;
 
-	// 부서별 근무시간 상세 정보 조회
-	@Test
-	void selectDeptWorkTimeSettingInfoByDeptId() {
-		OfficeDeptWorkTimeSettingVO result = deptWorkTimeSettingDao.selectDeptWorkTimeSettingInfoByDeptId("dept1");
-		log.info("selectDeptWorkTimeSettingInfoByDeptId result : {}", result);
-	}
-
 	// 부서별_근무_시간_관리 list
 	@Test
 	void selectDeptWorkTimeSettingList() {
@@ -37,6 +30,13 @@ class DeptWorkTimeSettingDaoTest {
 		int totalCount = deptWorkTimeSettingDao.selectDeptWorkTimeSettingListTotalCount(vo);
 		log.info("selectDeptWorkTimeSettingList result : {}", result);
 		log.info("selectDeptWorkTimeSettingList totalCount : {}", totalCount);
+	}
+
+	// 부서별 근무시간 상세 정보 조회
+	@Test
+	void selectDeptWorkTimeSettingInfoByDeptId() {
+		OfficeDeptWorkTimeSettingVO result = deptWorkTimeSettingDao.selectDeptWorkTimeSettingInfoByDeptId("dept1");
+		log.info("selectDeptWorkTimeSettingInfoByDeptId result : {}", result);
 	}
 
 	// 부서별_근무_시간_관리 insert

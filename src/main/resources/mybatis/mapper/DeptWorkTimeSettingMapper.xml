@@ -20,17 +20,6 @@
 		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_select"/>
 	</sql>
 
-	<!-- 부서별_근무_시간_관리 detail -->
-	<select id="selectDeptWorkTimeSettingInfoByDeptId"
-			parameterType="java.lang.String"
-			resultType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
-		SELECT
-			<include refid="dept_work_time_setting_select"/>
-		FROM   office_dept_work_time_setting a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE dept_id = #{deptId}
-	</select>
-
 	<!-- 부서별_근무_시간_관리 list -->
 	<select id="selectDeptWorkTimeSettingList"
 			parameterType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO"
@@ -51,6 +40,17 @@
 		FROM   office_dept_work_time_setting a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1=1
+	</select>
+
+	<!-- 부서별_근무_시간_관리 detail -->
+	<select id="selectDeptWorkTimeSettingInfoByDeptId"
+			parameterType="java.lang.String"
+			resultType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
+		SELECT
+			<include refid="dept_work_time_setting_select"/>
+		FROM   office_dept_work_time_setting a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+		WHERE dept_id = #{deptId}
 	</select>
 
 	<!-- 부서별_근무_시간_관리 insert -->

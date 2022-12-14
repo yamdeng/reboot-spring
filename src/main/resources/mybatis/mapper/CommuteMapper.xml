@@ -98,6 +98,30 @@
 		</if>
 	</sql>
 
+	<!-- 출퇴근_일일 list -->
+	<select id="selectCommuteList"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT
+			<include refid="commute_select"/>
+		FROM OFFICE_COMMUTE_DAY a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+			<include refid="commute_list_where"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 출퇴근_일일 list totalCount -->
+	<select id="selectCommuteListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM OFFICE_COMMUTE_DAY a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE 1=1
+			<include refid="commute_list_where"/>
+	</select>
+
 	<!-- 출퇴근_일일 detail -->
 	<select id="selectCommuteInfo"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
@@ -107,70 +131,6 @@
 		FROM OFFICE_COMMUTE_DAY a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.BASE_DATE_STR = #{baseDateStr} AND a.user_id = #{userId}
-	</select>
-
-	<!-- 출근 -->
-	<update id="startWork"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
-		UPDATE OFFICE_COMMUTE_DAY
-		SET
-			start_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,start_work_ip = #{startWorkIp}
-			,work_status_code = #{workStatusCode}
-			,work_result_code = #{workResultCode}
-			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,mod_user_id = #{loginUserId}
-		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
-	</update>
-
-	<!-- 퇴근 -->
-	<update id="outWork"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
-		UPDATE OFFICE_COMMUTE_DAY
-		SET
-			out_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,out_work_ip = #{outWorkIp}
-			,work_status_code = #{workStatusCode}
-			,work_result_code = #{workResultCode}
-			,worked_time_value = #{workedTimeValue}
-			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,mod_user_id = #{loginUserId}
-		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
-	</update>
-
-	<!-- 출퇴근_일일 list-ByDeptKey : 부서키 기준 -->
-	<select id="selectCommuteListByDeptKey"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
-			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
-		SELECT
-			<include refid="commute_select"/>
-		FROM OFFICE_COMMUTE_DAY a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr} AND d.dept_key = #{deptKey}
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
-	</select>
-
-	<!-- 출퇴근_일일 list-ByDeptKey totalCount : 부서키 기준 -->
-	<select id="selectCommuteListTotalCountByDeptKey"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
-			resultType="java.lang.Integer">
-		SELECT count(*)
-		FROM OFFICE_COMMUTE_DAY a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr} AND d.dept_key = #{deptKey}
-	</select>
-
-	<!-- 춭/퇴근 대상 직원 list -->
-	<select id="selectCommuteTargetUserList"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
-			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
-		SELECT
-			u.user_id as user_id
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
-		FROM
-			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
-		WHERE r.rank_title not in('대표이사', '실장')
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
 	<!-- 출퇴근_일일 insert -->
@@ -345,12 +305,102 @@
 		WHERE base_date_str = #{baseDateStr} AND user_id = #{userId}
 	</update>
 
-	<!-- 출퇴근 목록 조회 : 부서키 목록 기준  -->
+	<!-- 출근 -->
+	<update id="startWork"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		UPDATE OFFICE_COMMUTE_DAY
+		SET
+			start_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			,start_work_ip = #{startWorkIp}
+			,work_status_code = #{workStatusCode}
+			,work_result_code = #{workResultCode}
+			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			,mod_user_id = #{loginUserId}
+		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
+	</update>
+
+	<!-- 퇴근 -->
+	<update id="outWork"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		UPDATE OFFICE_COMMUTE_DAY
+		SET
+			out_work_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			,out_work_ip = #{outWorkIp}
+			,work_status_code = #{workStatusCode}
+			,work_result_code = #{workResultCode}
+			,worked_time_value = #{workedTimeValue}
+			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			,mod_user_id = #{loginUserId}
+		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
+	</update>
+
+	<!-- 출퇴근_일일 list-ByDeptKey : 부서키 기준 -->
+	<select id="selectCommuteListByDeptKey"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
+		SELECT
+			<include refid="commute_select"/>
+		FROM OFFICE_COMMUTE_DAY a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr} AND d.dept_key = #{deptKey}
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 출퇴근_일일 list-ByDeptKey totalCount : 부서키 기준 -->
+	<select id="selectCommuteListTotalCountByDeptKey"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM OFFICE_COMMUTE_DAY a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr} AND d.dept_key = #{deptKey}
+	</select>
+
+	<!-- 춭/퇴근 대상 직원 list -->
+	<select id="selectCommuteTargetUserList"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="com.yamdeng.template.vo.common.BaseCommonVO">
+		SELECT
+			u.user_id as user_id
+		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_select"/>
+		FROM
+			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
+		WHERE r.rank_title not in('대표이사', '실장')
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 춭/퇴근 대상 직원 list totalCount -->
+	<select id="selectCommuteTargetUserListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM
+			<include refid="com.yamdeng.template.data.dao.CommonDao.common_user_from"/>
+		WHERE r.rank_title not in('대표이사', '실장')
+	</select>
+
+	<!-- 출퇴근_일일 list-ByDeptIdList : 부서키 목록 기준  -->
 	<select id="selectCommuteListByDeptIdList"
 			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
 			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
 		SELECT
 			<include refid="commute_select"/>
+		FROM OFFICE_COMMUTE_DAY a
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+		WHERE a.BASE_DATE_STR = #{baseDateStr}
+			AND d.dept_key IN
+			<foreach item="item" index="index" collection="childDeptIdList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+	</select>
+
+	<!-- 출퇴근_일일 list-ByDeptIdList totalCount : 부서키 목록 기준  -->
+	<select id="selectCommuteListByDeptIdListTotalCount"
+			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
+			resultType="java.lang.Integer">
+		SELECT 	count(*)
 		FROM OFFICE_COMMUTE_DAY a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.BASE_DATE_STR = #{baseDateStr}
@@ -393,30 +443,6 @@
 				'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE', 'VACATION_CON',
 				'VACATION_PRIZE', 'VACATION_BABY', 'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
 			)
-	</select>
-
-	<!-- 일일_출퇴근 목록 : 공통 -->
-	<select id="selectCommuteList"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
-			resultType="com.yamdeng.template.vo.db.OfficeCommuteDayVO">
-		SELECT
-			<include refid="commute_select"/>
-		FROM OFFICE_COMMUTE_DAY a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1=1
-			<include refid="commute_list_where"/>
-		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
-	</select>
-
-	<!-- 일일_출퇴근 목록 : 공통(total count) -->
-	<select id="selectCommuteListTotalCount"
-			parameterType="com.yamdeng.template.vo.db.OfficeCommuteDayVO"
-			resultType="java.lang.Integer">
-		SELECT count(*)
-		FROM OFFICE_COMMUTE_DAY a
-			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE 1=1
-			<include refid="commute_list_where"/>
 	</select>
 
 	<!-- {일} 팀원 출퇴근 현황 : 팀장, 실장 -->

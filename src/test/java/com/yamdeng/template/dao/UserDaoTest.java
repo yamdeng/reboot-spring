@@ -17,20 +17,6 @@ class UserDaoTest {
 	@Autowired
 	private UserDao userDao;
 
-	// 부서의 팀장 userId 가져오기
-	@Test
-	void getDeptManagerUserId() {
-		String result = userDao.getDeptManagerUserId("dept1");
-		log.info("getDeptManagerUserId result : {}", result);
-	}
-
-	// 하위 부서 목록 가져오기
-	@Test
-	void selectChildDeptListByDeptKey() {
-		List<BaseCommonVO> result = userDao.selectChildDeptListByDeptKey("qa_parent");
-		log.info("selectChildDeptListByDeptKey result : {}", result);
-	}
-
 	// 사용자 list
 	@Test
 	void selectUserList() {
@@ -43,6 +29,20 @@ class UserDaoTest {
 		int totalCount = userDao.selectUserListTotalCount(vo);
 		log.info("selectUserList result : {}", result);
 		log.info("selectUserList totalCount : {}", totalCount);
+	}
+
+	// 부서의 팀장 userId 가져오기
+	@Test
+	void getDeptManagerUserId() {
+		String result = userDao.getDeptManagerUserId("dept1");
+		log.info("getDeptManagerUserId result : {}", result);
+	}
+
+	// 하위 부서 목록 가져오기
+	@Test
+	void selectChildDeptListByDeptKey() {
+		List<BaseCommonVO> result = userDao.selectChildDeptListByDeptKey("qa_parent");
+		log.info("selectChildDeptListByDeptKey result : {}", result);
 	}
 
 }
