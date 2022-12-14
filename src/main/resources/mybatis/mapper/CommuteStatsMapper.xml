@@ -7,7 +7,7 @@
 	<!-- OFFICE_COMMUTE_MONTH_H_STATS(통계_출퇴근_월간_휴일) 테이블 -->
 
 	<!-- OFFICE_COMMUTE_WEEK_STATS select column -->
-	<sql id="commute_stats_week_select">
+	<sql id="commute_week_stats_select">
 		a.user_id AS user_id /* 직원ID */
 		,a.monday_start_date_str AS monday_start_date_str /* 월요일 시작 일 */
 		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
@@ -23,7 +23,7 @@
 	</sql>
 
 	<!-- OFFICE_COMMUTE_WEEK_STATS where -->
-	<sql id="commute_stats_week_where">
+	<sql id="commute_week_stats_where">
 		AND a.MONDAY_START_DATE_STR = #{mondayStartDateStr}
 		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
 			<!-- 52시간 미만 (LESS) -->
@@ -38,7 +38,7 @@
 	</sql>
 
 	<!-- OFFICE_COMMUTE_MONTH_D_STATS select column -->
-	<sql id="commute_stats_month_d_select">
+	<sql id="commute_month_d_stats_select">
 		a.user_id AS user_id /* 직원ID */
 		,a.base_month_str AS base_month_str /* 기준년월 */
 		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
@@ -52,7 +52,7 @@
 	</sql>
 
 	<!-- OFFICE_COMMUTE_MONTH_D_STATS where -->
-	<sql id="commute_stats_month_d_where">
+	<sql id="commute_month_d_stats_where">
 		AND a.BASE_MONTH_STR = #{baseMonthStr}
 		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
 			<!-- 52시간 미만 (LESS) -->
@@ -75,7 +75,7 @@
 	</sql>
 
 	<!-- OFFICE_COMMUTE_MONTH_H_STATS select column -->
-	<sql id="commute_stats_month_h_select">
+	<sql id="commute_month_h_stats_select">
 		a.user_id AS user_id /* 직원ID */
 		,a.base_month_str AS base_month_str /* 기준년월 */
 		,a.sum_work_time_value AS sum_work_time_value /* 누적근무시간 */
@@ -103,7 +103,7 @@
 	</sql>
 
 	<!-- OFFICE_COMMUTE_MONTH_H_STATS where -->
-	<sql id="commute_stats_month_h_where">
+	<sql id="commute_month_h_stats_where">
 		AND a.BASE_MONTH_STR = #{baseMonthStr}
 	</sql>
 
@@ -112,11 +112,11 @@
 			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteWeekStatsVO"
 			resultType="com.yamdeng.template.vo.stats.OfficeCommuteWeekStatsVO">
 		SELECT
-			<include refid="commute_stats_week_select"/>
+			<include refid="commute_week_stats_select"/>
 		FROM OFFICE_COMMUTE_WEEK_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_week_where"/>
+			<include refid="commute_week_stats_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -128,7 +128,7 @@
 		FROM OFFICE_COMMUTE_WEEK_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_week_where"/>
+			<include refid="commute_week_stats_where"/>
 	</select>
 
 	<!-- 통계_출퇴근_월간_주별 list -->
@@ -136,11 +136,11 @@
 			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthDStatsVO"
 			resultType="com.yamdeng.template.vo.stats.OfficeCommuteMonthDStatsVO">
 		SELECT
-			<include refid="commute_stats_month_d_select"/>
+			<include refid="commute_month_d_stats_select"/>
 		FROM OFFICE_COMMUTE_MONTH_D_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_month_d_where"/>
+			<include refid="commute_month_d_stats_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -152,7 +152,7 @@
 		FROM OFFICE_COMMUTE_MONTH_D_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_month_d_where"/>
+			<include refid="commute_month_d_stats_where"/>
 	</select>
 
 	<!-- 통계_출퇴근_월간_휴일 list -->
@@ -160,11 +160,11 @@
 			parameterType="com.yamdeng.template.vo.stats.OfficeCommuteMonthHStatsVO"
 			resultType="com.yamdeng.template.vo.stats.OfficeCommuteMonthHStatsVO">
 		SELECT
-			<include refid="commute_stats_month_h_select"/>
+			<include refid="commute_month_h_stats_select"/>
 		FROM OFFICE_COMMUTE_MONTH_H_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_month_h_where"/>
+			<include refid="commute_month_h_stats_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -176,7 +176,7 @@
 		FROM OFFICE_COMMUTE_MONTH_H_STATS a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-			<include refid="commute_stats_month_h_where"/>
+			<include refid="commute_month_h_stats_where"/>
 	</select>
 
 </mapper>
