@@ -85,12 +85,6 @@
 			<if test='applyEndDateStr != null and !applyEndDateStr.equals("")'>
 				,apply_end_date_str
 			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date
-			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id
 			</if>
@@ -125,12 +119,6 @@
 			</if>
 			<if test='applyEndDateStr != null and !applyEndDateStr.equals("")'>
 				,#{applyEndDateStr}
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,#{regDate}
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,#{modDate}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,#{loginUserId}

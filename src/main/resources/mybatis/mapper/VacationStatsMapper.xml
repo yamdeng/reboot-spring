@@ -87,79 +87,79 @@
 		INSERT INTO office_vacation_month_stats (
 			user_id
 			,base_year
-			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+			<if test='use1monthCount != null'>
 				,use_1month_count
 			</if>
-			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+			<if test='use2monthCount != null'>
 				,use_2month_count
 			</if>
-			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+			<if test='use3monthCount != null'>
 				,use_3month_count
 			</if>
-			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+			<if test='use4monthCount != null'>
 				,use_4month_count
 			</if>
-			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+			<if test='use5monthCount != null'>
 				,use_5month_count
 			</if>
-			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+			<if test='use6monthCount != null'>
 				,use_6month_count
 			</if>
-			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+			<if test='use7monthCount != null'>
 				,use_7month_count
 			</if>
-			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+			<if test='use8monthCount != null'>
 				,use_8month_count
 			</if>
-			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+			<if test='use9monthCount != null'>
 				,use_9month_count
 			</if>
-			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+			<if test='use10monthCount != null'>
 				,use_10month_count
 			</if>
-			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+			<if test='use11monthCount != null'>
 				,use_11month_count
 			</if>
-			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+			<if test='use12monthCount != null'>
 				,use_12month_count
 			</if>
 		) VALUES (
 			#{userId}
 			,#{baseYear}
-			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+			<if test='use1monthCount != null'>
 				,#{use1monthCount}
 			</if>
-			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+			<if test='use2monthCount != null'>
 				,#{use2monthCount}
 			</if>
-			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+			<if test='use3monthCount != null'>
 				,#{use3monthCount}
 			</if>
-			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+			<if test='use4monthCount != null'>
 				,#{use4monthCount}
 			</if>
-			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+			<if test='use5monthCount != null'>
 				,#{use5monthCount}
 			</if>
-			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+			<if test='use6monthCount != null'>
 				,#{use6monthCount}
 			</if>
-			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+			<if test='use7monthCount != null'>
 				,#{use7monthCount}
 			</if>
-			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+			<if test='use8monthCount != null'>
 				,#{use8monthCount}
 			</if>
-			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+			<if test='use9monthCount != null'>
 				,#{use9monthCount}
 			</if>
-			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+			<if test='use10monthCount != null'>
 				,#{use10monthCount}
 			</if>
-			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+			<if test='use11monthCount != null'>
 				,#{use11monthCount}
 			</if>
-			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+			<if test='use12monthCount != null'>
 				,#{use12monthCount}
 			</if>
 		)
@@ -171,40 +171,40 @@
 		UPDATE office_vacation_month_stats
 		SET
 			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			<if test='use1monthCount != null and !use1monthCount.equals("")'>
+			<if test='use1monthCount != null'>
 				,use_1month_count = #{use1monthCount}
 			</if>
-			<if test='use2monthCount != null and !use2monthCount.equals("")'>
+			<if test='use2monthCount != null'>
 				,use_2month_count = #{use2monthCount}
 			</if>
-			<if test='use3monthCount != null and !use3monthCount.equals("")'>
+			<if test='use3monthCount != null'>
 				,use_3month_count = #{use3monthCount}
 			</if>
-			<if test='use4monthCount != null and !use4monthCount.equals("")'>
+			<if test='use4monthCount != null'>
 				,use_4month_count = #{use4monthCount}
 			</if>
-			<if test='use5monthCount != null and !use5monthCount.equals("")'>
+			<if test='use5monthCount != null'>
 				,use_5month_count = #{use5monthCount}
 			</if>
-			<if test='use6monthCount != null and !use6monthCount.equals("")'>
+			<if test='use6monthCount != null'>
 				,use_6month_count = #{use6monthCount}
 			</if>
-			<if test='use7monthCount != null and !use7monthCount.equals("")'>
+			<if test='use7monthCount != null'>
 				,use_7month_count = #{use7monthCount}
 			</if>
-			<if test='use8monthCount != null and !use8monthCount.equals("")'>
+			<if test='use8monthCount != null'>
 				,use_8month_count = #{use8monthCount}
 			</if>
-			<if test='use9monthCount != null and !use9monthCount.equals("")'>
+			<if test='use9monthCount != null'>
 				,use_9month_count = #{use9monthCount}
 			</if>
-			<if test='use10monthCount != null and !use10monthCount.equals("")'>
+			<if test='use10monthCount != null'>
 				,use_10month_count = #{use10monthCount}
 			</if>
-			<if test='use11monthCount != null and !use11monthCount.equals("")'>
+			<if test='use11monthCount != null'>
 				,use_11month_count = #{use11monthCount}
 			</if>
-			<if test='use12monthCount != null and !use12monthCount.equals("")'>
+			<if test='use12monthCount != null'>
 				,use_12month_count = #{use12monthCount}
 			</if>
 		WHERE base_year = #{baseYear} and user_id = #{userId}

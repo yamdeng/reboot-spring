@@ -193,26 +193,20 @@
 		INSERT INTO office_vacation_year (
 			user_id
 			,base_year
-			<if test='annualCount != null and !annualCount.equals("")'>
+			<if test='annualCount != null'>
 				,annual_count
 			</if>
-			<if test='monthCount != null and !monthCount.equals("")'>
+			<if test='monthCount != null'>
 				,month_count
 			</if>
-			<if test='useableCount != null and !useableCount.equals("")'>
+			<if test='useableCount != null'>
 				,useable_count
 			</if>
-			<if test='plusVacationCount != null and !plusVacationCount.equals("")'>
+			<if test='plusVacationCount != null'>
 				,plus_vacation_count
 			</if>
-			<if test='usedCount != null and !usedCount.equals("")'>
+			<if test='usedCount != null'>
 				,used_count
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id
@@ -223,26 +217,20 @@
 		) VALUES (
 			#{userId}
 			,#{baseYear}
-			<if test='annualCount != null and !annualCount.equals("")'>
+			<if test='annualCount != null'>
 				,#{annualCount}
 			</if>
-			<if test='monthCount != null and !monthCount.equals("")'>
+			<if test='monthCount != null'>
 				,#{monthCount}
 			</if>
-			<if test='useableCount != null and !useableCount.equals("")'>
+			<if test='useableCount != null'>
 				,#{useableCount}
 			</if>
-			<if test='plusVacationCount != null and !plusVacationCount.equals("")'>
+			<if test='plusVacationCount != null'>
 				,#{plusVacationCount}
 			</if>
-			<if test='usedCount != null and !usedCount.equals("")'>
+			<if test='usedCount != null'>
 				,#{usedCount}
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,#{regDate}
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,#{modDate}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,#{loginUserId}
@@ -259,19 +247,19 @@
 		UPDATE office_vacation_year
 		SET
 			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			<if test='annualCount != null and !annualCount.equals("")'>
+			<if test='annualCount != null'>
 				,annual_count = #{annualCount}
 			</if>
-			<if test='monthCount != null and !monthCount.equals("")'>
+			<if test='monthCount != null'>
 				,month_count = #{monthCount}
 			</if>
-			<if test='useableCount != null and !useableCount.equals("")'>
+			<if test='useableCount != null'>
 				,useable_count = #{useableCount}
 			</if>
-			<if test='plusVacationCount != null and !plusVacationCount.equals("")'>
+			<if test='plusVacationCount != null'>
 				,plus_vacation_count = #{plusVacationCount}
 			</if>
-			<if test='usedCount != null and !usedCount.equals("")'>
+			<if test='usedCount != null'>
 				,used_count = #{usedCount}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
@@ -303,14 +291,8 @@
 			<if test='vacationName != null and !vacationName.equals("")'>
 				,vacation_name
 			</if>
-			<if test='vacationCount != null and !vacationCount.equals("")'>
+			<if test='vacationCount != null'>
 				,vacation_count
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id
@@ -324,14 +306,8 @@
 			<if test='vacationName != null and !vacationName.equals("")'>
 				,#{vacationName}
 			</if>
-			<if test='vacationCount != null and !vacationCount.equals("")'>
+			<if test='vacationCount != null'>
 				,#{vacationCount}
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,#{regDate}
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,#{modDate}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,#{loginUserId}
@@ -351,14 +327,8 @@
 			<if test='vacationName != null and !vacationName.equals("")'>
 				,vacation_name = #{vacationName}
 			</if>
-			<if test='vacationCount != null and !vacationCount.equals("")'>
+			<if test='vacationCount != null'>
 				,vacation_count = #{vacationCount}
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date = #{regDate}
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date = #{modDate}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id = #{loginUserId}

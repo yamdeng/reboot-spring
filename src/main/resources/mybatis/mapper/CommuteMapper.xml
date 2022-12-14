@@ -180,16 +180,10 @@
 			<if test='workedTimeValue != null and !workedTimeValue.equals("")'>
 				,worked_time_value
 			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date
-			</if>
-			<if test='regUserId != null and !regUserId.equals("")'>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id
 			</if>
-			<if test='modUserId != null and !modUserId.equals("")'>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,mod_user_id
 			</if>
 		) VALUES (
@@ -234,20 +228,14 @@
 			<if test='tardyYn != null and !tardyYn.equals("")'>
 				,#{tardyYn}
 			</if>
-			<if test='workedTimeValue != null and !workedTimeValue.equals("")'>
+			<if test='workedTimeValue != null'>
 				,#{workedTimeValue}
 			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,#{regDate}
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
 			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,#{modDate}
-			</if>
-			<if test='regUserId != null and !regUserId.equals("")'>
-				,#{regUserId}
-			</if>
-			<if test='modUserId != null and !modUserId.equals("")'>
-				,#{modUserId}
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,#{loginUserId}
 			</if>
 		)
 	</insert>
@@ -296,7 +284,7 @@
 			<if test='tardyYn != null and !tardyYn.equals("")'>
 				,tardy_yn = #{tardyYn}
 			</if>
-			<if test='workedTimeValue != null and !workedTimeValue.equals("")'>
+			<if test='workedTimeValue != null'>
 				,worked_time_value = #{workedTimeValue}
 			</if>
 			<if test='modUserId != null and !modUserId.equals("")'>
@@ -315,7 +303,9 @@
 			,work_status_code = #{workStatusCode}
 			,work_result_code = #{workResultCode}
 			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,mod_user_id = #{loginUserId}
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id = #{loginUserId}
+			</if>
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
 
@@ -330,7 +320,9 @@
 			,work_result_code = #{workResultCode}
 			,worked_time_value = #{workedTimeValue}
 			,mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			,mod_user_id = #{loginUserId}
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id = #{loginUserId}
+			</if>
 		WHERE base_date_str = #{baseDateStr} and user_id = #{userId}
 	</update>
 

@@ -109,12 +109,6 @@
 			<if test='usedCount != null'>
 			,used_count
 			</if>
-			<if test='regDate != null'>
-			,reg_date
-			</if>
-			<if test='modDate != null'>
-			,mod_date
-			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 			,reg_user_id
 			</if>
@@ -139,12 +133,6 @@
 			<if test='usedCount != null'>
 			,#{usedCount}
 			</if>
-			<if test='regDate != null'>
-			,#{regDate}
-			</if>
-			<if test='modDate != null'>
-			,#{modDate}
-			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 			,#{loginUserId}
 			</if>
@@ -160,19 +148,19 @@
 		UPDATE office_vacation_year_preview
 		SET
 			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-			<if test='annualCount != null and !annualCount.equals("")'>
+			<if test='annualCount != null'>
 			,annual_count = #{annualCount}
 			</if>
-			<if test='monthCount != null and !monthCount.equals("")'>
+			<if test='monthCount != null'>
 			,month_count = #{monthCount}
 			</if>
-			<if test='useableCount != null and !useableCount.equals("")'>
+			<if test='useableCount != null'>
 			,useable_count = #{useableCount}
 			</if>
-			<if test='plusVacationCount != null and !plusVacationCount.equals("")'>
+			<if test='plusVacationCount != null'>
 			,plus_vacation_count = #{plusVacationCount}
 			</if>
-			<if test='usedCount != null and !usedCount.equals("")'>
+			<if test='usedCount != null'>
 			,used_count = #{usedCount}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
@@ -231,12 +219,6 @@
 			<if test='vacationCount != null and !vacationCount.equals("")'>
 				,vacation_count
 			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,reg_date
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,mod_date
-			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,reg_user_id
 			</if>
@@ -251,12 +233,6 @@
 			</if>
 			<if test='vacationCount != null and !vacationCount.equals("")'>
 				,#{vacationCount}
-			</if>
-			<if test='regDate != null and !regDate.equals("")'>
-				,#{regDate}
-			</if>
-			<if test='modDate != null and !modDate.equals("")'>
-				,#{modDate}
 			</if>
 			<if test='loginUserId != null and !loginUserId.equals("")'>
 				,#{loginUserId}
