@@ -31,8 +31,8 @@
 
 	<!-- OFFICE_COMMUTE_DAY where -->
 	<sql id="commute_list_where">
-		<if test='baseDateStr != null and !baseDateStr.equals("")'>
-			AND a.base_date_str = #{baseDateStr}
+		<if test='searchDateStr != null and !searchDateStr.equals("")'>
+			AND a.base_date_str = #{searchDateStr}
 		</if>
 		<if test='userId != null and !userId.equals("")'>
 			AND a.user_id = #{userId}
@@ -95,6 +95,19 @@
 			<if test='workTimeKind.equals("GREATER")'>
 				AND a.worked_time_value <![CDATA[ >= ]]> 8
 			</if>
+		</if>
+	</sql>
+
+	<!-- 통계 where -->
+	<sql id="commute_stats_where">
+		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+		</if>
+		<if test='startDateStr != null and !startDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ >= ]]> #{startDateStr}
+		</if>
+		<if test='endDateStr != null and !endDateStr.equals("")'>
+			AND a.base_date_str <![CDATA[ <= ]]> #{endDateStr}
 		</if>
 	</sql>
 
@@ -379,7 +392,7 @@
 			<include refid="commute_select"/>
 		FROM OFFICE_COMMUTE_DAY a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr}
+		WHERE a.BASE_DATE_STR = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -395,7 +408,7 @@
 		SELECT 	count(*)
 		FROM OFFICE_COMMUTE_DAY a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
-		WHERE a.BASE_DATE_STR = #{baseDateStr}
+		WHERE a.BASE_DATE_STR = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -409,29 +422,29 @@
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
 		SELECT 'tardy'   AS kind /* 지각 */
 			,count(*) AS agg_count
-		FROM   office_commute_day
-		WHERE  user_id = #{userId}
-			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			AND tardy_yn = 'Y'
+		FROM   office_commute_day a
+		WHERE  a.user_id = #{userId}
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND a.tardy_yn = 'Y'
 		UNION ALL
 		SELECT 'not_start_work' AS kind /* 출근 미체크 */
 			,count(*)        AS agg_count
-		FROM   office_commute_day
-		WHERE  user_id = #{userId}
-			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			AND start_work_date IS NULL
-			AND work_status_code NOT IN (
+		FROM   office_commute_day a
+		WHERE  a.user_id = #{userId}
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND a.start_work_date IS NULL
+			AND a.work_status_code NOT IN (
 				'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE', 'VACATION_CON',
 				'VACATION_PRIZE', 'VACATION_BABY', 'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
 			)
 		UNION ALL
 		SELECT 'not_out_work' AS kind /* 퇴근 미체크 */
 			,count(*)      AS agg_count
-		FROM   office_commute_day
-		WHERE  user_id = #{userId}
-			AND substring(base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
-			AND out_work_date IS NULL
-			AND work_status_code NOT IN (
+		FROM   office_commute_day a
+		WHERE  a.user_id = #{userId}
+			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
+			AND a.out_work_date IS NULL
+			AND a.work_status_code NOT IN (
 				'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE', 'VACATION_CON',
 				'VACATION_PRIZE', 'VACATION_BABY', 'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
 			)
@@ -448,7 +461,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -463,7 +476,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -478,7 +491,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -493,7 +506,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -508,7 +521,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -523,7 +536,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -538,7 +551,7 @@
 					ON u.user_key = a.user_id
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
-		WHERE  a.base_date_str = #{baseDateStr}
+		WHERE  a.base_date_str = #{searchDateStr}
 			AND d.dept_key IN
 			<foreach item="item" index="index" collection="childDeptIdList"
 					 open="(" separator="," close=")">
@@ -749,15 +762,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.work_status_code = 'ING'
 		UNION ALL
 		SELECT 'home_ing' AS kind /* 재택중 */
@@ -768,15 +773,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.work_status_code = 'HOME_ING'
 		UNION ALL
 		SELECT 'vacation_morning' AS kind /* 오전반차 */
@@ -787,15 +784,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE 1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.work_status_code = 'VACATION_MORNING'
 		UNION ALL
 		SELECT 'vacation_afternoon' AS kind /* 오후반차 */
@@ -806,15 +795,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.work_status_code = 'VACATION_AFTERNOON'
 		UNION ALL
 		SELECT 'end'     AS kind /* 업무종료 */
@@ -825,15 +806,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.work_status_code = 'END'
 		UNION ALL
 		SELECT 'tardy'   AS kind /* 지각 */
@@ -844,15 +817,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND a.tardy_yn = 'Y'
 		UNION ALL
 		SELECT 'vacation' AS kind /* 휴가/휴직 */
@@ -863,15 +828,7 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
+			<include refid="commute_stats_where"/>
 			AND ( a.work_status_code LIKE 'VACATION%'
 					AND a.work_status_code NOT IN( 'VACATION_MORNING', 'VACATION_AFTERNOON' ) )
 		UNION ALL
@@ -883,17 +840,9 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE 1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND start_work_date IS NULL
-			AND work_status_code NOT IN (
+			<include refid="commute_stats_where"/>
+			AND a.start_work_date IS NULL
+			AND a.work_status_code NOT IN (
 				'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE', 'VACATION_CON',
 				'VACATION_PRIZE', 'VACATION_BABY', 'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
 			)
@@ -906,17 +855,9 @@
 			INNER JOIN to0_dept_mast d
 					ON u.dept_key = d.dept_key
 		WHERE  1=1
-			<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND BASE_DATE_STR = #{searchDateStr}
-			</if>
-			<if test='startDateStr != null and !startDateStr.equals("")'>
-				AND base_date_str <![CDATA[ >= ]]> #{startDateStr}
-			</if>
-			<if test='endDateStr != null and !endDateStr.equals("")'>
-				AND base_date_str <![CDATA[ <= ]]> #{endDateStr}
-			</if>
-			AND out_work_date IS NULL
-			AND work_status_code NOT IN (
+			<include refid="commute_stats_where"/>
+			AND a.out_work_date IS NULL
+			AND a.work_status_code NOT IN (
 				'VACATION_YEAR', 'VACATION_NATION', 'VACATION_REPLACE', 'VACATION_CON',
 				'VACATION_PRIZE', 'VACATION_BABY', 'VACATION_CARE', 'VACATION_NORMAL', 'VACATION_ETC'
 			)

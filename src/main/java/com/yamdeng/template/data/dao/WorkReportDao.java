@@ -29,7 +29,7 @@ public interface WorkReportDao {
     OfficeWorkReportVO selectWorkReportInfoByBaseDateStrAndDeptId(OfficeWorkReportVO vo);
 
     // 업무보고 detail : report_id 기준
-    OfficeWorkReportVO selectWorkReportInfoByReportId(OfficeWorkReportVO vo);
+    OfficeWorkReportVO selectWorkReportInfoByReportId(String reportId);
 
     // 업무보고 insert
     int insertWorkReport(OfficeWorkReportVO vo);
@@ -38,10 +38,10 @@ public interface WorkReportDao {
     int updateWorkReport(OfficeWorkReportVO vo);
 
     // 업무보고_댓글 detail : report_id 기준
-    OfficeWorkReportCommentVO selectWorkReportCommentInfoByReportId(OfficeWorkReportCommentVO vo);
+    OfficeWorkReportCommentVO selectWorkReportCommentInfoByReportId(String reportId);
 
     // 업무보고_댓글 detail : comment_id 기준
-    OfficeWorkReportCommentVO selectWorkReportCommentInfoByCommentId(OfficeWorkReportCommentVO vo);
+    OfficeWorkReportCommentVO selectWorkReportCommentInfoByCommentId(String commentId);
 
     // 업무보고_댓글 insert
     int insertWorkReportComment(OfficeWorkReportCommentVO vo);

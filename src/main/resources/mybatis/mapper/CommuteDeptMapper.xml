@@ -25,7 +25,7 @@
 	<!-- OFFICE_COMMUTE_DEPT_DAY where -->
 	<sql id="commute_dept_where">
 		<if test='searchDateStr != null and !searchDateStr.equals("")'>
-				AND a.BASE_DATE_STR = #{searchDateStr}
+				AND a.base_date_str = #{searchDateStr}
 		</if>
 		<if test='searchMonthStr != null and !searchMonthStr.equals("")'>
 			AND substring(a.base_date_str :: VARCHAR, 1, 6) = #{searchMonthStr}
@@ -273,7 +273,7 @@
 		FROM   office_commute_dept_day a
 		WHERE  1=1
 			<include refid="commute_dept_stats_where"/>
-			AND commute_submit_status_code = 'APPROVE'
+			AND a.commute_submit_status_code = 'APPROVE'
 		UNION ALL
 		SELECT 'start_work_complete' AS kind /* 출근완료 */
 			,count(*)             agg_count

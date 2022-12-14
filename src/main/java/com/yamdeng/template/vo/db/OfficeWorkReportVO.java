@@ -21,6 +21,7 @@ public class OfficeWorkReportVO extends BaseCommonVO {
     private String deptId; /* 부서 */
     private String reportContent; /* 보고내용 */
     private String reportSubmitStatusCode; /* 업무보고 제출상태 */
+    private String reportSubmitStatusCodeName; /* 업무보고 제출상태 명 */
     private String issueYn; /* 이슈 여부 */
     private String searchKind; /* 검색종류 : 업무보고(ALL), 제출(SUBMIT), 미제출(NOT_SUBMIT), 이슈(ISSUE), 댓글(COMMENT) */
 

@@ -186,7 +186,7 @@ class CommuteDaoTest {
 	void selectCommuteStatsDayTypeManager() {
 		List<StatsCommonVO> result = commuteDao.selectCommuteStatsDayTypeManager(
 				OfficeCommuteDayVO.builder()
-						.baseDateStr("20221203")
+						.searchDateStr("20221203")
 						.childDeptIdList(Arrays.asList("dept1", "dept2"))
 						.build()
 		);

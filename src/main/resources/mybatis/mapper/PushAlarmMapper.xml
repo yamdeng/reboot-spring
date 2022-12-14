@@ -22,9 +22,9 @@
 			parameterType="java.lang.String"
 			resultType="java.lang.Integer">
 		SELECT count(*)
-		FROM   office_push_alarm
-		WHERE  user_id = #{userId}
-			AND read_date IS NULL
+		FROM   office_push_alarm a
+		WHERE  a.user_id = #{userId}
+			AND a.read_date IS NULL
 	</select>
 
 	<!-- 이미 알림 테이블에 저장하였는지 확인 -->
@@ -33,11 +33,11 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM   office_push_alarm a
-		WHERE  base_date_str = #{baseDateStr}
-			AND user_id = #{userId}
-			AND alarm_kind_code = #{alarmKindCode}
+		WHERE  a.base_date_str = #{baseDateStr}
+			AND a.user_id = #{userId}
+			AND a.alarm_kind_code = #{alarmKindCode}
 			<if test='targetId != null and !targetId.equals("")'>
-				AND target_id = #{targetId}
+				AND a.target_id = #{targetId}
 			</if>
 	</select>
 

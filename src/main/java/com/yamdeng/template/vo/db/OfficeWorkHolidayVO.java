@@ -16,6 +16,8 @@ public class OfficeWorkHolidayVO extends BaseCommonVO {
     private String holiDateStr; /* 날짜 */
     private String name; /* 명칭 */
     private String weekdayCode; /* 요일구분 */
+    private String weekdayCodeName; /* 요일구분 코드명 */
     private String weekendCode; /* 주중/주말 구분 */
+    private String weekendCodeName; /* 주중/주말 구분 코드명 */
 
 }

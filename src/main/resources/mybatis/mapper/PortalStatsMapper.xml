@@ -123,27 +123,27 @@
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
 		SELECT 'before_submit' AS kind /* 제출전 */
 			,count(*)       AS agg_count
-		FROM   office_commute_dept_day
-		WHERE  base_date_str = #{searchDateStr}
-			AND submit_date IS NULL
+		FROM   office_commute_dept_day a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.submit_date IS NULL
 		UNION ALL
 		SELECT 'reject'  AS kind /* 반려 */
 			,count(*) AS agg_count
-		FROM   office_commute_dept_day
-		WHERE  base_date_str = #{searchDateStr}
-			AND commute_submit_status_code = 'REJECT'
+		FROM   office_commute_dept_day a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.commute_submit_status_code = 'REJECT'
 		UNION ALL
 		SELECT 'submit'  AS kind /* 승인전(제출완료) */
 			,count(*) AS agg_count
-		FROM   office_commute_dept_day
-		WHERE  base_date_str = #{searchDateStr}
-			AND submit_date IS NOT NULL
+		FROM   office_commute_dept_day a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.submit_date IS NOT NULL
 		UNION ALL
 		SELECT 'approve_complete' AS kind /* 승인완료 */
 			,count(*)          AS agg_count
-		FROM   office_commute_dept_day
-		WHERE  base_date_str = #{searchDateStr}
-			AND commute_submit_status_code = 'APPROVE'
+		FROM   office_commute_dept_day a
+		WHERE  a.base_date_str = #{searchDateStr}
+			AND a.commute_submit_status_code = 'APPROVE'
 	</select>
 
 	<!-- 포탈 관리자 > 업무보고 통계 정보 -->
@@ -152,21 +152,21 @@
 			resultType="com.yamdeng.template.vo.common.StatsCommonVO">
 			SELECT 'regist'  AS kind /* 등록 */
 				,count(*) AS agg_count
-			FROM   office_work_report
-			WHERE  base_date_str = #{searchDateStr}
-				AND report_date IS NOT NULL
+			FROM   office_work_report a
+			WHERE  a.base_date_str = #{searchDateStr}
+				AND a.report_date IS NOT NULL
 			UNION ALL
 			SELECT 'no_regist' AS kind /* 미제출 */
 				,count(*)   AS agg_count
-			FROM   office_work_report
-			WHERE  base_date_str = #{searchDateStr}
-				AND report_date IS NULL
+			FROM   office_work_report a
+			WHERE  a.base_date_str = #{searchDateStr}
+				AND a.report_date IS NULL
 			UNION ALL
 			SELECT 'issue'   AS kind /* 이슈 */
 				,count(*) AS agg_count
-			FROM   office_work_report
-			WHERE  base_date_str = #{searchDateStr}
-				AND issue_yn = 'Y'
+			FROM   office_work_report a
+			WHERE  a.base_date_str = #{searchDateStr}
+				AND a.issue_yn = 'Y'
 			UNION ALL
 			SELECT 'comment'                    AS kind /* 코멘트 */
 				,count(DISTINCT a.report_id) AS agg_count

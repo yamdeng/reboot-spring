@@ -24,15 +24,15 @@
 
 	<!-- OFFICE_COMMUTE_WEEK_STATS where -->
 	<sql id="commute_stats_week_where">
-		AND MONDAY_START_DATE_STR = #{mondayStartDateStr}
+		AND a.MONDAY_START_DATE_STR = #{mondayStartDateStr}
 		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
 			<!-- 52시간 미만 (LESS) -->
 			<if test='workWeekTimeKind.equals("LESS")'>
-				AND SUN_WORK_TIME_VALUE <![CDATA[ < ]]> 52
+				AND a.SUN_WORK_TIME_VALUE <![CDATA[ < ]]> 52
 			</if>
 			<!-- 52시간 초과(GREATER) -->
 			<if test='workWeekTimeKind.equals("GREATER")'>
-				AND SUN_WORK_TIME_VALUE <![CDATA[ >= ]]> 52
+				AND a.SUN_WORK_TIME_VALUE <![CDATA[ >= ]]> 52
 			</if>
 		</if>
 	</sql>
@@ -53,22 +53,22 @@
 
 	<!-- OFFICE_COMMUTE_MONTH_D_STATS where -->
 	<sql id="commute_stats_month_d_where">
-		AND BASE_MONTH_STR = #{baseMonthStr}
+		AND a.BASE_MONTH_STR = #{baseMonthStr}
 		<if test='workWeekTimeKind != null and !workWeekTimeKind.equals("")'>
 			<!-- 52시간 미만 (LESS) -->
 			<!-- 52시간 초과한 주가 하나도 없는 경우 -->
 			<if test='workWeekTimeKind.equals("LESS")'>
 				AND (
-					FIRST_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and SECOND_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and THREE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
-					and FOUR_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 and FIVE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND SIX_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
+					a.FIRST_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND a.SECOND_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND a.THREE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
+					AND a.FOUR_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND a.FIVE_WEEK_TIME_VALUE <![CDATA[ < ]]> 52 AND a.SIX_WEEK_TIME_VALUE <![CDATA[ < ]]> 52
 				)
 			</if>
 			<!-- 52시간 초과(GREATER) -->
 			<!-- 한주라도 52시간 초과한 주가 존재할 경우 -->
 			<if test='workWeekTimeKind.equals("GREATER")'>
 				AND (
-					FIRST_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or SECOND_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or THREE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
-					or FOUR_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or FIVE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 or SIX_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
+					a.FIRST_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 OR a.SECOND_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 OR a.THREE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
+					OR a.FOUR_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 OR a.FIVE_WEEK_TIME_VALUE <![CDATA[ > ]]> 52 OR a.SIX_WEEK_TIME_VALUE <![CDATA[ > ]]> 52
 				)
 			</if>
 		</if>
@@ -104,7 +104,7 @@
 
 	<!-- OFFICE_COMMUTE_MONTH_H_STATS where -->
 	<sql id="commute_stats_month_h_where">
-		AND BASE_MONTH_STR = #{baseMonthStr}
+		AND a.BASE_MONTH_STR = #{baseMonthStr}
 	</sql>
 
 	<!-- 통계_출퇴근_주간 list -->

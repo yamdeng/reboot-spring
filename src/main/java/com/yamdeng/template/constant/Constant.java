@@ -116,4 +116,7 @@ public interface Constant {
     static final String CODE_PRIZE_VACATION_YEAR_1 = "1"; /* 입사일 기준 1년 이상인 직원 */
     static final String CODE_PRIZE_VACATION_YEAR_10 = "10"; /* 입사일 기준 10년 이상인 직원 */
 
+    // 배치종류
+    static final String CODE_BATCH_KIND_COMMUTE_DAY = "COMMUTE_DAY"; /* 일일 출퇴근 적재 */
+
 }

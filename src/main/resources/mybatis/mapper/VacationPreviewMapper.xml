@@ -20,7 +20,7 @@
 
 	<!-- OFFICE_VACATION_YEAR_PREVIEW where -->
 	<sql id="vacation_year_preview_where">
-		AND BASE_YEAR = #{baseYear}
+		AND a.base_year = #{baseYear}
 		<if test='userIdList != null and userIdList.size != 0'>
 			AND a.user_id IN
 			<foreach item="item" index="index" collection="userIdList"
@@ -50,7 +50,7 @@
 
 	<!-- OFFICE_VACATION_PLUS_PREVIEW where -->
 	<sql id="vacation_plus_preview_where">
-		AND base_year = #{baseYear}
+		AND a.base_year = #{baseYear}
 	</sql>
 
 	<!-- 휴가_휴직_현황(연별)_미리보기 list -->

@@ -50,7 +50,7 @@
 			<include refid="dept_work_time_setting_select"/>
 		FROM   office_dept_work_time_setting a
 			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
-		WHERE dept_id = #{deptId}
+		WHERE a.dept_id = #{deptId}
 	</select>
 
 	<!-- 부서별_근무_시간_관리 insert -->

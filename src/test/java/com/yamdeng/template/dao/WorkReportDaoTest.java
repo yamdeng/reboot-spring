@@ -56,7 +56,7 @@ class WorkReportDaoTest {
 	void selectWorkReportListByDeptIdList() {
 		OfficeWorkReportVO vo =
 				OfficeWorkReportVO.builder()
-						.baseDateStr("20221203")
+						.searchDateStr("20221203")
 						.childDeptIdList(Arrays.asList("dept1", "dept2"))
 						.build();
 		List<OfficeWorkReportVO> result = workReportDao.selectWorkReportListByDeptIdList(vo);
@@ -81,11 +81,7 @@ class WorkReportDaoTest {
 	@Test
 	void selectWorkReportInfoByReportId() {
 		String reportId = "fcb6fcdf-1aab-41e9-8ead-181dfc05b320";
-		OfficeWorkReportVO vo =
-				OfficeWorkReportVO.builder()
-						.reportId(reportId)
-						.build();
-		OfficeWorkReportVO result = workReportDao.selectWorkReportInfoByReportId(vo);
+		OfficeWorkReportVO result = workReportDao.selectWorkReportInfoByReportId(reportId);
 		log.info("selectWorkReportInfoByReportId result : {}", result);
 	}
 
@@ -125,11 +121,7 @@ class WorkReportDaoTest {
 	@Test
 	void selectWorkReportCommentInfoByReportId() {
 		String reportId = "fcb6fcdf-1aab-41e9-8ead-181dfc05b320";
-		OfficeWorkReportCommentVO vo =
-				OfficeWorkReportCommentVO.builder()
-						.reportId(reportId)
-						.build();
-		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByReportId(vo);
+		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByReportId(reportId);
 		log.info("selectWorkReportCommentInfoByReportId result : {}", result);
 	}
 
@@ -137,11 +129,7 @@ class WorkReportDaoTest {
 	@Test
 	void selectWorkReportCommentInfoByCommentId() {
 		String commentId = "ebc911cb-321d-493c-90d3-a23c7779549f";
-		OfficeWorkReportCommentVO vo =
-				OfficeWorkReportCommentVO.builder()
-						.commentId(commentId)
-						.build();
-		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByCommentId(vo);
+		OfficeWorkReportCommentVO result = workReportDao.selectWorkReportCommentInfoByCommentId(commentId);
 		log.info("selectWorkReportCommentInfoByCommentId result : {}", result);
 	}
 
@@ -183,7 +171,7 @@ class WorkReportDaoTest {
 	void selectWorkReportStats() {
 		OfficeWorkReportVO vo =
 				OfficeWorkReportVO.builder()
-						.baseDateStr("20221203")
+						.searchDateStr("20221203")
 						.childDeptIdList(Arrays.asList("dept1", "dept2"))
 						.twoBeforeWorkDateStr("20221203")
 						.build();

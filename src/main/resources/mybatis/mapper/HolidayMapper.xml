@@ -11,16 +11,18 @@
 		,a.name AS name /* 명칭 */
 		,a.weekday_code AS weekday_code /* 요일구분 */
 		,a.weekend_code AS weekend_code /* 주중/주말 구분 */
+		,fn_get_code_label('WEEKDAY', a.weekday_code)     AS weekday_code_name /* 요일구분 코드명 */
+		,fn_get_code_label('WEEKEND', a.weekend_code)     AS weekend_code_name /* 주중/주말 구분 코드명 */
 	</sql>
 
 	<!-- OFFICE_WORK_HOLIDAY where column -->
 	<sql id="work_holiday_where">
-		AND base_year = #{baseYear}
+		AND a.base_year = #{baseYear}
 		<if test='startDateStr != null and !startDateStr.equals("")'>
-			AND holi_date_str <![CDATA[ >= ]]> #{startDateStr}
+			AND a.holi_date_str <![CDATA[ >= ]]> #{startDateStr}
 		</if>
 		<if test='endDateStr != null and !endDateStr.equals("")'>
-			AND holi_date_str <![CDATA[ <= ]]> #{endDateStr}
+			AND a.holi_date_str <![CDATA[ <= ]]> #{endDateStr}
 		</if>
 	</sql>
 
@@ -52,8 +54,8 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM   office_work_holiday a
-		WHERE  base_year = #{baseYear}
-			AND holi_date_str = #{holiDateStr}
+		WHERE  a.base_year = #{baseYear}
+			AND a.holi_date_str = #{holiDateStr}
 	</select>
 
 </mapper>
