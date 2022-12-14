@@ -27,7 +27,7 @@
 		SELECT
 			<include refid="dept_work_time_setting_select"/>
 		FROM   office_dept_work_time_setting a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE dept_id = #{deptId}
 	</select>
 
@@ -36,9 +36,9 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO"
 			resultType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
 		SELECT
-		<include refid="dept_work_time_setting_select"/>
+			<include refid="dept_work_time_setting_select"/>
 		FROM   office_dept_work_time_setting a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1=1
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
@@ -49,7 +49,7 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM   office_dept_work_time_setting a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.dept_common_join_table"/>
 		WHERE 1=1
 	</select>
 
@@ -145,7 +145,8 @@
 	<update id="updateDeptWorkTimeSetting"
 			parameterType="com.yamdeng.template.vo.db.OfficeDeptWorkTimeSettingVO">
 		UPDATE office_dept_work_time_setting
-		 SET mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+		 SET
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
 			 <if test='timeName != null and !timeName.equals("")'>
 				 ,time_name = #{timeName}
 			 </if>

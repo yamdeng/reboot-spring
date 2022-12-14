@@ -56,7 +56,7 @@
 			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
 			<include refid="vacation_month_stats_where"/>
-			<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
+		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
 	<!-- 통계_휴가_월별_사용현황 list totalCount -->
@@ -65,9 +65,9 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM office_vacation_month_stats a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-		<include refid="vacation_month_stats_where"/>
+			<include refid="vacation_month_stats_where"/>
 	</select>
 
 	<!-- 통계_휴가_월별_사용현황 detail -->

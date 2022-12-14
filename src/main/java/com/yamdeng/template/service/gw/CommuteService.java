@@ -46,12 +46,12 @@ public class CommuteService {
 
     public OfficeCommuteDayVO detail(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
-        return commuteDao.selectCommuteInfoByUserId(requestVO);
+        return commuteDao.selectCommuteInfo(requestVO);
     }
 
     public OfficeCommuteDayVO startWork(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
-        OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfoByUserId(requestVO);
+        OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfo(requestVO);
         if(beforeCommuteDayVo == null) {
             throw new ApplicationException("출/퇴근 정보가 존재하지 않습니다. 신규 입사지는 입사 다음날부터 출퇴근 입력이 가능합니다.");
         } else if(beforeCommuteDayVo.getStartWorkDate() != null) {
@@ -68,13 +68,13 @@ public class CommuteService {
             }
             requestVO.setWorkResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL);
             commuteDao.startWork(requestVO);
-            return commuteDao.selectCommuteInfoByUserId(requestVO);
+            return commuteDao.selectCommuteInfo(requestVO);
         }
     }
 
     public OfficeCommuteDayVO outWork(OfficeCommuteDayVO requestVO) {
         requestVO.setLoginUserId("yamdeng");
-        OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfoByUserId(requestVO);
+        OfficeCommuteDayVO beforeCommuteDayVo = commuteDao.selectCommuteInfo(requestVO);
         if(beforeCommuteDayVo == null) {
             throw new ApplicationException("출/퇴근 정보가 존재하지 않습니다. 신규 입사지는 입사 다음날부터 출퇴근 입력이 가능합니다.");
         } else if(beforeCommuteDayVo.getOutWorkDate() != null) {
@@ -92,7 +92,7 @@ public class CommuteService {
             double workedTimeValue = Math.ceil(minuteValue * 10) / 10.0;
             requestVO.setWorkedTimeValue(workedTimeValue);
             commuteDao.outWork(requestVO);
-            return commuteDao.selectCommuteInfoByUserId(requestVO);
+            return commuteDao.selectCommuteInfo(requestVO);
         }
     }
 

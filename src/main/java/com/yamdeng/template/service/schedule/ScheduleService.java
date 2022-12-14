@@ -65,7 +65,7 @@ public class ScheduleService {
                                     .build()
                     );
             // 이미 추가한 출퇴근 일일 정보가 존재하는지 체크
-            OfficeCommuteDayVO alreadyCheckCommuteDayInfo = commuteDao.selectCommuteInfoByUserId(
+            OfficeCommuteDayVO alreadyCheckCommuteDayInfo = commuteDao.selectCommuteInfo(
                     OfficeCommuteDayVO.builder().baseDateStr(baseDateStr).userId(userKey).build()
             );
             if(alreadyCheckCommuteDayInfo == null) {
@@ -151,7 +151,7 @@ public class ScheduleService {
 
                     // 알림을 이미 보냈으면 처리를 하지 않음
                     if(isAlreadyAlarm < 1) {
-                        OfficeCommuteDayVO officeCommuteDayVO = commuteDao.selectCommuteInfoByUserId(
+                        OfficeCommuteDayVO officeCommuteDayVO = commuteDao.selectCommuteInfo(
                                 OfficeCommuteDayVO.builder()
                                         .baseDateStr(nowBaseDateStr)
                                         .userId(userKey)
@@ -324,7 +324,7 @@ public class ScheduleService {
 
                     // 알림을 이미 보냈으면 처리를 하지 않음
                     if(isAlreadyAlarm < 1) {
-                        OfficeCommuteDayVO officeCommuteDayVO = commuteDao.selectCommuteInfoByUserId(
+                        OfficeCommuteDayVO officeCommuteDayVO = commuteDao.selectCommuteInfo(
                                 OfficeCommuteDayVO.builder()
                                         .baseDateStr(nowBaseDateStr)
                                         .userId(userKey)

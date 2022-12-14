@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper
 public interface CommuteDao {
 
-    // 출퇴근 상세 조회 : 사용자ID 기준
-    OfficeCommuteDayVO selectCommuteInfoByUserId(OfficeCommuteDayVO vo);
+    // 출퇴근_일일 detail
+    OfficeCommuteDayVO selectCommuteInfo(OfficeCommuteDayVO vo);
 
     // 출근
     int startWork(OfficeCommuteDayVO vo);
@@ -21,10 +21,13 @@ public interface CommuteDao {
     // 퇴근
     int outWork(OfficeCommuteDayVO vo);
 
-    // 출퇴근 목록 조회 : 부서키 기준
+    // 출퇴근_일일 list-ByDeptKey : 부서키 기준
     List<OfficeCommuteDayVO> selectCommuteListByDeptKey(OfficeCommuteDayVO vo);
 
-    // 출/퇴근 대상 직원 전체 목록
+    // 출퇴근_일일 list-ByDeptKey totalCount : 부서키 기준
+    int selectCommuteListTotalCountByDeptKey(OfficeCommuteDayVO vo);
+
+    // 춭/퇴근 대상 직원 list
     List<BaseCommonVO> selectCommuteTargetUserList();
 
     // 출퇴근_일일 insert

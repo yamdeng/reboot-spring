@@ -104,9 +104,9 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationYearVO">
 		SELECT
-		<include refid="vacation_year_select"/>
+			<include refid="vacation_year_select"/>
 		FROM OFFICE_VACATION_YEAR a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
 	</select>
 
@@ -114,9 +114,10 @@
 	<select id="selectVacationDetailDayHistoryInfo"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO">
-		SELECT <include refid="vacation_detail_day_history_select"/>
+		SELECT
+			<include refid="vacation_detail_day_history_select"/>
 		FROM   office_vacation_detail_day_history a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.base_date_str = #{baseDateStr}
 			AND a.user_id = #{userId}
 	</select>
@@ -125,9 +126,10 @@
 	<select id="selectVacationDetailDayHistoryList"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailDayHistoryVO">
-		SELECT <include refid="vacation_detail_day_history_select"/>
+		SELECT
+			<include refid="vacation_detail_day_history_select"/>
 		FROM   office_vacation_detail_day_history a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
 		<if test='userId != null and !userId.equals("")'>
 			AND a.user_id = #{userId}
@@ -141,11 +143,12 @@
 	<select id="selectVacationDetailList"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationDetailVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationDetailVO">
-		SELECT <include refid="vacation_detail_select"/>
+		SELECT
+			<include refid="vacation_detail_select"/>
 		FROM office_vacation_detail a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-		<include refid="vacation_detail_where"/>
+			<include refid="vacation_detail_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -155,20 +158,21 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM office_vacation_detail a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-		<include refid="vacation_detail_where"/>
+			<include refid="vacation_detail_where"/>
 	</select>
 
 	<!-- 휴가_휴직_현황(연별) list -->
 	<select id="selectVacationYearList"
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationYearVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationYearVO">
-		SELECT <include refid="vacation_year_select"/>
+		SELECT
+			<include refid="vacation_year_select"/>
 		FROM office_vacation_year a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-		<include refid="vacation_detail_where"/>
+			<include refid="vacation_detail_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -178,9 +182,9 @@
 			resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM office_vacation_year a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
-		<include refid="vacation_detail_where"/>
+			<include refid="vacation_detail_where"/>
 	</select>
 
 	<!-- 휴가_휴직_현황(연별) insert -->
@@ -284,9 +288,9 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusVO"
 			resultType="com.yamdeng.template.vo.db.OfficeVacationPlusVO">
 		SELECT
-		<include refid="vacation_plus_select"/>
+			<include refid="vacation_plus_select"/>
 		FROM OFFICE_VACATION_PLUS a
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE a.base_year = #{baseYear} AND a.user_id = #{userId}
 	</select>
 
@@ -343,25 +347,25 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeVacationPlusVO">
 		UPDATE office_vacation_plus
 		SET
-		mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
-		<if test='vacationName != null and !vacationName.equals("")'>
-			,vacation_name = #{vacationName}
-		</if>
-		<if test='vacationCount != null and !vacationCount.equals("")'>
-			,vacation_count = #{vacationCount}
-		</if>
-		<if test='regDate != null and !regDate.equals("")'>
-			,reg_date = #{regDate}
-		</if>
-		<if test='modDate != null and !modDate.equals("")'>
-			,mod_date = #{modDate}
-		</if>
-		<if test='loginUserId != null and !loginUserId.equals("")'>
-			,reg_user_id = #{loginUserId}
-		</if>
-		<if test='loginUserId != null and !loginUserId.equals("")'>
-			,mod_user_id = #{loginUserId}
-		</if>
+			mod_date = <include refid="com.yamdeng.template.data.dao.CommonDao.current_date_function"/>
+			<if test='vacationName != null and !vacationName.equals("")'>
+				,vacation_name = #{vacationName}
+			</if>
+			<if test='vacationCount != null and !vacationCount.equals("")'>
+				,vacation_count = #{vacationCount}
+			</if>
+			<if test='regDate != null and !regDate.equals("")'>
+				,reg_date = #{regDate}
+			</if>
+			<if test='modDate != null and !modDate.equals("")'>
+				,mod_date = #{modDate}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,reg_user_id = #{loginUserId}
+			</if>
+			<if test='loginUserId != null and !loginUserId.equals("")'>
+				,mod_user_id = #{loginUserId}
+			</if>
 		WHERE base_year = #{baseYear} AND user_id = #{userId}
 	</update>
 
@@ -375,7 +379,7 @@
 		FROM   office_vacation_year a
 				left outer join office_vacation_month_stats s
 							on a.user_id = s.user_id and a.base_year = s.base_year
-		<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
+			<include refid="com.yamdeng.template.data.dao.CommonDao.user_common_join_table"/>
 		WHERE 1=1
 			AND a.base_year = #{baseYear}
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>

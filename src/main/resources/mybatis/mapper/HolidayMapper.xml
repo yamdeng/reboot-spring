@@ -39,10 +39,10 @@
 			parameterType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO"
 			resultType="com.yamdeng.template.vo.db.OfficeWorkHolidayVO">
 		SELECT
-		<include refid="work_holiday_select"/>
+			<include refid="work_holiday_select"/>
 		FROM   office_work_holiday a
 		WHERE  1=1
-		<include refid="work_holiday_where"/>
+			<include refid="work_holiday_where"/>
 		<include refid="com.yamdeng.template.data.dao.CommonDao.common_page_bottom"/>
 	</select>
 
@@ -53,7 +53,7 @@
 		SELECT count(*)
 		FROM   office_work_holiday a
 		WHERE  1=1
-		<include refid="work_holiday_where"/>
+			<include refid="work_holiday_where"/>
 	</select>
 
 </mapper>

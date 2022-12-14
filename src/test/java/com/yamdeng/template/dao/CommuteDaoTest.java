@@ -25,17 +25,17 @@ class CommuteDaoTest {
 	@Autowired
 	private CommuteDao commuteDao;
 
-	// 출퇴근 상세 조회 : 사용자ID 기준
+	// 출퇴근_일일 detail
 	@Test
-	void selectCommuteInfoByUserId() {
+	void selectCommuteInfo() {
 		OfficeCommuteDayVO vo =
 				OfficeCommuteDayVO.builder()
 						.baseDateStr("20221203")
 						.userId("yamdeng")
 						.loginUserId("yamdeng")
 						.build();
-		OfficeCommuteDayVO result = commuteDao.selectCommuteInfoByUserId(vo);
-		log.info("selectCommuteInfoByUserId result : {}", result);
+		OfficeCommuteDayVO result = commuteDao.selectCommuteInfo(vo);
+		log.info("selectCommuteInfo result : {}", result);
 	}
 
 	// 출근
@@ -66,7 +66,7 @@ class CommuteDaoTest {
 						.workStatusCode(Constant.CODE_WORK_STATUS_VACATION_MORNING)
 						.workResultCode(Constant.CODE_WORK_RESULT_SUCCESS_NORMAL)
 						.build();
-		OfficeCommuteDayVO detailInfo = commuteDao.selectCommuteInfoByUserId(vo);
+		OfficeCommuteDayVO detailInfo = commuteDao.selectCommuteInfo(vo);
 		LocalDateTime startWorkDate = detailInfo.getStartWorkDate();
 		LocalDateTime now = LocalDateTime.now();
 		long minutes = startWorkDate.until( now, ChronoUnit.MINUTES );
@@ -79,7 +79,7 @@ class CommuteDaoTest {
 		log.info("outWork result : {}", result);
 	}
 
-	// 출퇴근 목록 조회 : 부서키 기준
+	// 출퇴근_일일 list-ByDeptKey : 부서키 기준
 	@Test
 	void selectCommuteListByDeptKey() {
 		OfficeCommuteDayVO vo =
@@ -91,10 +91,12 @@ class CommuteDaoTest {
 						.limit(10)
 						.build();
 		List<OfficeCommuteDayVO> result = commuteDao.selectCommuteListByDeptKey(vo);
+		int totalCount = commuteDao.selectCommuteListTotalCountByDeptKey(vo);
 		log.info("selectCommuteListByDeptKey result : {}", result);
+		log.info("selectCommuteListByDeptKey totalCount : {}", totalCount);
 	}
 
-	// 출/퇴근 대상 직원 전체 목록
+	// 춭/퇴근 대상 직원 list
 	@Test
 	void selectCommuteTargetUserList() {
 		List<BaseCommonVO> result = commuteDao.selectCommuteTargetUserList();
